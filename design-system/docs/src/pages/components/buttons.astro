@@ -98,7 +98,18 @@ const code = `import { Button, IconButton } from "@ui";
         ))
       }
     </DocTable>
-    <p class="doc-note">Loading keeps focus on the button, sets aria-busy and ignores clicks. Disabled buttons can’t be focused, so always say nearby why an action isn’t available, such as “Add an API key first”.</p>
+    <DocTable caption="Loading without an icon" columns={["Style", "Default", "Loading"]}>
+      {
+        STYLES.map(({ variant, name, label }) => (
+          <tr>
+            <th scope="row">{name}</th>
+            <td><Button variant={variant}>{label}</Button></td>
+            <td><Button variant={variant} loading>{label}</Button></td>
+          </tr>
+        ))
+      }
+    </DocTable>
+    <p class="doc-note">A loading button never changes width. With an icon, the spinner takes the icon’s place. Without one, the spinner sits in the middle and the label stays in place, unseen, so the width holds and screen readers still hear the label. Loading keeps focus on the button, sets aria-busy and ignores clicks. Disabled buttons can’t be focused, so always say nearby why an action isn’t available, such as “Add an API key first”.</p>
   </DocSection>
 
   <DocSection title="Icon button" lead="For familiar actions in tight toolbars. Secondary or Ghost, 32px with a 20px icon or 24px with a 16px icon. Every icon button is named by its label.">

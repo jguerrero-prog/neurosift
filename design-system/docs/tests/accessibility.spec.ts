@@ -175,6 +175,47 @@ test("text at 200% of the browser's default size neither overflows nor clips", a
   }
 });
 
+test("buttons: a loading button is as wide as the same button not loading", async ({
+  page,
+}) => {
+  await page.goto("components/buttons/");
+  const pairs = await page.evaluate(() =>
+    [...document.querySelectorAll("table")].flatMap((table) => {
+      const heads = [...table.querySelectorAll("thead th")].map(
+        (th) => th.textContent,
+      );
+      const idle = heads.indexOf("Default");
+      const busy = heads.indexOf("Loading");
+      if (idle < 0 || busy < 0) return [];
+      return [...table.querySelectorAll("tbody tr")].map((row) => {
+        const cells = row.children;
+        const button = (i: number) =>
+          cells[i].querySelector(".ns-button") as HTMLElement;
+        const loading = button(busy);
+        const spinner = loading
+          .querySelector(".ns-spinner")!
+          .getBoundingClientRect();
+        const box = loading.getBoundingClientRect();
+        return {
+          row: row.querySelector("th")?.textContent,
+          idle: button(idle).getBoundingClientRect().width,
+          busy: box.width,
+          centered:
+            loading.dataset.spinner !== "center" ||
+            Math.abs(
+              spinner.left + spinner.width / 2 - (box.left + box.width / 2),
+            ) < 1,
+        };
+      });
+    }),
+  );
+  expect(pairs.length).toBeGreaterThanOrEqual(8);
+  for (const { row, idle, busy, centered } of pairs) {
+    expect(busy, `${row} loading width`).toBe(idle);
+    expect(centered, `${row} spinner centered`).toBe(true);
+  }
+});
+
 test("buttons: disabled ones leave the tab order, loading ones stay and say they're busy", async ({
   page,
 }) => {
