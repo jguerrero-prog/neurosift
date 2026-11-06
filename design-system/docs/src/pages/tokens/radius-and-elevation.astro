@@ -52,7 +52,13 @@ const elevations = tokensIn("elevation");
   </DocSection>
 
   <DocSection title="Focus ring" lead="A 2px border/focus outline drawn 2px outside the control. It shows for keyboard focus only (:focus-visible), never on a mouse click, and it is never removed.">
-    <p><span class="focus-sample">Open file</span></p>
+    <div class="focus-stage">
+      <span class="focus-sample">Open file</span>
+    </div>
+    <div class="focus-stage focus-stage-navy">
+      <span class="focus-sample focus-sample-inverse">/acquisition/LFPs</span>
+    </div>
+    <p class="doc-note">On navy surfaces, such as the header and selected rows, the ring is border/focus-inverse, white at 11:1. border/focus is only 1.5:1 there.</p>
     <p class="doc-note">Text inputs show focus by thickening their own border to 2px border/focus instead of adding a ring around it.</p>
   </DocSection>
 

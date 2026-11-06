@@ -6,7 +6,7 @@ const set = TokenSet.load(new URL("./", import.meta.url));
 
 describe("design tokens", () => {
   it("reads every token from the five files", () => {
-    expect(set.tokens.size).toBe(72 + 52 + 40 + 17 + 3);
+    expect(set.tokens.size).toBe(72 + 53 + 40 + 17 + 3);
   });
 
   it("gives every token one CSS name", () => {
