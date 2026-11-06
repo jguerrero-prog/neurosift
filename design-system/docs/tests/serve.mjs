@@ -1,4 +1,4 @@
-// Serves the built docs (dist/) for the accessibility suite, the same way locally and in CI.
+// Serves the built docs (dist/) for the accessibility suite, under DOCS_BASE as GitHub Pages does.
 import { createReadStream, existsSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, normalize } from "node:path";
@@ -16,12 +16,19 @@ const TYPES = {
   ".woff": "font/woff",
 };
 
+const BASE = process.env.DOCS_BASE ?? "/";
+
 createServer((request, response) => {
-  const path = normalize(decodeURIComponent(new URL(request.url, "http://x").pathname));
+  const url = new URL(request.url, "http://x").pathname;
+  if (!url.startsWith(BASE)) return response.writeHead(404).end();
+  const path = normalize(decodeURIComponent(url.slice(BASE.length - 1)));
   let file = join(ROOT, path);
   if (!file.startsWith(ROOT)) return response.writeHead(403).end();
-  if (existsSync(file) && statSync(file).isDirectory()) file = join(file, "index.html");
+  if (existsSync(file) && statSync(file).isDirectory())
+    file = join(file, "index.html");
   if (!existsSync(file)) return response.writeHead(404).end();
-  response.writeHead(200, { "content-type": TYPES[extname(file)] ?? "application/octet-stream" });
+  response.writeHead(200, {
+    "content-type": TYPES[extname(file)] ?? "application/octet-stream",
+  });
   createReadStream(file).pipe(response);
 }).listen(Number(process.argv[2] ?? 4322));
