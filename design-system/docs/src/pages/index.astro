@@ -1,0 +1,33 @@
+---
+import DocSection from "../components/DocSection.astro";
+import Intro from "../components/Intro.astro";
+import DocsLayout from "../layouts/DocsLayout.astro";
+import { navigation, withBase } from "../navigation";
+
+const tokenPages = navigation.find(({ heading }) => heading === "Tokens")?.items ?? [];
+---
+
+<DocsLayout title="Neurosift design system" description="The coded Neurosift design system: tokens first, then components.">
+  <Intro
+    lead="The coded half of the Neurosift design system. Tokens come from the Figma variables and styles as W3C design tokens, and every value on these pages is read from them, so the pages can’t drift from the code."
+    status="Updated November 6, 2026 · Tokens first; components follow"
+    rules={[
+      { title: "One source", text: "Figma variables become *.tokens.json, which build tokens.css for the app and these pages." },
+      { title: "No inline styles", text: "Components use classes in CSS files that read the tokens." },
+      { title: "Charts stay Neurosift’s", text: "The system dresses what surrounds a chart, never the chart itself." },
+    ]}
+  />
+
+  <DocSection title="Tokens" lead="Five pages, matching the Tokens pages of the Figma file.">
+    <ul class="page-list">
+      {
+        tokenPages.map(({ label, href, summary }) => (
+          <li>
+            <a href={withBase(href)}>{label}</a>
+            <p class="type-body-sm">{summary}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </DocSection>
+</DocsLayout>
