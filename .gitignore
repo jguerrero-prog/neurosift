@@ -31,3 +31,6 @@ src/build-info.json
 
 .vite/**
 .codex
+
+# Design system docs (Astro)
+design-system/docs/.astro

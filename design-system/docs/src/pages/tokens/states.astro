@@ -1,0 +1,41 @@
+---
+import DocSection from "../../components/DocSection.astro";
+import Intro from "../../components/Intro.astro";
+import TokenTable from "../../components/TokenTable.astro";
+import DocsLayout from "../../layouts/DocsLayout.astro";
+import { TokenView } from "../../tokens";
+
+const rows = [
+  ["Hover", "action.primary-hover", "Primary button"],
+  ["Hover", "action.secondary-hover", "Secondary button"],
+  ["Hover", "surface.row-hover", "Tree and table rows, tabs"],
+  ["Hover", "text.link-hover", "Links"],
+  ["Pressed", "action.primary-pressed", "Primary button"],
+  ["Pressed", "action.secondary-pressed", "Secondary button"],
+  ["Focus", "border.focus", "Focus ring on every control, input border on focus"],
+  ["Selected", "surface.row-selected", "Open object in the tree: inverted row"],
+  ["Selected", "border.selected", "Selected tab underline"],
+  ["Disabled", "action.disabled", "Disabled button fill"],
+  ["Disabled", "text.disabled", "Disabled text"],
+  ["Disabled", "border.disabled", "Disabled input and secondary button edge"],
+  ["Error", "border.error", "Input with an error"],
+  ["Error", "status.error.text", "Error message under a field"],
+].map(([lead, path, use]) => ({ lead, view: TokenView.of(path), use }));
+---
+
+<DocsLayout title="State tokens" description="The tokens that carry hover, pressed, focus, selected, disabled and error states.">
+  <Intro
+    lead="Hover, pressed, focus, selected, disabled and error use the same tokens in every component, so a state looks the same wherever it appears."
+    status="Updated November 6, 2026 · Tokens · Semantic tokens"
+    rules={[
+      { title: "Color is the third signal", text: "Selected rows invert, errors add a message, disabled controls lose their edge. Color comes after shape and words." },
+      { title: "Focus always shows", text: "A 2px border/focus ring with a 2px gap on every control, never removed." },
+      { title: "Say why it’s off", text: "If a control is disabled for a reason, such as a missing API key, say why next to it." },
+    ]}
+  />
+
+  <DocSection title="State tokens" lead="The semantic tokens that carry a state.">
+    <TokenTable caption="State tokens" rows={rows} sample="swatch" leadColumn="State" />
+    <p class="doc-note">The matrix of states across components arrives with the components, so each cell can be a real component in that state.</p>
+  </DocSection>
+</DocsLayout>
