@@ -16,6 +16,7 @@ export default defineConfig({
         "./src/pages/NwbPage/hdf5Interface",
       ),
       "@jobManager": path.resolve(__dirname, "./src/jobManager"),
+      "@ui": path.resolve(__dirname, "./src/ui"),
     },
   },
   build: {
@@ -30,6 +31,7 @@ export default defineConfig({
       "src/**/*.test.{ts,tsx}",
       "devel/**/*.test.ts",
       "design-system/tokens/**/*.test.ts",
+      "design-system/icons/**/*.test.ts",
     ],
   },
 });

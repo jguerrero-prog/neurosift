@@ -16,6 +16,16 @@ export const withBase = (href: string): string => `${base}${href}`;
 export const navigation: NavSection[] = [
   { items: [{ label: "Overview", href: "/" }] },
   {
+    heading: "Foundations",
+    items: [
+      {
+        label: "Iconography",
+        href: "/foundations/iconography/",
+        summary: "IBM Carbon icons, their sizes and what they replace.",
+      },
+    ],
+  },
+  {
     heading: "Tokens",
     items: [
       {
@@ -42,6 +52,16 @@ export const navigation: NavSection[] = [
         label: "States",
         href: "/tokens/states/",
         summary: "Hover, pressed, focus, selected, disabled and error.",
+      },
+    ],
+  },
+  {
+    heading: "Components",
+    items: [
+      {
+        label: "Buttons",
+        href: "/components/buttons/",
+        summary: "Button and Icon button: four styles, two sizes, every state.",
       },
     ],
   },

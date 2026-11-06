@@ -30,3 +30,27 @@ jobs:
 
       - name: Build the docs
         run: npm run docs:build
+
+  accessibility:
+    name: Docs accessibility
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: design-system/docs/package-lock.json
+
+      - name: Install docs dependencies
+        run: npm run docs:install
+
+      - name: Install Chromium for Playwright
+        working-directory: design-system/docs
+        run: npx playwright install --with-deps chromium
+
+      - name: Run the accessibility suite
+        run: npm run docs:test
