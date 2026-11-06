@@ -128,7 +128,15 @@ describe("contrast of the intended token pairings (WCAG 2.2 AA)", () => {
     expect(Contrast.ratio("text.muted", "data.selection")).toBeLessThan(TEXT);
   });
 
-  it.todo(
-    "border/focus on navy surfaces reaches 3:1, once a focus token for dark surfaces exists",
-  );
+  it.each(NAVY)("border/focus-inverse on %s reaches 3:1", (background) => {
+    expect(
+      Contrast.ratio("border.focus-inverse", background),
+    ).toBeGreaterThanOrEqual(NON_TEXT);
+  });
+
+  it("flags border/focus on navy, which is why the inverse ring exists", () => {
+    expect(Contrast.ratio("border.focus", "surface.header")).toBeLessThan(
+      NON_TEXT,
+    );
+  });
 });

@@ -141,6 +141,10 @@ code {
   color: inherit;
 }
 
+.hero :focus-visible {
+  outline-color: var(--border-focus-inverse);
+}
+
 .hero h1 {
   font: var(--type-display);
   letter-spacing: var(--type-display-letter-spacing);
@@ -402,6 +406,26 @@ main {
   border-radius: var(--radius-sm);
   outline: var(--border-width-2) solid var(--border-focus);
   outline-offset: var(--space-0-5);
+}
+
+.focus-stage {
+  display: inline-flex;
+  padding: var(--space-6);
+  margin-inline-end: var(--space-4);
+  background: var(--surface-panel);
+  border: var(--border-width-1) solid var(--border-subtle);
+}
+
+.focus-stage-navy {
+  background: var(--surface-header);
+  border-color: var(--surface-header);
+}
+
+.focus-sample-inverse {
+  font: var(--type-code-sm);
+  color: var(--text-on-inverse);
+  background: var(--surface-row-selected);
+  outline-color: var(--border-focus-inverse);
 }
 
 .muted {

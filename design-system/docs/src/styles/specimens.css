@@ -403,6 +403,10 @@
   --token: var(--border-focus);
 }
 
+.token-border-focus-inverse {
+  --token: var(--border-focus-inverse);
+}
+
 .token-border-error {
   --token: var(--border-error);
 }

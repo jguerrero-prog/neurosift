@@ -101,6 +101,7 @@
   --border-strong: var(--color-black);
   --border-selected: var(--color-blue-600);
   --border-focus: var(--color-blue-600);
+  --border-focus-inverse: var(--color-white);
   --border-error: var(--color-red-700);
   --border-disabled: var(--color-neutral-300);
   --status-error-bg: var(--color-red-50);
