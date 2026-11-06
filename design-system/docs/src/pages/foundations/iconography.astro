@@ -1,0 +1,127 @@
+---
+import { Icon, type IconName, type IconSize } from "@ui";
+import { ICONS } from "@ui/Icon/icons";
+import CodeSample from "../../components/CodeSample.astro";
+import DoDont from "../../components/DoDont.astro";
+import DocSection from "../../components/DocSection.astro";
+import DocTable from "../../components/DocTable.astro";
+import Intro from "../../components/Intro.astro";
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const names = Object.keys(ICONS) as IconName[];
+
+const SIZES: { size: IconSize; px: number; token: string; use: string }[] = [
+  { size: "sm", px: 16, token: "icon/size/sm", use: "Beside 14px text: file tree rows, table actions, buttons" },
+  { size: "md", px: 20, token: "icon/size/md", use: "Beside 16px text: toolbar icon buttons, menus, inputs" },
+  { size: "lg", px: 24, token: "icon/size/lg", use: "Standalone: empty states, panel headers" },
+  { size: "xl", px: 32, token: "icon/size/xl", use: "Large: home page cards, empty views" },
+];
+
+const REPLACEMENTS: [string, IconName][] = [
+  ["Search", "search"],
+  ["Close", "close"],
+  ["Share", "share"],
+  ["ContentCopy", "copy"],
+  ["Launch", "launch"],
+  ["FileDownload, Download", "download"],
+  ["History", "recently-viewed"],
+  ["Settings", "settings"],
+  ["RestartAlt", "reset"],
+  ["ChevronLeft, ArrowLeft", "chevron--left"],
+  ["ChevronRight, ArrowRight", "chevron--right"],
+  ["PlayArrow", "play"],
+  ["Pause", "pause"],
+  ["Stop", "stop"],
+  ["SkipPrevious", "skip--back"],
+  ["GitHub", "logo--github"],
+];
+
+const code = `import { Icon, IconButton } from "@ui";
+
+<Icon name="download" />                     // 16px, hidden from screen readers
+<Icon name="settings" size="lg" label="Settings" />   // standalone, announced
+<IconButton icon="search" label="Search" />  // the button carries the name`;
+---
+
+<DocsLayout title="Iconography" description="IBM Carbon icons in the Neurosift design system: the set, sizes and what they replace.">
+  <Intro
+    lead="Neurosift’s icons come from IBM Carbon, the icon set made to go with IBM Plex, so type and icons come from one family. They replace Material Icons, a few Font Awesome icons, and text characters standing in for icons."
+    status={`Updated November 6, 2026 · Foundations · ${names.length} icons in code so far, each added with the page that needs it`}
+    rules={[
+      { title: "One set, one family", text: "Carbon and Plex were designed together at IBM. Every icon comes from Carbon, so none look borrowed." },
+      { title: "Icons support words", text: "An icon sits beside a label wherever there is room. Icon-only buttons are for familiar actions in tight toolbars." },
+      { title: "Size follows text", text: "16px icons beside 14px text, 20px beside 16px text. 24 and 32px only for standalone icons." },
+    ]}
+  />
+
+  <DocSection title="The icons in code" lead="The Carbon icons the app can use today, drawn by the Icon component at 24px. The full set of 62 is on the Figma Iconography page; each joins the code when a page needs it.">
+    <ul class="icon-grid">
+      {
+        names.map((name) => (
+          <li>
+            <Icon name={name} size="lg" />
+            <code>{name}</code>
+          </li>
+        ))
+      }
+    </ul>
+  </DocSection>
+
+  <DocSection title="Sizes" lead="Four sizes from Carbon’s grid, one per icon/size token. Pick the size from the text beside the icon, never an in-between size.">
+    <DocTable caption="Icon sizes" columns={["Icon", "Size", "Token", "Use"]}>
+      {
+        SIZES.map(({ size, px, token, use }) => (
+          <tr>
+            <td><Icon name="download" size={size} /></td>
+            <td>{px}px</td>
+            <td><code>{token}</code></td>
+            <td>{use}</td>
+          </tr>
+        ))
+      }
+    </DocTable>
+  </DocSection>
+
+  <DocSection title="What they replace" lead="The Material icons the app imports today and the Carbon icon that takes each one’s place, from the Figma replacement map.">
+    <DocTable caption="Material to Carbon" columns={["Material", "Carbon", "Icon"]}>
+      {
+        REPLACEMENTS.map(([material, carbon]) => (
+          <tr>
+            <th scope="row">{material}</th>
+            <td><code>{carbon}</code></td>
+            <td><Icon name={carbon} size="md" /></td>
+          </tr>
+        ))
+      }
+    </DocTable>
+    <p class="doc-note">The Font Awesome icons and the typed characters in the Figma map (▶, ⧉, ← →, 🔍) are replaced with the pages that use them.</p>
+  </DocSection>
+
+  <DocSection title="Color" lead="Icons take the color of the text beside them, through currentColor. Alone, they need 3:1 contrast with what is behind them. Status icons always come with words.">
+    <div class="demo-row">
+      <span class="icon-beside"><Icon name="search" /> Search dandisets</span>
+      <a class="icon-beside" href="https://dandiarchive.org"><Icon name="launch" /> View on DANDI</a>
+    </div>
+  </DocSection>
+
+  <DocSection title="Accessibility">
+    <ul class="rule-list">
+      <li><strong>Decorative icons.</strong> An icon beside a label is decoration: Icon hides it from screen readers unless it has a label.</li>
+      <li><strong>Icon-only buttons.</strong> IconButton requires a label, which becomes the button’s accessible name.</li>
+      <li><strong>Target size.</strong> Icon buttons are at least 24 × 24px, and 32 × 32px in toolbars, even when the icon is 16 or 20px.</li>
+      <li><strong>Never color alone.</strong> Status icons come with words, and type icons sit beside the type’s name.</li>
+    </ul>
+  </DocSection>
+
+  <DocSection title="Usage">
+    <DoDont
+      dos={["Use the same icon for the same action everywhere, such as download for every export.", "Pair icons with labels wherever there is room.", "Match the icon size to the text size."]}
+      donts={["Don’t type emoji or symbols as icons. They change with the operating system and screen readers read them aloud.", "Don’t import Material or Font Awesome icons in new code.", "Don’t scale an icon to an in-between size such as 18 or 22px."]}
+    />
+  </DocSection>
+
+  <DocSection title="In code" lead="Icons are drawn from path data generated from Carbon’s SVGs, so there is no icon package to install. To add an icon, copy its SVG into design-system/icons/carbon and run npm run icons.">
+    <CodeSample label="React" code={code} />
+    <p class="doc-note">IBM Carbon icons, Apache 2.0. The license ships with the SVGs in design-system/icons/carbon.</p>
+  </DocSection>
+</DocsLayout>
