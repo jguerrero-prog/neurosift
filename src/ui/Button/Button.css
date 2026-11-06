@@ -31,3 +31,20 @@
 .ns-button[aria-busy="true"] {
   cursor: progress;
 }
+
+/* Without an icon, the spinner sits over the label, which stays (unseen) to hold the width and name. */
+.ns-button[data-spinner="center"] {
+  position: relative;
+}
+
+.ns-button[data-spinner="center"] .ns-spinner {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: var(--icon-size-sm);
+  block-size: var(--icon-size-sm);
+}
+
+.ns-button[data-spinner="center"] .ns-button-label {
+  opacity: 0;
+}

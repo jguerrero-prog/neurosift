@@ -79,6 +79,26 @@ describe("Button", () => {
     expect(onClick).not.toHaveBeenCalled();
   });
 
+  it("while loading without an icon, centers the spinner over the label, which still names it", () => {
+    render(<Button loading>Open file</Button>);
+    const button = screen.getByRole("button", { name: "Open file" });
+    expect(button.getAttribute("aria-busy")).toBe("true");
+    expect(button.dataset.spinner).toBe("center");
+    expect(button.querySelector(".ns-spinner")).not.toBeNull();
+    expect(button.querySelector(".ns-button-label")?.textContent).toBe(
+      "Open file",
+    );
+  });
+
+  it("while loading with an icon, swaps the icon and keeps the label in view", () => {
+    render(
+      <Button loading icon="download">
+        Download
+      </Button>,
+    );
+    expect(screen.getByRole("button").dataset.spinner).toBeUndefined();
+  });
+
   it("is a link when it goes somewhere", () => {
     render(
       <Button href="https://dandiarchive.org" icon="launch">

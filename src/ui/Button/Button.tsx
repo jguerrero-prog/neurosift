@@ -73,10 +73,11 @@ export function Button(props: ButtonProps) {
       type={type}
       className={classes(variant, size)}
       aria-busy={loading || undefined}
+      data-spinner={loading && !icon ? "center" : undefined}
       onClick={handleClick}
     >
       {loading ? <Spinner /> : icon && <Icon name={icon} />}
-      {children}
+      <span className="ns-button-label">{children}</span>
     </button>
   );
 }
