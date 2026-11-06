@@ -371,6 +371,19 @@
         }
       }
     },
+    "focus-inverse": {
+      "$type": "color",
+      "$value": "{color.white}",
+      "$description": "Focus ring on navy surfaces: the header, selected rows, primary buttons",
+      "$extensions": {
+        "com.figma": {
+          "collection": "Semantic",
+          "scopes": [
+            "STROKE_COLOR"
+          ]
+        }
+      }
+    },
     "error": {
       "$type": "color",
       "$value": "{color.red.700}",
