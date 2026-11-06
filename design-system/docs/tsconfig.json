@@ -11,6 +11,11 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "baseUrl": ".",
-    "paths": { "@ui": ["../../src/ui"], "@ui/*": ["../../src/ui/*"] }
+    "paths": {
+      "@ui": ["../../src/ui"],
+      "@ui/*": ["../../src/ui/*"],
+      "react": ["./node_modules/@types/react"],
+      "react/*": ["./node_modules/@types/react/*"]
+    }
   }
 }
