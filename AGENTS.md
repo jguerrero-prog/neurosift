@@ -36,6 +36,7 @@ The design system lives in `design-system/`: design tokens in `tokens/`, icon so
 - **Styling:** classes in CSS files that read the tokens (`var(--action-primary)`, `.type-body`). No inline `style` attributes, no MUI `sx`, no hex or named colors in new code.
 - **Components:** pure components in `src/ui/` render only from props, with every state controlled by props, and take no `className` or `style`; data loading lives in a separate wrapper. Write each component's tests from its Figma spec before the component. Build once and reuse; never copy a function or component.
 - **Accessibility:** `npm run docs:test` runs axe and keyboard, focus, target size, reflow, text size, forced colors and reduced motion checks on every docs page. CI requires it.
+- **Published docs:** every merge into `development` publishes the docs to GitHub Pages under `/<repository name>/` (`docs-pages.yml`). `DOCS_BASE=/neurosift/ npm run docs:test` runs the suite under that path, including a check that every link and asset responds.
 - **Comments:** only where the code can't explain itself, two lines at most. If a comment restates a name, rename instead.
 - **New tokens or token groups** get a page in `design-system/docs/src/pages` and an entry in `design-system/docs/src/navigation.ts`.
 - Astro runs its dev server in the background when it detects a coding agent; stop it with `npx astro dev stop` in `design-system/docs`.
