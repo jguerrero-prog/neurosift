@@ -54,3 +54,26 @@ jobs:
 
       - name: Run the accessibility suite
         run: npm run docs:test
+
+  migration:
+    name: Migration progress
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check out the base branch beside this one
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git fetch --depth=1 origin "$BASE_REF"
+          git worktree add --detach "$RUNNER_TEMP/base" FETCH_HEAD
+
+      # Fails when this pull request adds an MUI import, an inline style or an sx prop.
+      - name: Count MUI imports and inline styles against the base branch
+        run: node design-system/migration/count.mjs src "$RUNNER_TEMP/base/src" | tee -a "$GITHUB_STEP_SUMMARY"

@@ -32,6 +32,7 @@ export default defineConfig({
       "devel/**/*.test.ts",
       "design-system/tokens/**/*.test.ts",
       "design-system/icons/**/*.test.ts",
+      "design-system/migration/**/*.test.ts",
     ],
   },
 });
