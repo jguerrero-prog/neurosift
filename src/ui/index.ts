@@ -7,3 +7,7 @@ export { Spinner } from "./Spinner/Spinner";
 export { Checkbox } from "./Checkbox/Checkbox";
 export { SearchField } from "./SearchField/SearchField";
 export { TextInput } from "./TextInput/TextInput";
+export { Menu } from "./Menu/Menu";
+export type { MenuItem } from "./Menu/Menu";
+export { Select } from "./Select/Select";
+export type { SelectOption } from "./Select/Select";

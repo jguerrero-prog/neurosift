@@ -634,3 +634,21 @@ main {
     padding-inline: var(--space-4);
   }
 }
+
+/* Turns the customizable select off, to show what browsers without it draw. */
+.select-fallback .ns-select,
+.select-fallback .ns-select::picker(select) {
+  appearance: none;
+}
+
+.menu-demo {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: start;
+}
+
+.menu-demo-status {
+  min-block-size: 1lh;
+  margin: 0;
+  color: var(--text-secondary);
+}

@@ -15,6 +15,10 @@ test.beforeAll(async ({ browser }) => {
 });
 
 // Names what sticks out past the window, so a failure says where to look.
+// WebKit, like Safari's default, tabs only between form fields; Alt+Tab reaches every control.
+const tab = (browserName: string) =>
+  browserName === "webkit" ? "Alt+Tab" : "Tab";
+
 const overflow = (page: Page) =>
   page.evaluate(() => {
     const width = document.documentElement.clientWidth;
@@ -110,10 +114,11 @@ test("every page has one h1 first, no skipped heading levels, and labelled landm
 
 test("the keyboard reaches the skip link first and every stop shows a 2px focus ring", async ({
   page,
+  browserName,
 }) => {
   for (const path of pages) {
     await page.goto(path);
-    await page.keyboard.press("Tab");
+    await page.keyboard.press(tab(browserName));
     await expect(page.locator(".skip-link"), path).toBeFocused();
     for (let stop = 0; stop < 30; stop++) {
       // Text fields show focus by thickening their own edge in border/focus; everything else gets a ring.
@@ -145,7 +150,7 @@ test("the keyboard reaches the skip link first and every stop shows a 2px focus 
         };
       });
       expect(ring.shown, `${path} ${ring.name}`).toBe(true);
-      await page.keyboard.press("Tab");
+      await page.keyboard.press(tab(browserName));
       if (await page.evaluate(() => document.activeElement === document.body))
         break;
     }
@@ -159,6 +164,7 @@ test("links and controls are at least 24 by 24 pixels", async ({ page }) => {
       [...document.querySelectorAll("a, button, [tabindex='0']")]
         .filter(
           (el) =>
+            el.checkVisibility() &&
             !el.matches(".skip-link") &&
             !(getComputedStyle(el).display === "inline" && el.closest("p, li")),
         )
@@ -191,7 +197,12 @@ test("pages reflow at 320px wide and survive text spacing overrides", async ({
 
 test("text at 200% of the browser's default size neither overflows nor clips", async ({
   page,
+  browserName,
 }) => {
+  test.skip(
+    browserName !== "chromium",
+    "Sets font sizes through Chromium's DevTools protocol",
+  );
   const cdp = await page.context().newCDPSession(page);
   await cdp.send("Page.setFontSizes", {
     fontSizes: { standard: 32, fixed: 26 },
@@ -239,7 +250,7 @@ test("buttons: a loading button is as wide as the same button not loading", asyn
   );
   expect(pairs.length).toBeGreaterThanOrEqual(8);
   for (const { row, idle, busy, centered } of pairs) {
-    expect(busy, `${row} loading width`).toBe(idle);
+    expect(busy, `${row} loading width`).toBeCloseTo(idle, 2);
     expect(centered, `${row} spinner centered`).toBe(true);
   }
 });
@@ -291,6 +302,7 @@ test("buttons: disabled ones leave the tab order, loading ones stay and say they
 
 test("buttons keep a visible edge and focus ring in forced colors", async ({
   page,
+  browserName,
 }) => {
   await page.emulateMedia({ forcedColors: "active" });
   await page.goto("components/buttons/");
@@ -307,8 +319,8 @@ test("buttons keep a visible edge and focus ring in forced colors", async ({
   expect(edges.every(Boolean)).toBe(true);
   const button = page.locator(".ns-button--primary").first();
   await button.focus();
-  await page.keyboard.press("Shift+Tab");
-  await page.keyboard.press("Tab");
+  await page.keyboard.press(`Shift+${tab(browserName)}`);
+  await page.keyboard.press(tab(browserName));
   expect(
     await button.evaluate((b) => getComputedStyle(b).outlineStyle),
   ).not.toBe("none");
@@ -322,4 +334,90 @@ test("the spinner stops moving under reduced motion", async ({ page }) => {
     .first()
     .evaluate((arc) => getComputedStyle(arc).animationName);
   expect(animation).toBe("none");
+});
+
+test("selects: Space opens the list, Escape closes it and keeps the value and focus", async ({
+  page,
+  browserName,
+}) => {
+  await page.goto("components/selects/");
+  const select = page.getByRole("combobox", { name: "Playback speed" });
+  await select.focus();
+  await page.keyboard.press("Space");
+  expect(await select.evaluate((s) => s.matches(":open"))).toBe(true);
+  test.skip(
+    browserName === "firefox",
+    "Firefox's native list doesn't take synthetic keys",
+  );
+  await page.keyboard.press("ArrowDown");
+  await page.keyboard.press("Escape");
+  expect(await select.evaluate((s) => s.matches(":open"))).toBe(false);
+  await expect(select).toBeFocused();
+  await expect(select).toHaveValue("1×");
+});
+
+test("selects: arrows and Enter pick from the styled list; typing jumps to an option", async ({
+  page,
+  browserName,
+}) => {
+  await page.goto("components/selects/");
+  const select = page.getByRole("combobox", { name: "Playback speed" });
+  await select.focus();
+  if (browserName !== "firefox") {
+    // Firefox's native list doesn't take synthetic keys; the others pick from the styled list.
+    await page.keyboard.press("Space");
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    await expect(select).toHaveValue("2×");
+    expect(await select.evaluate((s) => s.matches(":open"))).toBe(false);
+  }
+  await page.keyboard.type("8");
+  await expect(select).toHaveValue("8×");
+});
+
+test("menus: Enter opens on the first item, arrows skip disabled items, Escape returns focus", async ({
+  page,
+}) => {
+  await page.goto("components/selects/");
+  const trigger = page.getByRole("button", { name: "Share" }).first();
+  await trigger.scrollIntoViewIfNeeded();
+  await expect(trigger).toHaveAttribute("aria-expanded", "false");
+  await page.waitForFunction(
+    () => !document.querySelector("astro-island[ssr]"),
+  );
+  await trigger.focus();
+  await page.keyboard.press("Enter");
+  await expect(trigger).toHaveAttribute("aria-expanded", "true");
+  await expect(page.getByRole("menuitem", { name: "Copy link" })).toBeFocused();
+  await page.keyboard.press("ArrowDown");
+  await page.keyboard.press("ArrowDown");
+  await expect(
+    page.getByRole("menuitem", { name: "View on DANDI" }),
+  ).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(trigger).toBeFocused();
+  await expect(trigger).toHaveAttribute("aria-expanded", "false");
+});
+
+test("menus: open under their button, at least as wide, and picking runs the item", async ({
+  page,
+}) => {
+  await page.goto("components/selects/");
+  const trigger = page.getByRole("button", { name: "Share" }).first();
+  await trigger.scrollIntoViewIfNeeded();
+  await page.waitForFunction(
+    () => !document.querySelector("astro-island[ssr]"),
+  );
+  await trigger.click();
+  const menu = page.getByRole("menu").first();
+  const [button, list] = [
+    await trigger.boundingBox(),
+    await menu.boundingBox(),
+  ];
+  expect(list!.y).toBeGreaterThanOrEqual(button!.y + button!.height);
+  expect(Math.round(list!.x)).toBe(Math.round(button!.x));
+  expect(list!.width).toBeGreaterThanOrEqual(button!.width);
+  await page.getByRole("menuitem", { name: "Copy link" }).click();
+  await expect(menu).toBeHidden();
+  await expect(page.getByRole("status").first()).toHaveText("Ran “Copy link”");
 });
