@@ -63,6 +63,16 @@ export const navigation: NavSection[] = [
         href: "/components/buttons/",
         summary: "Button and Icon button: four styles, two sizes, every state.",
       },
+      {
+        label: "Text inputs and search",
+        href: "/components/text-inputs/",
+        summary: "Text input and Search field: labels, units, errors in words.",
+      },
+      {
+        label: "Checkboxes",
+        href: "/components/checkboxes/",
+        summary: "On, off and mixed, with the whole row as the target.",
+      },
     ],
   },
 ];

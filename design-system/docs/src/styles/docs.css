@@ -285,7 +285,10 @@ main {
 
 .swatch-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(calc(var(--space-16) * 2), 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(calc(var(--space-16) * 2), 1fr)
+  );
   gap: var(--space-4) var(--space-3);
   padding: 0;
   list-style: none;
@@ -459,9 +462,42 @@ main {
   box-shadow: var(--elevation-3);
 }
 
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100%, calc(var(--layout-panel-min) + var(--space-10))), 1fr)
+  );
+  gap: var(--space-8);
+  align-items: start;
+}
+
+.field-stack {
+  display: grid;
+  gap: var(--space-4);
+  max-inline-size: var(--layout-panel-max);
+}
+
+.checkbox-group {
+  display: grid;
+  gap: var(--space-1);
+  min-inline-size: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.checkbox-group legend {
+  padding: 0;
+  margin-block-end: var(--space-2);
+}
+
 .icon-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(calc(var(--space-16) * 2), 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(calc(var(--space-16) * 2), 1fr)
+  );
   gap: var(--space-6) var(--space-4);
   padding: 0;
   list-style: none;

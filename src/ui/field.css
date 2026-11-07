@@ -1,0 +1,43 @@
+/* The frame and inner input shared by TextInput and SearchField. */
+:is(.ns-field-box, .ns-search) {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  margin: 0;
+  color: var(--text-default);
+  background: var(--surface-panel);
+  border: var(--border-width-1) solid var(--border-strong);
+  border-radius: var(--radius-sm);
+}
+
+:is(.ns-field-box, .ns-search):hover {
+  background: var(--action-secondary-hover);
+}
+
+/* Focus thickens the edge to 2px without moving the content. */
+:is(.ns-field-box, .ns-search):focus-within {
+  border-color: var(--border-focus);
+  box-shadow: inset 0 0 0 var(--border-width-1) var(--border-focus);
+}
+
+:is(.ns-field-input, .ns-search-input) {
+  /* Starts at zero and fills the frame, so the font never sets the field width. */
+  flex: 1;
+  inline-size: 0;
+  min-inline-size: 0;
+  padding: 0;
+  color: var(--text-default);
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+:is(.ns-field-input, .ns-search-input)::placeholder {
+  color: var(--text-muted);
+}
+
+@media (forced-colors: active) {
+  :is(.ns-field-box, .ns-search):focus-within {
+    outline: var(--border-width-2) solid Highlight;
+  }
+}
