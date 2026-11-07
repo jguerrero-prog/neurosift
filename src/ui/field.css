@@ -55,6 +55,10 @@
   color: var(--text-default);
   background: transparent;
   border: 0;
+}
+
+/* The frame shows focus, so the control inside never draws a ring of its own. */
+:is(.ns-field-input, .ns-search-input, .ns-select):is(:focus, :focus-visible) {
   outline: none;
 }
 

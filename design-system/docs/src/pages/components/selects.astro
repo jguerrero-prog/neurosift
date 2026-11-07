@@ -42,8 +42,8 @@ const CHOOSING = [
 ];
 
 const BROWSERS = [
-  ["Chromium (Chrome, Edge) and WebKit (Safari)", "Customizable select", "The list is drawn as the Menu: tokens, the Carbon checkmark, meta text, eight options before it scrolls"],
-  ["Firefox", "Native list", "The closed field looks the same; the open list is Firefox’s own, without meta text"],
+  ["Chrome and Edge", "Customizable select", "The list is drawn as the Menu: tokens, the Carbon checkmark, meta text, eight options before it scrolls"],
+  ["Safari and Firefox", "Native list", "The closed field looks the same; the open list is the browser’s own, without meta text, until the browser ships customizable selects"],
 ];
 
 const SELECT_KEYS = [
@@ -144,7 +144,7 @@ const code = `import { Menu, Select } from "@ui";
         <Select label="Group trials by, fallback" value="trial_type" onChange={noop} options={GROUPS} />
       </div>
     </div>
-    <p class="doc-note">The second field turns the styling off, so it opens the list Firefox shows. Checked in Playwright’s Chromium 158, WebKit 27.2 and Firefox 159.</p>
+    <p class="doc-note">The second field turns the styling off, so it opens the list Safari and Firefox show. The tests run Playwright’s Chromium 158, Firefox 159 and WebKit 27.2; that WebKit is ahead of shipping Safari and already draws the styled list, while Safari 26.6 still shows its own.</p>
     <DocTable caption="What each browser shows" columns={["Browsers", "Open list", "What people see"]}>
       {BROWSERS.map(([browsers, list, see]) => <tr><th scope="row">{browsers}</th><td>{list}</td><td>{see}</td></tr>)}
     </DocTable>

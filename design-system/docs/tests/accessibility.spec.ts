@@ -121,14 +121,16 @@ test("the keyboard reaches the skip link first and every stop shows a 2px focus 
     await page.keyboard.press(tab(browserName));
     await expect(page.locator(".skip-link"), path).toBeFocused();
     for (let stop = 0; stop < 30; stop++) {
-      // Text fields show focus by thickening their own edge in border/focus; everything else gets a ring.
+      // Fields show focus by thickening their own edge in border/focus, with no second ring inside; everything else gets a ring.
       const ring = await page.evaluate(() => {
         const el = document.activeElement as HTMLElement;
         const name =
           el.textContent?.trim() ||
           el.getAttribute("aria-label") ||
           (el as HTMLInputElement).labels?.[0]?.textContent;
-        const frame = el.closest<HTMLElement>(".ns-field-box, .ns-search");
+        const frame = el.matches("input, select")
+          ? el.closest<HTMLElement>(".ns-field-box, .ns-search")
+          : null;
         if (frame) {
           const probe = document.createElement("span");
           probe.style.color = "var(--border-focus)";
@@ -138,7 +140,10 @@ test("the keyboard reaches the skip link first and every stop shows a 2px focus 
           const edge = getComputedStyle(frame);
           return {
             name,
-            shown: edge.borderColor === focus && edge.boxShadow !== "none",
+            shown:
+              edge.borderColor === focus &&
+              edge.boxShadow !== "none" &&
+              getComputedStyle(el).outlineStyle === "none",
           };
         }
         const style = getComputedStyle(el);
