@@ -48,9 +48,9 @@ jobs:
       - name: Install docs dependencies
         run: npm run docs:install
 
-      - name: Install Chromium for Playwright
+      - name: Install Chromium, Firefox and WebKit for Playwright
         working-directory: design-system/docs
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Run the accessibility suite
         run: npm run docs:test

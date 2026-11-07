@@ -73,6 +73,11 @@ export const navigation: NavSection[] = [
         href: "/components/checkboxes/",
         summary: "On, off and mixed, with the whole row as the target.",
       },
+      {
+        label: "Dropdowns and selects",
+        href: "/components/selects/",
+        summary: "Select and Menu: one value or one action from a list.",
+      },
     ],
   },
 ];
