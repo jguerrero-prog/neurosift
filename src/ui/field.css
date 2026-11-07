@@ -21,7 +21,9 @@
 }
 
 :is(.ns-field-input, .ns-search-input) {
+  /* Starts at zero and fills the frame, so the font never sets the field width. */
   flex: 1;
+  inline-size: 0;
   min-inline-size: 0;
   padding: 0;
   color: var(--text-default);

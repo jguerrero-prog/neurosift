@@ -1,5 +1,6 @@
 .ns-field {
   display: grid;
+  min-inline-size: 0;
   gap: var(--space-1);
 }
 

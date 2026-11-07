@@ -466,7 +466,7 @@ main {
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
-    minmax(calc(var(--layout-panel-min) + var(--space-10)), 1fr)
+    minmax(min(100%, calc(var(--layout-panel-min) + var(--space-10))), 1fr)
   );
   gap: var(--space-8);
   align-items: start;
