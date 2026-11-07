@@ -356,24 +356,23 @@ test("selects: Space opens the list, Escape closes it and keeps the value and fo
   await expect(select).toHaveValue("1×");
 });
 
-test("selects: typing jumps to an option; arrows and Enter pick from the styled list", async ({
+test("selects: arrows and Enter pick from the styled list; typing jumps to an option", async ({
   page,
   browserName,
 }) => {
   await page.goto("components/selects/");
   const select = page.getByRole("combobox", { name: "Playback speed" });
   await select.focus();
+  if (browserName !== "firefox") {
+    // Firefox's native list doesn't take synthetic keys; the others pick from the styled list.
+    await page.keyboard.press("Space");
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    await expect(select).toHaveValue("2×");
+    expect(await select.evaluate((s) => s.matches(":open"))).toBe(false);
+  }
   await page.keyboard.type("8");
   await expect(select).toHaveValue("8×");
-  test.skip(
-    browserName === "firefox",
-    "Firefox's native list doesn't take synthetic keys",
-  );
-  await page.keyboard.press("Alt+ArrowDown");
-  await page.keyboard.press("ArrowUp");
-  await page.keyboard.press("Enter");
-  await expect(select).toHaveValue("4×");
-  expect(await select.evaluate((s) => s.matches(":open"))).toBe(false);
 });
 
 test("menus: Enter opens on the first item, arrows skip disabled items, Escape returns focus", async ({
