@@ -1,0 +1,133 @@
+---
+import { SearchField, TextInput } from "@ui";
+import CodeSample from "../../components/CodeSample.astro";
+import DoDont from "../../components/DoDont.astro";
+import DocSection from "../../components/DocSection.astro";
+import DocTable from "../../components/DocTable.astro";
+import Intro from "../../components/Intro.astro";
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const noop = () => {};
+const HELPER = "Seconds from the start of the session.";
+
+const MESSAGES = [
+  ["Start must come before the end, 1.00 s.", "On leaving either field"],
+  ["Use between 1 and 1,000 bins.", "On leaving the field"],
+  ["Dandiset IDs are six digits, such as 000728.", "On submit"],
+  ["This URL doesn’t point to an NWB file. Neurosift opens .nwb, .nwb.lindi.json and .zarr files.", "After the file check fails"],
+  ["DANDI didn’t accept this key. Copy it again from your DANDI account page.", "After the archive answers"],
+];
+
+const WRITING = [
+  ["Opens embargoed Dandisets on dandiarchive.org. Saved in this browser only.", "Enter your DANDI API key for accessing protected resources on api.dandiarchive.org", "Says what it does and where it’s kept"],
+  ["Search Dandisets, for example “mouse hippocampus”", "Search for Dandisets...", "An example helps more than an ellipsis"],
+  ["Number of bins", "Num. bins", "Name the thing, no abbreviations"],
+  ["Empty, with “Leave empty for no filter.”", "off", "A placeholder isn’t a value"],
+];
+
+const SPECS = [
+  ["Field height", "32px · button/height/md", "24px · button/height/sm"],
+  ["Padding at the sides", "12px · space/3", "8px · space/2"],
+  ["Label", "type/label, above the field, 4px gap (space/1)", "Same"],
+  ["Value and placeholder", "type/body-sm · text/default and text/muted", "Same"],
+  ["Helper and error", "type/caption · text/secondary, or status/error/text with the error icon", "Same"],
+  ["Edge", "1px border/strong; 2px border/focus on focus, 2px border/error on error", "Same"],
+  ["Hover", "action/secondary-hover", "Same"],
+  ["Disabled", "action/disabled fill, border/disabled, text/disabled", "Same"],
+  ["Search field", "40px · input/height/lg (Large) or 32px (Medium), 20px or 16px search icon", "—"],
+];
+
+const code = `import { SearchField, TextInput } from "@ui";
+
+<TextInput label="Window start (s)" value={start} onChange={setStart}
+  unit="s" inputMode="decimal" helper="Seconds from the start of the session."
+  error={startError} />
+
+<SearchField label="Search Dandisets" value={query} onChange={setQuery}
+  onSearch={runSearch} loading={searching}
+  placeholder="Search Dandisets, for example “mouse hippocampus”" />`;
+---
+
+<DocsLayout title="Text inputs and search" description="Text input and Search field: labels, units, helper text and errors in words.">
+  <Intro
+    lead="Text inputs take values people type: an API key, a time window, a number of bins, a filter cutoff. The search field finds Dandisets and datasets on the archive pages. Every field has a visible label, says which unit it expects, and explains what went wrong in words when a value doesn’t fit."
+    status="Updated November 6, 2026 · Components · Every field on this page is the component the app imports from @ui"
+    rules={[
+      { title: "Labels sit above the field", text: "A short noun, always visible. Placeholders show an example; they never replace the label." },
+      { title: "Units live in the label", text: "“Window start (s)”, “Low-pass cutoff (Hz)”. People shouldn’t have to guess seconds or milliseconds." },
+      { title: "Errors say what fits", text: "Name the allowed range or format, next to the field, as soon as people leave it." },
+    ]}
+  />
+
+  <DocSection title="Text input" lead="One component in two sizes. Focus thickens the edge to a 2px link-blue border, so the label and value don’t move. Click into a field here to see it.">
+    <div class="field-grid">
+      <TextInput label="Window start (s)" value="" onChange={noop} placeholder="For example, 0.5" helper={HELPER} />
+      <TextInput label="Window start (s)" value="0.18" onChange={noop} unit="s" helper={HELPER} />
+      <TextInput label="Window start (s)" value="2000" onChange={noop} unit="s" error="Use a start between 0 and 1,375.28 s, the length of this session." />
+      <TextInput label="Window start (s)" value="0.18" onChange={noop} unit="s" helper={HELPER} disabled />
+    </div>
+    <p class="doc-note">Empty with an example placeholder, filled, with an error, and disabled. A disabled field needs a reason nearby.</p>
+  </DocSection>
+
+  <DocSection title="Sizes" lead="Medium is the default. Small lines up with 24px compact rows in plot control panels, where the PSTH and spectrogram settings live.">
+    <div class="field-grid">
+      <TextInput label="Number of bins" value="50" onChange={noop} inputMode="numeric" />
+      <TextInput label="Number of bins" value="50" onChange={noop} inputMode="numeric" size="sm" />
+    </div>
+  </DocSection>
+
+  <DocSection title="Numbers and units" lead="Most fields take a number with a unit. Put the unit in the label and repeat it as a suffix inside the field, so it stays visible after people type. Screen readers hear it once, from the label.">
+    <div class="field-grid">
+      <TextInput label="Low-pass cutoff (Hz)" value="" onChange={noop} unit="Hz" inputMode="decimal" helper="Leave empty for no filter." />
+      <TextInput label="Number of bins" value="50" onChange={noop} inputMode="numeric" helper="Between 1 and 1,000." />
+    </div>
+  </DocSection>
+
+  <DocSection title="Search field" lead="For the DANDI, EMBER and OpenNeuro pages. The magnifier sits inside the field and search runs on Enter. A clear button appears once there is text, and Escape also clears. While results load, a spinner takes the clear button’s place.">
+    <div class="field-stack">
+      <SearchField label="Search Dandisets" value="" onChange={noop} onSearch={noop} placeholder="Search Dandisets, for example “mouse hippocampus”" />
+      <SearchField label="Search Dandisets, with a query" value="hippocampus place cells" onChange={noop} onSearch={noop} />
+      <SearchField label="Search Dandisets, loading" value="hippocampus place cells" onChange={noop} onSearch={noop} loading />
+      <SearchField label="Search files" value="" onChange={noop} onSearch={noop} size="md" placeholder="Search files in this Dandiset" />
+    </div>
+    <p class="doc-note">Large (40px) on archive pages, Medium (32px) inside panels. The label is visually hidden but always there for screen readers.</p>
+  </DocSection>
+
+  <DocSection title="Validation messages" lead="Check when people leave the field or submit, never on each keystroke. Messages are full sentences that name what fits.">
+    <DocTable caption="Validation messages" columns={["Message", "When"]}>
+      {MESSAGES.map(([message, when]) => <tr><th scope="row">{message}</th><td>{when}</td></tr>)}
+    </DocTable>
+  </DocSection>
+
+  <DocSection title="Writing labels and help text" lead="Rewrites of strings in the app today. Sentence case, units in brackets, no abbreviations or trailing ellipses.">
+    <DocTable caption="Writing labels and help text" columns={["Use", "Instead of", "Why"]}>
+      {WRITING.map(([use, instead, why]) => <tr><th scope="row">{use}</th><td>{instead}</td><td>{why}</td></tr>)}
+    </DocTable>
+  </DocSection>
+
+  <DocSection title="Accessibility">
+    <ul class="rule-list">
+      <li><strong>Labels.</strong> Every field has a &lt;label&gt; tied to it. In a search field it is visually hidden, never missing.</li>
+      <li><strong>Errors.</strong> The field gets aria-invalid, the message is tied to it with aria-describedby, and an icon goes with the color.</li>
+      <li><strong>Input hints.</strong> inputMode="decimal" for numbers, autocomplete="off" for keys, and type="search" in the search field.</li>
+      <li><strong>Contrast.</strong> Text 17.4:1, placeholder 5.3:1 and the field edge 21:1 on white; the 2px focus border is 7.2:1.</li>
+    </ul>
+  </DocSection>
+
+  <DocSection title="Usage">
+    <DoDont
+      dos={["Keep the label visible above the field at all times.", "Put units in the label and as a suffix.", "Give an example in the placeholder.", "Explain the allowed range in the error message."]}
+      donts={["Don’t use the placeholder as the label.", "Don’t write “off” or “n/a” inside an empty field.", "Don’t show an error while people are still typing.", "Don’t abbreviate labels to fit a narrow panel; widen the panel."]}
+    />
+  </DocSection>
+
+  <DocSection title="Specs" lead="Values for developers. Every value is a token.">
+    <DocTable caption="Text input specs" columns={["Property", "Medium", "Small"]}>
+      {SPECS.map(([property, medium, small]) => <tr><th scope="row">{property}</th><td>{medium}</td><td>{small}</td></tr>)}
+    </DocTable>
+  </DocSection>
+
+  <DocSection title="In code" lead="Import from @ui. Both components are controlled: they show the value they’re given and report each change.">
+    <CodeSample label="React" code={code} />
+  </DocSection>
+</DocsLayout>

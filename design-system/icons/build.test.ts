@@ -22,11 +22,16 @@ const MUI_REPLACEMENTS = [
   "logo--github",
 ];
 
+// Icons the components draw themselves: the error message and the checkbox marks.
+const COMPONENT_ICONS = ["error", "checkmark", "subtract"];
+
 const icons = IconSource.load(SOURCE);
 
 describe("icons", () => {
-  it("holds a Carbon icon for every MUI icon the app uses", () => {
-    expect(Object.keys(icons).sort()).toEqual([...MUI_REPLACEMENTS].sort());
+  it("holds the MUI replacements and the icons components draw, nothing else", () => {
+    expect(Object.keys(icons).sort()).toEqual(
+      [...MUI_REPLACEMENTS, ...COMPONENT_ICONS].sort(),
+    );
   });
 
   it("matches the committed icons.ts", () => {

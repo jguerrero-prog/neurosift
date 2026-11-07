@@ -106,17 +106,35 @@ test("the keyboard reaches the skip link first and every stop shows a 2px focus 
     await page.keyboard.press("Tab");
     await expect(page.locator(".skip-link"), path).toBeFocused();
     for (let stop = 0; stop < 30; stop++) {
+      // Text fields show focus by thickening their own edge in border/focus; everything else gets a ring.
       const ring = await page.evaluate(() => {
         const el = document.activeElement as HTMLElement;
+        const name =
+          el.textContent?.trim() ||
+          el.getAttribute("aria-label") ||
+          (el as HTMLInputElement).labels?.[0]?.textContent;
+        const frame = el.closest<HTMLElement>(".ns-field-box, .ns-search");
+        if (frame) {
+          const probe = document.createElement("span");
+          probe.style.color = "var(--border-focus)";
+          document.body.append(probe);
+          const focus = getComputedStyle(probe).color;
+          probe.remove();
+          const edge = getComputedStyle(frame);
+          return {
+            name,
+            shown: edge.borderColor === focus && edge.boxShadow !== "none",
+          };
+        }
         const style = getComputedStyle(el);
         return {
-          name: el.textContent?.trim() || el.getAttribute("aria-label"),
-          width: parseFloat(style.outlineWidth),
-          outline: style.outlineStyle,
+          name,
+          shown:
+            style.outlineStyle !== "none" &&
+            parseFloat(style.outlineWidth) >= 2,
         };
       });
-      expect(ring.outline, `${path} ${ring.name}`).not.toBe("none");
-      expect(ring.width, `${path} ${ring.name}`).toBeGreaterThanOrEqual(2);
+      expect(ring.shown, `${path} ${ring.name}`).toBe(true);
       await page.keyboard.press("Tab");
       if (await page.evaluate(() => document.activeElement === document.body))
         break;
@@ -213,6 +231,37 @@ test("buttons: a loading button is as wide as the same button not loading", asyn
   for (const { row, idle, busy, centered } of pairs) {
     expect(busy, `${row} loading width`).toBe(idle);
     expect(centered, `${row} spinner centered`).toBe(true);
+  }
+});
+
+test("checkboxes: Space and a click on the label toggle; a disabled box doesn't change", async ({
+  page,
+}) => {
+  await page.goto("components/checkboxes/");
+  const ember = page.getByRole("checkbox", { name: /^EMBER/ });
+  await expect(ember).not.toBeChecked();
+  await ember.focus();
+  await page.keyboard.press("Space");
+  await expect(ember).toBeChecked();
+  await page.getByText("EMBER", { exact: true }).click();
+  await expect(ember).not.toBeChecked();
+  const disabled = page.locator(".ns-checkbox-input:disabled").first();
+  const before = await disabled.isChecked();
+  await disabled.click({ force: true });
+  expect(await disabled.isChecked()).toBe(before);
+});
+
+test("text inputs: an invalid field points to a visible message that says what fits", async ({
+  page,
+}) => {
+  await page.goto("components/text-inputs/");
+  const invalid = page.locator("[aria-invalid='true']");
+  expect(await invalid.count()).toBeGreaterThan(0);
+  for (const field of await invalid.all()) {
+    const id = await field.getAttribute("aria-describedby");
+    const message = page.locator(`[id="${id}"]`);
+    await expect(message).toBeVisible();
+    await expect(message).toContainText(/\S/);
   }
 });
 
