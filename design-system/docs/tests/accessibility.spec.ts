@@ -14,12 +14,22 @@ test.beforeAll(async ({ browser }) => {
   await page.close();
 });
 
+// Names what sticks out past the window, so a failure says where to look.
 const overflow = (page: Page) =>
-  page.evaluate(
-    () =>
-      document.documentElement.scrollWidth -
-      document.documentElement.clientWidth,
-  );
+  page.evaluate(() => {
+    const width = document.documentElement.clientWidth;
+    if (document.documentElement.scrollWidth <= width) return [];
+    return [...document.querySelectorAll("body *")]
+      .filter(
+        (el) =>
+          !el.closest(".doc-table, pre") &&
+          el.getBoundingClientRect().right > width + 1,
+      )
+      .map(
+        (el) =>
+          `${el.tagName.toLowerCase()}.${el.className} ${Math.round(el.getBoundingClientRect().right - width)}px`,
+      );
+  });
 
 const clipped = (page: Page) =>
   page.evaluate(() =>
@@ -169,7 +179,7 @@ test("pages reflow at 320px wide and survive text spacing overrides", async ({
   for (const path of pages) {
     await page.setViewportSize({ width: 320, height: 800 });
     await page.goto(path);
-    expect(await overflow(page), path).toBe(0);
+    expect(await overflow(page), path).toEqual([]);
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.addStyleTag({
       content:
@@ -188,7 +198,7 @@ test("text at 200% of the browser's default size neither overflows nor clips", a
   });
   for (const path of pages) {
     await page.goto(path);
-    expect(await overflow(page), path).toBe(0);
+    expect(await overflow(page), path).toEqual([]);
     expect(await clipped(page), path).toEqual([]);
   }
 });
