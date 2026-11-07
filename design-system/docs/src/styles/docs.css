@@ -652,3 +652,14 @@ main {
   margin: 0;
   color: var(--text-secondary);
 }
+
+/* Room above and below, so the tooltips open without flipping. */
+.tooltip-demo {
+  padding-block: var(--space-10);
+}
+
+.toggletip-demo {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+}

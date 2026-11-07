@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 // WCAG 2.2 AA on every docs page; the pages are found from the side menu, so new pages are covered.
 const pages: string[] = [];
@@ -425,4 +425,84 @@ test("menus: open under their button, at least as wide, and picking runs the ite
   await page.getByRole("menuitem", { name: "Copy link" }).click();
   await expect(menu).toBeHidden();
   await expect(page.getByRole("status").first()).toHaveText("Ran “Copy link”");
+});
+
+const tooltipOf = (page: Page, name: string) =>
+  page
+    .getByRole("button", { name })
+    .locator("xpath=following-sibling::*[contains(@class, 'ns-tooltip')]");
+const isOpen = (tooltip: Locator) =>
+  tooltip.evaluate((el) => el.matches(":popover-open"));
+
+test("tooltips: 500ms after hover, at once on keyboard focus, gone on Escape", async ({
+  page,
+  browserName,
+}) => {
+  await page.goto("components/tooltips/");
+  await page.waitForFunction(
+    () => !document.querySelector(".tooltip-demo astro-island[ssr]"),
+  );
+  const settings = page.getByRole("button", { name: "Settings" });
+  const tooltip = tooltipOf(page, "Settings");
+  await settings.hover();
+  await page.waitForTimeout(250);
+  expect(await isOpen(tooltip)).toBe(false);
+  await expect.poll(() => isOpen(tooltip)).toBe(true);
+  await page.mouse.move(0, 0);
+  await expect.poll(() => isOpen(tooltip)).toBe(false);
+  await page.getByRole("button", { name: "Earlier" }).focus();
+  await page.keyboard.press(tab(browserName));
+  await expect(settings).toBeFocused();
+  expect(await isOpen(tooltip)).toBe(true);
+  await page.keyboard.press("Escape");
+  expect(await isOpen(tooltip)).toBe(false);
+});
+
+test("tooltips: the pointer can move onto a tooltip without it closing (WCAG 1.4.13)", async ({
+  page,
+}) => {
+  await page.goto("components/tooltips/");
+  await page.waitForFunction(
+    () => !document.querySelector(".tooltip-demo astro-island[ssr]"),
+  );
+  await page.getByRole("button", { name: "Settings" }).hover();
+  const tooltip = tooltipOf(page, "Settings");
+  await expect.poll(() => isOpen(tooltip)).toBe(true);
+  const box = (await tooltip.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2, {
+    steps: 5,
+  });
+  await page.waitForTimeout(300);
+  expect(await isOpen(tooltip)).toBe(true);
+});
+
+test("tooltips: never appear on touch", async ({ browser }) => {
+  const context = await browser.newContext({ hasTouch: true });
+  const page = await context.newPage();
+  await page.goto("components/tooltips/");
+  await page.waitForFunction(
+    () => !document.querySelector(".tooltip-demo astro-island[ssr]"),
+  );
+  await page.getByRole("button", { name: "Settings" }).tap();
+  await page.waitForTimeout(700);
+  expect(await isOpen(tooltipOf(page, "Settings"))).toBe(false);
+  await context.close();
+});
+
+test("toggletips: Enter opens, Escape closes and returns focus to the Info button", async ({
+  page,
+}) => {
+  await page.goto("components/tooltips/");
+  const info = page.getByRole("button", { name: "About shared y-scale" });
+  await info.scrollIntoViewIfNeeded();
+  await page.waitForFunction(
+    () => !document.querySelector(".toggletip-demo astro-island[ssr]"),
+  );
+  await info.focus();
+  await page.keyboard.press("Enter");
+  await expect(info).toHaveAttribute("aria-expanded", "true");
+  await expect(page.locator(".ns-toggletip-panel")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(info).toHaveAttribute("aria-expanded", "false");
+  await expect(info).toBeFocused();
 });

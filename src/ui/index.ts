@@ -11,3 +11,6 @@ export { Menu } from "./Menu/Menu";
 export type { MenuItem } from "./Menu/Menu";
 export { Select } from "./Select/Select";
 export type { SelectOption } from "./Select/Select";
+export { Toggletip } from "./Toggletip/Toggletip";
+export { Tooltip } from "./Tooltip/Tooltip";
+export type { TooltipPlacement } from "./Tooltip/Tooltip";

@@ -22,8 +22,14 @@ const MUI_REPLACEMENTS = [
   "logo--github",
 ];
 
-// Icons the components draw themselves: the error message, the checkbox marks and the select chevron.
-const COMPONENT_ICONS = ["error", "checkmark", "subtract", "chevron--down"];
+// Icons the components draw themselves: the error message, the checkbox marks, the select chevron and the info button.
+const COMPONENT_ICONS = [
+  "error",
+  "checkmark",
+  "subtract",
+  "chevron--down",
+  "information",
+];
 
 const icons = IconSource.load(SOURCE);
 
