@@ -680,3 +680,13 @@ main {
 .section-demo {
   max-inline-size: var(--layout-text-max);
 }
+
+.code-demo {
+  display: grid;
+  gap: var(--space-4);
+  max-inline-size: var(--layout-page-max);
+}
+
+.inline-code-demo {
+  margin: 0;
+}

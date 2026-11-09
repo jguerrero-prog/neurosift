@@ -93,6 +93,11 @@ export const navigation: NavSection[] = [
         href: "/components/pages/",
         summary: "Page and Section: a page's title, column and titled panels.",
       },
+      {
+        label: "Code block",
+        href: "/components/code/",
+        summary: "Code block and Inline code: Python people can copy, read and run.",
+      },
     ],
   },
 ];
