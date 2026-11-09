@@ -582,3 +582,37 @@ test("toasts: wait while hovered or focused, and return focus when they close", 
   await expect(polite).toHaveText("");
   await expect(button("Close tab")).toBeFocused();
 });
+
+test("accordions: Enter and Space open and close a section; a disclosure says whether it's open", async ({
+  page,
+}) => {
+  await page.goto("components/accordions/");
+  const header = page.locator("summary", { hasText: "Controls" });
+  await header.scrollIntoViewIfNeeded();
+  await expect(
+    header.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  const details = header.locator("xpath=..");
+  await expect(details).not.toHaveAttribute("open");
+  await header.focus();
+  await page.keyboard.press("Enter");
+  await expect(details).toHaveAttribute("open");
+  await expect(page.getByLabel("Window start")).toBeVisible();
+  await header.focus();
+  await page.keyboard.press(" ");
+  await expect(details).not.toHaveAttribute("open");
+
+  const more = page.getByRole("button", { name: "Show full description" });
+  await more.scrollIntoViewIfNeeded();
+  await expect(
+    more.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  await more.focus();
+  await page.keyboard.press("Enter");
+  const less = page.getByRole("button", { name: "Show less" });
+  await expect(less).toHaveAttribute("aria-expanded", "true");
+  await expect(
+    page.getByText("Neural activity from two neuron populations"),
+  ).toBeVisible();
+  await expect(less).toBeFocused();
+});

@@ -25,3 +25,4 @@ export { useToast } from "./Toast/toastContext";
 export type { ToastApi, ToastOptions } from "./Toast/toastContext";
 export { Page } from "./Page/Page";
 export { Section } from "./Page/Section";
+export { AccordionItem, Disclosure } from "./Accordion/Accordion";

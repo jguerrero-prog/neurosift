@@ -93,6 +93,11 @@ export const navigation: NavSection[] = [
         href: "/components/pages/",
         summary: "Page and Section: a page's title, column and titled panels.",
       },
+      {
+        label: "Accordions",
+        href: "/components/accordions/",
+        summary: "Accordion item and Disclosure: sections of a panel, and more on request.",
+      },
     ],
   },
 ];
