@@ -582,3 +582,44 @@ test("toasts: wait while hovered or focused, and return focus when they close", 
   await expect(polite).toHaveText("");
   await expect(button("Close tab")).toBeFocused();
 });
+
+test("dialogs: focus starts on the title, Tab stays inside, Escape closes and focus returns to the opener", async ({
+  page,
+  browserName,
+}) => {
+  await page.goto("components/modals/");
+  const opener = page.getByRole("button", { name: "Remove API key" });
+  await opener.scrollIntoViewIfNeeded();
+  await expect(
+    opener.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  await opener.focus();
+  await page.keyboard.press("Enter");
+  const dialog = page.getByRole("dialog", {
+    name: "Remove the DANDI API key?",
+  });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("heading")).toBeFocused();
+  for (let i = 0; i < 3; i++) {
+    await page.keyboard.press(tab(browserName));
+    expect(
+      await dialog.evaluate((d) => d.contains(document.activeElement)),
+    ).toBe(true);
+  }
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(opener).toBeFocused();
+
+  const info = page.getByRole("button", { name: "Column info" });
+  await info.scrollIntoViewIfNeeded();
+  await expect(
+    info.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  await info.focus();
+  await page.keyboard.press("Enter");
+  const drawer = page.getByRole("dialog", { name: "Column info" });
+  await expect(drawer.getByRole("heading")).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(drawer).toHaveCount(0);
+  await expect(info).toBeFocused();
+});

@@ -93,6 +93,11 @@ export const navigation: NavSection[] = [
         href: "/components/pages/",
         summary: "Page and Section: a page's title, column and titled panels.",
       },
+      {
+        label: "Modals and drawers",
+        href: "/components/modals/",
+        summary: "Dialog and Drawer: one decision at a time, and panels beside the data.",
+      },
     ],
   },
 ];
