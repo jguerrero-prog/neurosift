@@ -59,7 +59,7 @@ describe("NwbObjectView", () => {
     );
     expect(screen.getByText("tab bar")).toBeTruthy();
     expect(
-      screen.getByText("Something went wrong in the Raster view of /units"),
+      screen.getByText("The Raster view of /units couldn’t be shown"),
     ).toBeTruthy();
     expect(screen.getByText("spike_times is not a ragged array")).toBeTruthy();
   });

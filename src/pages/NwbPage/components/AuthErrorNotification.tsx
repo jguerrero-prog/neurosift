@@ -1,63 +1,37 @@
-import React from "react";
-import { Alert, Button, Box, Link } from "@mui/material";
+import { Alert } from "@ui";
 import { useNavigate } from "react-router-dom";
+import "./AuthErrorNotification.css";
 
 interface AuthErrorNotificationProps {
   dandiUrl?: string;
 }
 
-const AuthErrorNotification: React.FC<AuthErrorNotificationProps> = ({
-  dandiUrl,
-}) => {
+/** Shown when DANDI refuses a file because the Dandiset is embargoed and no key, or the wrong key, was sent. */
+const AuthErrorNotification = ({ dandiUrl }: AuthErrorNotificationProps) => {
   const navigate = useNavigate();
-
-  const isDandiStaging = dandiUrl?.includes("api.sandbox.dandiarchive.org");
-  const serverType = isDandiStaging ? "DANDI Sandbox" : "DANDI";
-
+  const sandbox = dandiUrl?.includes("api.sandbox.dandiarchive.org");
+  const archive = sandbox ? "DANDI sandbox" : "DANDI";
   return (
-    <Box sx={{ m: 2 }}>
+    <div className="auth-error-notification">
       <Alert
-        severity="warning"
-        sx={{
-          mb: 2,
-          "& .MuiAlert-message": {
-            width: "100%",
+        status="warning"
+        title="This Dandiset is embargoed"
+        actions={[
+          { label: "Add API key", onClick: () => navigate("/settings") },
+          {
+            label: sandbox
+              ? "Get a key on the DANDI sandbox"
+              : "Get a key on DANDI",
+            href: sandbox
+              ? "https://gui-staging.dandiarchive.org"
+              : "https://dandiarchive.org",
+            newTab: true,
           },
-        }}
+        ]}
       >
-        <Box>
-          <strong>Permission Required</strong>
-          <p>
-            This appears to be an embargoed dataset that requires authentication
-            to access. You need to provide a valid {serverType} API key in your
-            settings.
-          </p>
-          <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={() => navigate("/settings")}
-            >
-              Go to Settings
-            </Button>
-            <Button
-              variant="outlined"
-              size="small"
-              component={Link}
-              href={
-                isDandiStaging
-                  ? "https://gui-staging.dandiarchive.org"
-                  : "https://dandiarchive.org"
-              }
-              target="_blank"
-            >
-              Get API Key from {serverType}
-            </Button>
-          </Box>
-        </Box>
+        Add a {archive} API key from an account with access to open its files.
       </Alert>
-    </Box>
+    </div>
   );
 };
 

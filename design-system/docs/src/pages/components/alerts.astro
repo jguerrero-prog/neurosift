@@ -39,6 +39,14 @@ const SPECS = [
   ["Timing", "Stays", "4 seconds; errors and work in progress stay", "While it applies"],
 ];
 
+const IN_APP = [
+  ["Any view that fails to draw", "Error alert: “The timeseries alignment couldn’t be shown”, the cause as detail, Try again and Report this"],
+  ["An embargoed Dandiset without a key", "Warning alert: “This Dandiset is embargoed”, with Add API key and Get a key on DANDI"],
+  ["Share on a tab", "Success toast: “Link copied”; an error toast if the browser won’t copy"],
+  ["Settings, after a key changes", "Info alert: “Reload to use the new key”, with Reload page"],
+  ["A 4D NIfTI image", "Info inline message: how many frames have loaded and how to load the rest"],
+];
+
 const code = `import { Alert, InlineMessage, ToastProvider, useToast } from "@ui";
 
 <Alert
@@ -139,6 +147,12 @@ toast.show({ status: "success", message: "Link copied" });`;
   <DocSection title="Specs" lead="Values for developers. Every value is a token.">
     <DocTable caption="Alert, Toast and Inline message specs" columns={["Property", "Alert", "Toast", "Inline message"]}>
       {SPECS.map(([property, alert, toast, inline]) => <tr><th scope="row">{property}</th><td>{alert}</td><td>{toast}</td><td>{inline}</td></tr>)}
+    </DocTable>
+  </DocSection>
+
+  <DocSection title="In the app" lead="Where the app uses them today.">
+    <DocTable caption="Alert, Toast and Inline message in the app" columns={["Where", "Shows"]}>
+      {IN_APP.map(([where, shows]) => <tr><th scope="row">{where}</th><td>{shows}</td></tr>)}
     </DocTable>
   </DocSection>
 

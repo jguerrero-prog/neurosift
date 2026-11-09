@@ -102,6 +102,23 @@ describe("Alert", () => {
     expect(retry).toHaveBeenCalledTimes(1);
   });
 
+  it("opens a link action in a new tab when asked", () => {
+    render(
+      <Alert
+        status="error"
+        actions={[
+          { label: "Try again", onClick: vi.fn() },
+          { label: "Report this", href: "https://github.com/", newTab: true },
+        ]}
+      >
+        Failed
+      </Alert>,
+    );
+    const link = screen.getByRole("link", { name: "Report this" });
+    expect(link.getAttribute("target")).toBe("_blank");
+    expect(link.getAttribute("rel")).toBe("noopener noreferrer");
+  });
+
   it("has a dismiss button only when it can be dismissed", () => {
     render(<Alert status="info">Note</Alert>);
     expect(screen.queryByRole("button", { name: "Dismiss" })).toBeNull();

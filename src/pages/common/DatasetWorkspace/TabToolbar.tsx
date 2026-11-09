@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import ShareTabButton from "./ShareTabButton";
+import ShareTabButton from "@shared/ShareTabButton/ShareTabButton";
 import { DatasetFile } from "./plugins/pluginInterface";
 
 const TOOLBAR_HEIGHT = 24;
@@ -43,7 +43,7 @@ const TabToolbar: FunctionComponent<TabToolbarProps> = ({ width, file }) => {
           minWidth: 28,
         }}
       >
-        <ShareTabButton file={file} />
+        <ShareTabButton params={{ tab: `${file.filepath}|${file.parentId}` }} />
       </div>
     </div>
   );
