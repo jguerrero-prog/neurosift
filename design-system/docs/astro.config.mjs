@@ -9,9 +9,14 @@ export default defineConfig({
   devToolbar: { enabled: false },
   integrations: [react()],
   vite: {
-    // The docs render the app's own components; one copy of React serves both.
+    // The docs render the app's own components and fonts; one copy of React and Plex serves both.
     resolve: {
-      alias: { "@ui": fileURLToPath(new URL("../../src/ui", import.meta.url)) },
+      alias: {
+        "@ui": fileURLToPath(new URL("../../src/ui", import.meta.url)),
+        "@fontsource": fileURLToPath(
+          new URL("./node_modules/@fontsource", import.meta.url),
+        ),
+      },
       dedupe: ["react", "react-dom"],
     },
   },

@@ -530,6 +530,8 @@ const toastPage = async (page: Page) => {
   await page.waitForFunction(
     () => !document.querySelector("astro-island[ssr]"),
   );
+  // Only the test moves time, so a slow machine can't run out a toast's 4 seconds.
+  await page.clock.pauseAt((await page.evaluate(() => Date.now())) + 100);
   const region = page.locator(".ns-toast-region");
   return {
     button: (name: string) => page.getByRole("button", { name, exact: true }),

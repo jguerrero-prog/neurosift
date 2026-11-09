@@ -412,10 +412,7 @@ const AppContent = () => {
                 path="/nwb"
                 element={<NwbPage width={width} height={mainHeight} />}
               />
-              <Route
-                path="/settings"
-                element={<SettingsPage width={width} height={mainHeight} />}
-              />
+              <Route path="/settings" element={<SettingsPage />} />
               <Route
                 path="/guide"
                 element={<GuidePage width={width} height={mainHeight} />}

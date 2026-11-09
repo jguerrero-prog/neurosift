@@ -23,3 +23,5 @@ export type { ToastProps, ToastStatus } from "./Toast/Toast";
 export { ToastProvider } from "./Toast/ToastProvider";
 export { useToast } from "./Toast/toastContext";
 export type { ToastApi, ToastOptions } from "./Toast/toastContext";
+export { Page } from "./Page/Page";
+export { Section } from "./Page/Section";

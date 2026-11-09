@@ -1,3 +1,9 @@
+/* IBM Plex for the app and the docs: Sans JP for text, Mono for code and values. */
+@import "@fontsource/ibm-plex-sans-jp/400.css";
+@import "@fontsource/ibm-plex-sans-jp/500.css";
+@import "@fontsource/ibm-plex-sans-jp/600.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+
 /* IBM Plex Sans JP draws … − × ± σ → as wide CJK glyphs; these faces take them from IBM Plex Sans.
    Declared after the Plex Sans JP faces, so they win for these characters only. */
 @font-face {
