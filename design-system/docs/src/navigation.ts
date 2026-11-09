@@ -31,7 +31,8 @@ export const navigation: NavSection[] = [
       {
         label: "Color",
         href: "/tokens/color/",
-        summary: "Primitive, semantic and data colors, each a CSS custom property.",
+        summary:
+          "Primitive, semantic and data colors, each a CSS custom property.",
       },
       {
         label: "Typography",
@@ -52,6 +53,41 @@ export const navigation: NavSection[] = [
         label: "States",
         href: "/tokens/states/",
         summary: "Hover, pressed, focus, selected, disabled and error.",
+      },
+    ],
+  },
+  {
+    heading: "Usage guidelines",
+    items: [
+      {
+        label: "Voice and content",
+        href: "/guidelines/voice/",
+        summary: "Precise, plain and considerate, in two modes of one voice.",
+      },
+      {
+        label: "Scientific notation and units",
+        href: "/guidelines/notation/",
+        summary: "Exact identifiers, readable numbers, one spelling per unit.",
+      },
+      {
+        label: "Data visualization",
+        href: "/guidelines/data-visualization/",
+        summary: "One set of rules for every plot; the data gets the hue.",
+      },
+      {
+        label: "Errors and access",
+        href: "/guidelines/errors/",
+        summary: "Where each error goes, how to word it, and API keys.",
+      },
+      {
+        label: "Empty states",
+        href: "/guidelines/empty-states/",
+        summary: "Say why it’s empty and offer one way forward.",
+      },
+      {
+        label: "Loading and large data",
+        href: "/guidelines/loading/",
+        summary: "Say what is loading, how far along, and what is too big.",
       },
     ],
   },
@@ -86,7 +122,8 @@ export const navigation: NavSection[] = [
       {
         label: "Tooltips",
         href: "/components/tooltips/",
-        summary: "Tooltip, Toggletip and Info button: names and help on request.",
+        summary:
+          "Tooltip, Toggletip and Info button: names and help on request.",
       },
       {
         label: "Pages and sections",
