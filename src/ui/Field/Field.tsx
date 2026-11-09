@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Icon } from "../Icon/Icon";
+import "../base.css";
 import "../field.css";
 import { fieldMessageId } from "./fieldAria";
 
@@ -9,6 +10,8 @@ interface FieldProps {
   size: "md" | "sm";
   helper?: string;
   error?: string;
+  /** Keeps the label for screen readers only, where a visible label nearby already names the field. */
+  hideLabel?: boolean;
   children: ReactNode;
 }
 
@@ -19,12 +22,16 @@ export function Field({
   size,
   helper,
   error,
+  hideLabel = false,
   children,
 }: FieldProps) {
   const message = error ?? helper;
   return (
     <div className={`ns-field ns-field--${size}`}>
-      <label className="ns-field-label" htmlFor={id}>
+      <label
+        className={hideLabel ? "ns-visually-hidden" : "ns-field-label"}
+        htmlFor={id}
+      >
         {label}
       </label>
       <div className="ns-field-box">{children}</div>

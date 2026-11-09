@@ -93,6 +93,11 @@ export const navigation: NavSection[] = [
         href: "/components/pages/",
         summary: "Page and Section: a page's title, column and titled panels.",
       },
+      {
+        label: "Sliders",
+        href: "/components/sliders/",
+        summary: "Slider and Range slider: feel by eye, exact numbers in a field.",
+      },
     ],
   },
 ];

@@ -25,3 +25,5 @@ export { useToast } from "./Toast/toastContext";
 export type { ToastApi, ToastOptions } from "./Toast/toastContext";
 export { Page } from "./Page/Page";
 export { Section } from "./Page/Section";
+export { Slider } from "./Slider/Slider";
+export { RangeSlider } from "./Slider/RangeSlider";
