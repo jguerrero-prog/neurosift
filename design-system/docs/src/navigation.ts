@@ -79,6 +79,11 @@ export const navigation: NavSection[] = [
         summary: "Select and Menu: one value or one action from a list.",
       },
       {
+        label: "Alerts and toasts",
+        href: "/components/alerts/",
+        summary: "Alert, Toast and Inline message: what happened, what to do.",
+      },
+      {
         label: "Tooltips",
         href: "/components/tooltips/",
         summary: "Tooltip, Toggletip and Info button: names and help on request.",

@@ -663,3 +663,16 @@ main {
   gap: var(--space-1);
   align-items: center;
 }
+
+.alert-demo,
+.toast-specimens,
+.inline-message-demo {
+  display: grid;
+  gap: var(--space-3);
+  max-inline-size: var(--layout-text-max);
+}
+
+.toast-specimens {
+  justify-items: start;
+  margin-block-start: var(--space-6);
+}
