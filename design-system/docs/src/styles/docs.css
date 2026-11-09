@@ -680,3 +680,35 @@ main {
 .section-demo {
   max-inline-size: var(--layout-text-max);
 }
+
+.tabs-demo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  justify-items: start;
+}
+
+.tabs-demo > .ns-tabs {
+  justify-self: stretch;
+}
+
+.tabs-demo-panel {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.segmented-demos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+
+.segmented-demo {
+  display: grid;
+  gap: var(--space-1);
+  justify-items: start;
+}
+
+.segmented-demo-label {
+  color: var(--text-secondary);
+}

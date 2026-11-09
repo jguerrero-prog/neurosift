@@ -25,3 +25,7 @@ export { useToast } from "./Toast/toastContext";
 export type { ToastApi, ToastOptions } from "./Toast/toastContext";
 export { Page } from "./Page/Page";
 export { Section } from "./Page/Section";
+export { Tabs, TabPanel } from "./Tabs/Tabs";
+export type { TabItem } from "./Tabs/Tabs";
+export { SegmentedControl } from "./SegmentedControl/SegmentedControl";
+export type { SegmentOption } from "./SegmentedControl/SegmentedControl";
