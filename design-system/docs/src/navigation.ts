@@ -78,6 +78,11 @@ export const navigation: NavSection[] = [
         href: "/components/selects/",
         summary: "Select and Menu: one value or one action from a list.",
       },
+      {
+        label: "Tooltips",
+        href: "/components/tooltips/",
+        summary: "Tooltip, Toggletip and Info button: names and help on request.",
+      },
     ],
   },
 ];

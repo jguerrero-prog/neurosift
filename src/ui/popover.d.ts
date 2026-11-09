@@ -9,3 +9,10 @@ declare module "react" {
     popovertarget?: string;
   }
 }
+
+declare global {
+  // Opening a popover from a source anchors it to that element.
+  interface HTMLElement {
+    showPopover(options?: { source?: HTMLElement }): void;
+  }
+}

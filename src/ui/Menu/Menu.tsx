@@ -1,6 +1,7 @@
-import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
+import { useCallback, useId, useRef, type KeyboardEvent } from "react";
 import { Button, type ButtonSize, type ButtonVariant } from "../Button/Button";
 import type { IconName } from "../Icon/Icon";
+import { usePopover } from "../popover/usePopover";
 import "./Menu.css";
 
 export interface MenuItem {
@@ -34,34 +35,17 @@ export function Menu({
   size = "md",
 }: MenuProps) {
   const id = useId();
-  const root = useRef<HTMLDivElement>(null);
   const list = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = useState(false);
 
   const enabled = () => [
     ...list.current!.querySelectorAll<HTMLButtonElement>(
       ".ns-menu-item:not(:disabled)",
     ),
   ];
-  const trigger = () =>
-    root.current!.querySelector<HTMLButtonElement>(":scope > button");
-
-  useEffect(() => {
-    const menu = list.current!;
-    const onToggle = (event: Event) => {
-      const opened = (event as ToggleEvent).newState === "open";
-      setOpen(opened);
-      if (opened) enabled()[0]?.focus();
-      // Escape, a pick or Tab leave focus inside or nowhere; send it back to the button.
-      else if (
-        menu.contains(document.activeElement) ||
-        document.activeElement === document.body
-      )
-        trigger()?.focus();
-    };
-    menu.addEventListener("toggle", onToggle);
-    return () => menu.removeEventListener("toggle", onToggle);
-  }, []);
+  const open = usePopover(
+    list,
+    useCallback(() => enabled()[0]?.focus(), []),
+  );
 
   const onKeyDown = (event: KeyboardEvent) => {
     if (event.key === "Tab") return list.current!.hidePopover();
@@ -74,7 +58,7 @@ export function Menu({
   };
 
   return (
-    <div className="ns-menu" ref={root}>
+    <div className="ns-menu">
       <Button
         variant={variant}
         size={size}
