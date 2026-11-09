@@ -11,6 +11,7 @@ import {
   Select,
   Typography,
 } from "@mui/material";
+import FramesNote from "./FramesNote";
 import { Niivue, SHOW_RENDER } from "./niivue_dist";
 import React, {
   useCallback,
@@ -268,21 +269,13 @@ const NiftiViewer: React.FC<NiftiViewerProps> = ({
             >
               forward
             </Button>
-
-            <Button
-              onClick={() => {
-                const volume = niivueRef.current?.volumes[0];
-                if (!volume) return;
-                const total = volume.nTotalFrame4D;
-                const current = volume.nFrame4D;
-                alert(
-                  `4D images can be slow to load. Click the '...' icon below the graph to see the entire dataset. Currently displaying ${current} of ${total} frames.`,
-                );
-              }}
-            >
-              about
-            </Button>
           </Box>
+        )}
+        {!loading && (
+          <FramesNote
+            loaded={niivueRef.current?.volumes[0]?.nFrame4D ?? 0}
+            total={niivueRef.current?.volumes[0]?.nTotalFrame4D ?? 0}
+          />
         )}
       </Box>
       <Box sx={{ position: "relative", height }}>

@@ -7,9 +7,9 @@ import "./Alert.css";
 
 export type AlertStatus = Status;
 
-export type AlertAction =
-  | { label: string; onClick: () => void }
-  | { label: string; href: string };
+type ButtonAction = { label: string; onClick: () => void };
+type LinkAction = { label: string; href: string; newTab?: boolean };
+export type AlertAction = ButtonAction | LinkAction;
 
 interface AlertProps {
   status: AlertStatus;
@@ -19,6 +19,13 @@ interface AlertProps {
   actions?: [AlertAction] | [AlertAction, AlertAction];
   onDismiss?: () => void;
 }
+
+const actionProps = (action: AlertAction) => {
+  if ("onClick" in action) return { onClick: action.onClick };
+  return action.newTab
+    ? { href: action.href, target: "_blank", rel: "noopener noreferrer" }
+    : { href: action.href };
+};
 
 export function Alert({
   status,
@@ -39,14 +46,14 @@ export function Alert({
         {detail && <code className="ns-alert-detail">{detail}</code>}
         {actions && (
           <div className="ns-alert-actions">
-            {actions.map(({ label, ...action }, index) => (
+            {actions.map((action, index) => (
               <Button
-                key={label}
-                {...action}
+                key={action.label}
+                {...actionProps(action)}
                 size="sm"
                 variant={index === 0 ? "secondary" : "ghost"}
               >
-                {label}
+                {action.label}
               </Button>
             ))}
           </div>

@@ -274,7 +274,7 @@ const MainWorkspace: React.FC<MainWorkspaceProps> = ({
             }}
           >
             <ScrollY width={contentWidth} height={contentHeight}>
-              <ErrorBoundary what="the Widgets tab">
+              <ErrorBoundary what="the widgets">
                 <NwbHierarchyView
                   nwbUrl={nwbUrl}
                   onOpenObjectInNewTab={handleOpenObjectInNewTab}
@@ -295,7 +295,7 @@ const MainWorkspace: React.FC<MainWorkspaceProps> = ({
             }}
           >
             <ScrollY width={contentWidth} height={contentHeight}>
-              <ErrorBoundary what="the HDF5 tab">
+              <ErrorBoundary what="the HDF5 view">
                 <Hdf5View
                   nwbUrl={nwbUrl}
                   width={contentWidth}
@@ -313,7 +313,7 @@ const MainWorkspace: React.FC<MainWorkspaceProps> = ({
             }}
           >
             <ScrollY width={contentWidth} height={contentHeight}>
-              <ErrorBoundary what="the Videos tab">
+              <ErrorBoundary what="the videos">
                 <MultiVideoTabView
                   nwbUrl={nwbUrl}
                   width={contentWidth}
@@ -333,7 +333,7 @@ const MainWorkspace: React.FC<MainWorkspaceProps> = ({
                   : "none",
             }}
           >
-            <ErrorBoundary what="the Icephys tab">
+            <ErrorBoundary what="the icephys view">
               <IcephysTabView
                 nwbUrl={nwbUrl}
                 width={contentWidth}
@@ -351,7 +351,7 @@ const MainWorkspace: React.FC<MainWorkspaceProps> = ({
             }}
           >
             <ScrollY width={contentWidth} height={contentHeight}>
-              <ErrorBoundary what="the Timeseries Alignment tab">
+              <ErrorBoundary what="the timeseries alignment">
                 <TimeseriesAlignmentView
                   nwbUrl={nwbUrl}
                   width={contentWidth}
@@ -368,7 +368,7 @@ const MainWorkspace: React.FC<MainWorkspaceProps> = ({
           </div>
           {showFixedContent && activeFixedTab === "specifications" && (
             <ScrollY width={contentWidth} height={contentHeight}>
-              <ErrorBoundary what="the Schema tab">
+              <ErrorBoundary what="the schema">
                 <Suspense
                   fallback={
                     <div style={{ padding: 20 }}>Loading specifications...</div>
@@ -388,7 +388,7 @@ const MainWorkspace: React.FC<MainWorkspaceProps> = ({
             }}
           >
             <ScrollY width={contentWidth} height={contentHeight}>
-              <ErrorBoundary what="the Python Usage tab">
+              <ErrorBoundary what="the Python usage">
                 <NwbUsageScript nwbUrl={nwbUrl} />
               </ErrorBoundary>
             </ScrollY>

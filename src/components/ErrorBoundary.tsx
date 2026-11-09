@@ -1,5 +1,6 @@
-import { Alert, AlertTitle, Button } from "@mui/material";
+import { Alert } from "@ui";
 import { Component, ErrorInfo, ReactNode } from "react";
+import "./ErrorBoundary.css";
 import {
   errorMessage,
   issueUrlForError,
@@ -7,8 +8,8 @@ import {
 } from "../util/reportError";
 
 type Props = {
-  // What is inside, as it reads in "Something went wrong in ...", e.g.
-  // "this view" or "the HDF5 tab".
+  // What is inside, in plain words, as it reads in "... couldn't be shown",
+  // e.g. "this page" or "the timeseries alignment".
   what: string;
   // The boundary clears its error when this value changes. Use it for content
   // that is replaced without remounting the boundary, such as a route.
@@ -51,31 +52,23 @@ class ErrorBoundary extends Component<Props, State> {
     const { error } = this.state;
     const { what } = this.props;
     return (
-      <Alert
-        severity="error"
-        sx={{ m: 1 }}
-        action={
-          <>
-            <Button color="inherit" size="small" onClick={this.reset}>
-              Try again
-            </Button>
-            <Button
-              color="inherit"
-              size="small"
-              href={issueUrlForError(error, what)}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Report this
-            </Button>
-          </>
-        }
-      >
-        <AlertTitle>Something went wrong in {what}</AlertTitle>
-        <code style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
-          {errorMessage(error)}
-        </code>
-      </Alert>
+      <div className="error-boundary">
+        <Alert
+          status="error"
+          title={`${what[0].toUpperCase()}${what.slice(1)} couldn’t be shown`}
+          detail={errorMessage(error)}
+          actions={[
+            { label: "Try again", onClick: this.reset },
+            {
+              label: "Report this",
+              href: issueUrlForError(error, what),
+              newTab: true,
+            },
+          ]}
+        >
+          Try again, or report it if it keeps happening.
+        </Alert>
+      </div>
     );
   }
 }
