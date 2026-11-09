@@ -93,6 +93,11 @@ export const navigation: NavSection[] = [
         href: "/components/pages/",
         summary: "Page and Section: a page's title, column and titled panels.",
       },
+      {
+        label: "Tables",
+        href: "/components/tables/",
+        summary: "DataTable and Tree: rules, not fills, and the whole row as the target.",
+      },
     ],
   },
 ];

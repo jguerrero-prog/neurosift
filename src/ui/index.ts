@@ -25,3 +25,7 @@ export { useToast } from "./Toast/toastContext";
 export type { ToastApi, ToastOptions } from "./Toast/toastContext";
 export { Page } from "./Page/Page";
 export { Section } from "./Page/Section";
+export { DataTable } from "./Table/DataTable";
+export type { Column, Sort, SortDirection } from "./Table/DataTable";
+export { Tree } from "./Tree/Tree";
+export type { TreeNode } from "./Tree/Tree";
