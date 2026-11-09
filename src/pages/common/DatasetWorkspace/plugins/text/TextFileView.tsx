@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { FunctionComponent, useEffect, useState } from "react";
 import { DatasetPluginProps } from "../pluginInterface";
 import { resolveDatasetFileUrl } from "@hdf5Interface";
+import ViewError from "@components/ViewError/ViewError";
 
 const TextFileView: FunctionComponent<DatasetPluginProps> = ({ file }) => {
   const [textContent, setTextContent] = useState<string | null>(null);
@@ -39,11 +40,7 @@ const TextFileView: FunctionComponent<DatasetPluginProps> = ({ file }) => {
   }
 
   if (error) {
-    return (
-      <Box sx={{ p: 3 }}>
-        <Typography color="error">Error: {error}</Typography>
-      </Box>
-    );
+    return <ViewError what="this file" error={error} />;
   }
 
   return (

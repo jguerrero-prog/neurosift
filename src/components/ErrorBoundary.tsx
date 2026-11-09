@@ -1,11 +1,6 @@
-import { Alert } from "@ui";
 import { Component, ErrorInfo, ReactNode } from "react";
-import "./ErrorBoundary.css";
-import {
-  errorMessage,
-  issueUrlForError,
-  reportError,
-} from "../util/reportError";
+import ViewError from "./ViewError/ViewError";
+import { reportError } from "../util/reportError";
 
 type Props = {
   // What is inside, in plain words, as it reads in "... couldn't be shown",
@@ -51,25 +46,7 @@ class ErrorBoundary extends Component<Props, State> {
 
     const { error } = this.state;
     const { what } = this.props;
-    return (
-      <div className="error-boundary">
-        <Alert
-          status="error"
-          title={`${what[0].toUpperCase()}${what.slice(1)} couldn’t be shown`}
-          detail={errorMessage(error)}
-          actions={[
-            { label: "Try again", onClick: this.reset },
-            {
-              label: "Report this",
-              href: issueUrlForError(error, what),
-              newTab: true,
-            },
-          ]}
-        >
-          Try again, or report it if it keeps happening.
-        </Alert>
-      </div>
-    );
+    return <ViewError what={what} error={error} onRetry={this.reset} />;
   }
 }
 

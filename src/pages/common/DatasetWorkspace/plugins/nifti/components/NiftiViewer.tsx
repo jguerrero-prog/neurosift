@@ -22,6 +22,7 @@ import React, {
 } from "react";
 import getAuthorizationHeaderForUrl from "../../../../../util/getAuthorizationHeaderForUrl";
 import { addRequestWatermark } from "../../../../../../util/requestWatermark";
+import ViewError from "@components/ViewError/ViewError";
 
 interface NiftiViewerProps {
   fileUrl: string;
@@ -145,11 +146,7 @@ const NiftiViewer: React.FC<NiftiViewerProps> = ({
   }, [fileUrl, canvasId, canvas, handleFrameChange]);
 
   if (error) {
-    return (
-      <Box sx={{ p: 2 }}>
-        <Typography color="error">Error: {error}</Typography>
-      </Box>
-    );
+    return <ViewError what="the NIfTI image" error={error} />;
   }
 
   // Helper function to safely get nFrame4D

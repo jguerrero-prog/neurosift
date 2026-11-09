@@ -6,6 +6,7 @@ import DatasetDataView from "./DatasetDataView";
 import { isUsingLindi, getLindiUrl } from "./hdf5Interface";
 
 import { NwbFileOverview } from "./Types";
+import ViewError from "@components/ViewError/ViewError";
 
 type NwbFileOverviewResult = NwbFileOverview | { error: string } | null;
 
@@ -204,7 +205,7 @@ export const NwbOverview = ({
       )}
       <div style={{ marginBottom: 8 }}>
         {nwbFileOverview && "error" in nwbFileOverview ? (
-          <div style={{ color: "red" }}>{nwbFileOverview.error}</div>
+          <ViewError what="the file overview" error={nwbFileOverview.error} />
         ) : nwbFileOverview ? (
           <table style={tableStyle}>
             <tbody>

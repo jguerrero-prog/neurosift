@@ -8,6 +8,7 @@ import DatasetWorkspace from "../common/DatasetWorkspace/DatasetWorkspace";
 import useRegisterOpenNeuroAIComponent from "./useRegisterOpenNeuroAIComponent";
 import { OpenNeuroDatasetInfo } from "./types";
 import { fetchDatasetInfo, fetchDirectoryFiles } from "./openNeuroApi";
+import ViewError from "@components/ViewError/ViewError";
 
 type OpenNeuroDatasetPageProps = {
   width: number;
@@ -94,7 +95,7 @@ const OpenNeuroDatasetPage: FunctionComponent<OpenNeuroDatasetPageProps> = ({
   });
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <ViewError what="this dataset" error={error} />;
   if (!datasetInfo) return <div>No dataset found</div>;
 
   const initialSplitterPosition = Math.max(300, Math.min(450, width / 3));

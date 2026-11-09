@@ -20,7 +20,7 @@ import getAuthorizationHeaderForUrl from "../util/getAuthorizationHeaderForUrl";
 import { getEmberApiHeaders } from "../util/getDandiApiHeaders";
 import { getRecentEmberDandisets } from "../util/recentEmberDandisets";
 import EmberDandisetSearchResult from "./EmberDandisetSearchResult.tsx";
-import { NeurodataTypesSearchPanel } from "./components/NeurodataTypesSearchPanel";
+import { NeurodataTypesSearchPanel } from "../common/NeurodataTypesSearchPanel";
 import { SearchMode, SearchModeControl } from "./components/SearchModeControl";
 import { DandisetSearchResultItem, DandisetsResponse } from "./dandi-types";
 import { useNeurodataTypesIndex } from "./hooks/useNeurodataTypesIndex";

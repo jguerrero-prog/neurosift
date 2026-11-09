@@ -8,6 +8,7 @@ import TimeseriesPlot from "./TimeseriesPlot";
 import TimeseriesPlotTSV2 from "./TimeseriesPlotTSV2";
 import { Props } from "./types";
 import { useTimeseriesSelection } from "@shared/context-timeseries-selection-2";
+import ViewError from "@components/ViewError/ViewError";
 
 export const SimpleTimeseriesView: FunctionComponent<
   Props & { condensed?: boolean }
@@ -131,11 +132,7 @@ export const SimpleTimeseriesView: FunctionComponent<
   };
 
   if (error) {
-    return (
-      <div className="loadingContainer" style={{ color: "#e74c3c" }}>
-        Error: {error}
-      </div>
-    );
+    return <ViewError what="the time series" error={error} />;
   }
 
   if (!info) {
