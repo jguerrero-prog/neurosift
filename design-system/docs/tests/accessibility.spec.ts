@@ -582,3 +582,32 @@ test("toasts: wait while hovered or focused, and return focus when they close", 
   await expect(polite).toHaveText("");
   await expect(button("Close tab")).toBeFocused();
 });
+
+test("time controls: buttons and the plot's keys move one shared window; the overview steps from the keyboard", async ({
+  page,
+}) => {
+  await page.goto("components/time-controls/");
+  const length = page.getByRole("textbox", { name: "Window length" });
+  await length.scrollIntoViewIfNeeded();
+  await expect(
+    length.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  await page.getByRole("button", { name: "Zoom out" }).click();
+  await expect(length).toHaveValue("5.25");
+  const plot = page.getByRole("application", { name: "LFP plot, stand-in" });
+  await plot.focus();
+  await page.keyboard.press("=");
+  await expect(length).toHaveValue("3.75");
+  await page.keyboard.press("Home");
+  await expect(page.getByRole("textbox", { name: "Window start" })).toHaveValue(
+    "0.00",
+  );
+  await expect(page.getByRole("button", { name: "Earlier" })).toBeDisabled();
+  const overview = page.getByRole("slider", { name: "Time overview" });
+  await overview.focus();
+  await page.keyboard.press("Shift+ArrowRight");
+  await expect(overview).toHaveAttribute(
+    "aria-valuetext",
+    "3.75 s from 3.75 s",
+  );
+});

@@ -96,4 +96,19 @@ describe("TextInput", () => {
       true,
     );
   });
+
+  it("can keep its label for screen readers only", () => {
+    render(
+      <TextInput
+        label="Opacity value"
+        hideLabel
+        value="0.5"
+        onChange={() => {}}
+      />,
+    );
+    expect(screen.getByRole("textbox", { name: "Opacity value" })).toBeTruthy();
+    expect(screen.getByText("Opacity value").className).toBe(
+      "ns-visually-hidden",
+    );
+  });
 });

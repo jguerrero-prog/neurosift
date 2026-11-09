@@ -15,6 +15,7 @@ interface TextInputProps extends Omit<
   helper?: string;
   error?: string;
   unit?: string;
+  hideLabel?: boolean;
 }
 
 export function TextInput({
@@ -26,11 +27,19 @@ export function TextInput({
   helper,
   error,
   unit,
+  hideLabel,
   ...native
 }: TextInputProps) {
   const id = useId();
   return (
-    <Field id={id} label={label} size={size} helper={helper} error={error}>
+    <Field
+      id={id}
+      label={label}
+      size={size}
+      helper={helper}
+      error={error}
+      hideLabel={hideLabel}
+    >
       <input
         {...native}
         id={id}

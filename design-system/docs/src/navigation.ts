@@ -93,6 +93,11 @@ export const navigation: NavSection[] = [
         href: "/components/pages/",
         summary: "Page and Section: a page's title, column and titled panels.",
       },
+      {
+        label: "Time controls",
+        href: "/components/time-controls/",
+        summary: "Time window, Channel window, Time overview and Playback.",
+      },
     ],
   },
 ];

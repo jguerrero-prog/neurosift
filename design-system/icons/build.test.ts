@@ -31,6 +31,10 @@ const COMPONENT_ICONS = [
   "information",
   "checkmark--outline",
   "warning--alt",
+  "zoom--in",
+  "zoom--out",
+  "add",
+  "chevron--up",
 ];
 
 const icons = IconSource.load(SOURCE);
