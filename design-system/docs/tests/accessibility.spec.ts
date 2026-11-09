@@ -108,7 +108,9 @@ test("every page has one h1 first, no skipped heading levels, and labelled landm
       path,
     ).toBe(false);
     await expect(page.locator("main"), path).toHaveCount(1);
-    await expect(page.locator("nav[aria-label]"), path).toHaveCount(1);
+    // The side menu, plus any navigation a component page demonstrates; each is labelled.
+    await expect(page.locator(".side-menu[aria-label]"), path).toHaveCount(1);
+    await expect(page.locator("nav:not([aria-label])"), path).toHaveCount(0);
   }
 });
 
@@ -581,4 +583,29 @@ test("toasts: wait while hovered or focused, and return focus when they close", 
   await page.keyboard.press("Enter");
   await expect(polite).toHaveText("");
   await expect(button("Close tab")).toBeFocused();
+});
+
+test("breadcrumbs: a folded trail shows every level again, and focus moves to the first one revealed", async ({
+  page,
+}) => {
+  await page.goto("components/navigation/");
+  const more = page
+    .locator(".breadcrumbs-narrow-demo")
+    .getByRole("button", { name: "Show all levels" });
+  await more.scrollIntoViewIfNeeded();
+  await expect(
+    more.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  const nav = page.locator(".breadcrumbs-narrow-demo nav");
+  const middle = nav.getByRole("link", { name: "sub-1", exact: true });
+  await expect(middle).toBeHidden();
+  await more.focus();
+  await page.keyboard.press("Enter");
+  await expect(middle).toBeVisible();
+  await expect(
+    nav.getByRole("link", { name: "000673 · Control of working memory" }),
+  ).toBeFocused();
+  await expect(nav.locator("[aria-current='page']")).toHaveText(
+    "sub-1_ses-1_ecephys+image.nwb",
+  );
 });

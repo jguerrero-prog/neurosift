@@ -93,6 +93,11 @@ export const navigation: NavSection[] = [
         href: "/components/pages/",
         summary: "Page and Section: a page's title, column and titled panels.",
       },
+      {
+        label: "Navigation and breadcrumbs",
+        href: "/components/navigation/",
+        summary: "App bar, Breadcrumbs and Object path: where people are.",
+      },
     ],
   },
 ];

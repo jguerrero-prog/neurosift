@@ -6,7 +6,14 @@ export class IconSource {
   static parse(name, svg) {
     if (!svg.includes('viewBox="0 0 32 32"'))
       throw new Error(`${name}: expected a 32px Carbon icon`);
-    const body = svg.replace(/^\s*<svg[^>]*>|<\/svg>\s*$/g, "");
+    // A circle becomes the same shape as two arcs, so every icon is path data.
+    const body = svg
+      .replace(/^\s*<svg[^>]*>|<\/svg>\s*$/g, "")
+      .replace(
+        /<circle\s+cx="([\d.]+)"\s+cy="([\d.]+)"\s+r="([\d.]+)"\s*\/>/g,
+        (_, cx, cy, r) =>
+          `<path d="M${+cx - +r},${cy}a${r},${r},0,1,0,${2 * r},0a${r},${r},0,1,0,${-2 * r},0Z"/>`,
+      );
     const leftover = body.replace(/<path\s[^>]*\/>/g, "").trim();
     if (leftover)
       throw new Error(`${name}: unsupported markup ${leftover.slice(0, 40)}`);
