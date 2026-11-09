@@ -88,6 +88,11 @@ export const navigation: NavSection[] = [
         href: "/components/tooltips/",
         summary: "Tooltip, Toggletip and Info button: names and help on request.",
       },
+      {
+        label: "Pages and sections",
+        href: "/components/pages/",
+        summary: "Page and Section: a page's title, column and titled panels.",
+      },
     ],
   },
 ];

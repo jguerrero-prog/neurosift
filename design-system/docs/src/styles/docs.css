@@ -676,3 +676,7 @@ main {
   justify-items: start;
   margin-block-start: var(--space-6);
 }
+
+.section-demo {
+  max-inline-size: var(--layout-text-max);
+}
