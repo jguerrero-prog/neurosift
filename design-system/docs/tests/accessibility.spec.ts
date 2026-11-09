@@ -506,3 +506,77 @@ test("toggletips: Enter opens, Escape closes and returns focus to the Info butto
   await expect(info).toHaveAttribute("aria-expanded", "false");
   await expect(info).toBeFocused();
 });
+
+test("alerts: errors are announced at once, other messages politely, and none takes focus", async ({
+  page,
+}) => {
+  await page.goto("components/alerts/");
+  const alerts = page.locator(".alert-demo");
+  await expect(alerts.getByRole("alert")).toHaveCount(1);
+  await expect(alerts.getByRole("status")).toHaveCount(3);
+  const inline = page.locator(".inline-message-demo");
+  await expect(inline.getByRole("alert")).toHaveCount(1);
+  await expect(inline.getByRole("status")).toHaveCount(2);
+  expect(
+    await page.evaluate(() => document.activeElement === document.body),
+  ).toBe(true);
+});
+
+const toastPage = async (page: Page) => {
+  await page.clock.install();
+  await page.goto("components/alerts/");
+  const closeTab = page.getByRole("button", { name: "Close tab" });
+  await closeTab.scrollIntoViewIfNeeded();
+  await page.waitForFunction(
+    () => !document.querySelector("astro-island[ssr]"),
+  );
+  const region = page.locator(".ns-toast-region");
+  return {
+    button: (name: string) => page.getByRole("button", { name, exact: true }),
+    polite: region.getByRole("status"),
+    urgent: region.getByRole("alert"),
+  };
+};
+
+test("toasts: read politely and gone after 4 seconds; errors read at once and stay; focus never moves", async ({
+  page,
+}) => {
+  const { button, polite, urgent } = await toastPage(page);
+  await button("Copy link").focus();
+  await page.keyboard.press("Enter");
+  await expect(polite).toContainText("Link copied");
+  await expect(button("Copy link")).toBeFocused();
+  await page.clock.runFor(4100);
+  await expect(polite).toHaveText("");
+  await button("Fail to copy").focus();
+  await page.keyboard.press("Enter");
+  await expect(urgent).toContainText("Couldn’t copy the link.");
+  await expect(polite).toHaveText("");
+  await page.clock.runFor(60000);
+  await expect(urgent).toContainText("Couldn’t copy the link.");
+  await expect(button("Fail to copy")).toBeFocused();
+});
+
+test("toasts: wait while hovered or focused, and return focus when they close", async ({
+  page,
+}) => {
+  const { button, polite } = await toastPage(page);
+  await button("Close tab").focus();
+  await page.keyboard.press("Enter");
+  await expect(polite).toContainText("Tab closed");
+  await polite.hover();
+  await page.clock.runFor(10000);
+  await expect(polite).toContainText("Tab closed");
+  await page.mouse.move(0, 0);
+  await page.clock.runFor(4100);
+  await expect(polite).toHaveText("");
+
+  await button("Close tab").focus();
+  await page.keyboard.press("Enter");
+  await polite.getByRole("button", { name: "Undo" }).focus();
+  await page.clock.runFor(10000);
+  await expect(polite).toContainText("Tab closed");
+  await page.keyboard.press("Enter");
+  await expect(polite).toHaveText("");
+  await expect(button("Close tab")).toBeFocused();
+});
