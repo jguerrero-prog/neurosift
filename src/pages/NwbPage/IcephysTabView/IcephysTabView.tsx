@@ -3,6 +3,7 @@ import {
   FunctionComponent,
   useEffect,
   useMemo,
+  useId,
   useRef,
   useState,
 } from "react";
@@ -21,6 +22,9 @@ import { ALL_ROW, ResolvedSweep, ScopeSelection } from "./useChain";
 import { IcephysRow, useIcephysTable } from "./useIcephysTable";
 import { useSweepData } from "./useSweepData";
 import { useSweepTimes } from "./useSweepTimes";
+import { InlineMessage } from "@ui";
+import { parseXWindow } from "./xWindow";
+import "./IcephysTabView.css";
 
 interface IcephysTabViewProps {
   nwbUrl: string;
@@ -612,25 +616,11 @@ const IcephysTabView: FunctionComponent<IcephysTabViewProps> = ({
       ? "sweep"
       : resolvedColor;
 
-  // Within-sweep x-window crop (ms). Valid only when both ends parse and
-  // start < end; otherwise null (autorange). A reversed/equal window is not
-  // silently swapped: it is flagged with an inline error (see windowError) so a
-  // mistake is surfaced rather than guessed at. Shared across panels.
-  const xwStart = parseFloat(xWindowStr.start);
-  const xwEnd = parseFloat(xWindowStr.end);
-  const bothWindowEndsSet =
-    xWindowStr.start.trim() !== "" && xWindowStr.end.trim() !== "";
-  const windowError: string | null = bothWindowEndsSet
-    ? !Number.isFinite(xwStart) || !Number.isFinite(xwEnd)
-      ? "window bounds must be numbers"
-      : xwStart >= xwEnd
-        ? "window start must be less than end"
-        : null
-    : null;
-  const xRangeMs: [number, number] | null =
-    Number.isFinite(xwStart) && Number.isFinite(xwEnd) && xwEnd > xwStart
-      ? [xwStart, xwEnd]
-      : null;
+  const windowErrorId = useId();
+  const { range: xRangeMs, error: windowError } = parseXWindow(
+    xWindowStr.start,
+    xWindowStr.end,
+  );
 
   // Sampling: render an evenly-spaced subset so a large family paints fast, and
   // so a faceted view is bounded overall (not 12 x panels, which ballooned with
@@ -984,11 +974,13 @@ const IcephysTabView: FunctionComponent<IcephysTabViewProps> = ({
             onChange={(e) =>
               setXWindowStr((w) => ({ ...w, start: e.target.value }))
             }
+            aria-invalid={windowError ? true : undefined}
+            aria-describedby={windowError ? windowErrorId : undefined}
+            className="icephys-window-input"
             style={{
               width: 56,
               fontSize: 12,
               padding: "2px 4px",
-              borderColor: windowError ? "#c00" : undefined,
             }}
           />
           {" - "}
@@ -999,11 +991,13 @@ const IcephysTabView: FunctionComponent<IcephysTabViewProps> = ({
             onChange={(e) =>
               setXWindowStr((w) => ({ ...w, end: e.target.value }))
             }
+            aria-invalid={windowError ? true : undefined}
+            aria-describedby={windowError ? windowErrorId : undefined}
+            className="icephys-window-input"
             style={{
               width: 56,
               fontSize: 12,
               padding: "2px 4px",
-              borderColor: windowError ? "#c00" : undefined,
             }}
           />
           {(xWindowStr.start !== "" || xWindowStr.end !== "") && (
@@ -1014,12 +1008,12 @@ const IcephysTabView: FunctionComponent<IcephysTabViewProps> = ({
               full
             </button>
           )}
-          {windowError && (
-            <span style={{ marginLeft: 6, fontSize: 11, color: "#c00" }}>
-              {windowError}
-            </span>
-          )}
         </label>
+        {windowError && (
+          <span id={windowErrorId}>
+            <InlineMessage status="error">{windowError}</InlineMessage>
+          </span>
+        )}
         {panelsBy !== "none" && (
           <label
             style={{ display: "flex", alignItems: "center", gap: 4 }}

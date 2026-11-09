@@ -10,6 +10,7 @@ import { DatasetPluginProps } from "../pluginInterface";
 import AudioPlayer from "./AudioPlayer";
 import WaveformCanvas from "./WaveformCanvas";
 import { resolveDatasetFileUrl } from "@hdf5Interface";
+import ViewError from "@components/ViewError/ViewError";
 
 type WaveformData = {
   data: Float32Array;
@@ -144,7 +145,12 @@ const WavFileView: FunctionComponent<DatasetPluginProps> = ({
   }
 
   if (error || !waveformData || !audioUrl) {
-    return <div>Error: {error || "Failed to load audio file"}</div>;
+    return (
+      <ViewError
+        what="the audio file"
+        error={error || "The audio data is missing."}
+      />
+    );
   }
 
   return (

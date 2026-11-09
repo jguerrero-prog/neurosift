@@ -2,6 +2,7 @@ import { getHdf5DatasetData, getHdf5Group } from "@hdf5Interface";
 import {
   CSSProperties,
   FunctionComponent,
+  ReactNode,
   useEffect,
   useMemo,
   useState,
@@ -22,6 +23,9 @@ import {
   loadEventRelatedSnippets,
   plottedRowIndexes,
 } from "./loadEventRelatedSnippets";
+import "./EventRelatedSignalView.css";
+import { InlineMessage } from "@ui";
+import ViewError from "@components/ViewError/ViewError";
 
 type Props = {
   nwbUrl: string;
@@ -606,7 +610,9 @@ const EventRelatedSignalInner: FunctionComponent<InnerProps> = ({
               </button>
             </div>
             {paramError && (
-              <div style={{ color: "#e74c3c", marginTop: 6 }}>{paramError}</div>
+              <div className="event-related-param-error">
+                <InlineMessage status="error">{paramError}</InlineMessage>
+              </div>
             )}
           </div>
         </details>
@@ -720,9 +726,7 @@ const EventRelatedSignalInner: FunctionComponent<InnerProps> = ({
           </div>
         )}
         {clientError ? (
-          <div style={{ padding: 12, color: "#e74c3c" }}>
-            Error loading series: {clientError}
-          </div>
+          <ViewError what="the series" error={clientError} />
         ) : !client ? (
           <div style={{ padding: 12, color: "#555" }}>Loading series...</div>
         ) : selectedChannels.length === 0 ? (
@@ -1023,7 +1027,7 @@ const AlignBlock: FunctionComponent<AlignBlockProps> = ({
     ];
   }, [allTrials, split, grouping, groups, alignToVariable, countLabel]);
 
-  const statusBox = (color: string, text: string) => (
+  const statusBox = (color: string, text: ReactNode) => (
     <div
       style={{
         flex: "0 0 auto",
@@ -1038,7 +1042,11 @@ const AlignBlock: FunctionComponent<AlignBlockProps> = ({
     </div>
   );
 
-  if (error) return statusBox("#e74c3c", `Error: ${error}`);
+  if (error)
+    return statusBox(
+      "inherit",
+      <ViewError what="the trial snippets" error={error} />,
+    );
   if (!allTrials || !cells)
     return statusBox(
       "#555",

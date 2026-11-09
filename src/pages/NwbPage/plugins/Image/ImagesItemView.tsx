@@ -9,6 +9,7 @@ import {
 import { DatasetDataType } from "@remote-h5-file";
 import { getNeurodataTypeAncestry } from "../../neurodataTypeInheritance";
 import { useNwbFileSpecifications } from "../../SpecificationsView/SetupNwbFileSpecificationsProvider";
+import ViewError from "@components/ViewError/ViewError";
 
 type Props = {
   width: number;
@@ -92,7 +93,7 @@ export const ImageItem: FunctionComponent<ImageItemProps> = ({
     return ancestry.find((t) => coreImageTypes.includes(t));
   }, [neurodataType, specifications]);
   if (errorMessage) {
-    return <div>Error loading data: {errorMessage}</div>;
+    return <ViewError what="the images" error={errorMessage} />;
   }
   if (!dataset) return <div>Loading dataset...</div>;
   if (!data) return <div>Loading data (ImageItem)...</div>;

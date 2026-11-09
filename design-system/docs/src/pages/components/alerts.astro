@@ -40,7 +40,8 @@ const SPECS = [
 ];
 
 const IN_APP = [
-  ["Any view that fails to draw", "Error alert: “The timeseries alignment couldn’t be shown”, the cause as detail, Try again and Report this"],
+  ["Any view or file that can’t be shown", "Error alert: “The spectrogram couldn’t be shown”, the cause as detail, Report this, and Try again where the view can retry"],
+  ["A wrong value in a plot control", "Error inline message beside it: “Window start must be before the end.”"],
   ["An embargoed Dandiset without a key", "Warning alert: “This Dandiset is embargoed”, with Add API key and Get a key on DANDI"],
   ["Share on a tab", "Success toast: “Link copied”; an error toast if the browser won’t copy"],
   ["Settings, after a key changes", "Info alert: “Reload to use the new key”, with Reload page"],

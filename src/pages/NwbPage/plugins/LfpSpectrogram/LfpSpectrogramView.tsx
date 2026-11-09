@@ -38,6 +38,7 @@ import SpectrogramWorkerClient, {
   isComputeCanceled,
 } from "./workerClient";
 import { SpectrogramResult } from "./WorkerTypes";
+import ViewError from "@components/ViewError/ViewError";
 
 type Props = {
   nwbUrl: string;
@@ -79,11 +80,7 @@ const LfpSpectrogramView: FunctionComponent<Props> = ({
   }, [nwbUrl, group]);
 
   if (clientError)
-    return (
-      <div className="loadingContainer" style={{ color: "#e74c3c" }}>
-        Error: {clientError}
-      </div>
-    );
+    return <ViewError what="the spectrogram" error={clientError} />;
   if (!group) return <div className="loadingContainer">Loading info...</div>;
   if (!client)
     return <div className="loadingContainer">Loading timeseries client...</div>;

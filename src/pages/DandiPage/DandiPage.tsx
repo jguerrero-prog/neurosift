@@ -19,13 +19,14 @@ import { AIRegisteredComponent, useAIComponentRegistry } from "../../AIContext";
 import { getDandiApiHeaders } from "../util/getDandiApiHeaders";
 import { getRecentDandisets } from "../util/recentDandisets";
 import DandisetSearchResult from "./DandisetSearchResult";
-import { NeurodataTypesSearchPanel } from "./components/NeurodataTypesSearchPanel";
+import { NeurodataTypesSearchPanel } from "../common/NeurodataTypesSearchPanel";
 import { SearchMode, SearchModeControl } from "./components/SearchModeControl";
 import { DandisetSearchResultItem, DandisetsResponse } from "./dandi-types";
 import doDandiSemanticSearch from "./doDandiSemanticSearch";
 import { useNeurodataTypesIndex } from "./hooks/useNeurodataTypesIndex";
 import { doNeurodataTypesSearch } from "./services/doNeurodataTypesSearch";
 import getAuthorizationHeaderForUrl from "../util/getAuthorizationHeaderForUrl";
+import ViewError from "@components/ViewError/ViewError";
 
 type DandiPageProps = {
   width: number;
@@ -402,19 +403,7 @@ const DandiPage: FunctionComponent<DandiPageProps> = ({ width, height }) => {
           </Box>
         )}
         {searchError && (
-          <Box
-            sx={{
-              mb: 2,
-              p: 2,
-              backgroundColor: "rgba(211, 47, 47, 0.1)",
-              borderRadius: 1,
-              border: "1px solid rgba(211, 47, 47, 0.3)",
-            }}
-          >
-            <Typography color="error" variant="body2">
-              {searchError}
-            </Typography>
-          </Box>
+          <ViewError what="the search results" error={searchError} />
         )}
         <Box>
           {searchResults.map((result: DandisetSearchResultItem) => (
