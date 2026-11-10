@@ -3,6 +3,7 @@ import DocRows from "../../components/DocRows.astro";
 import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
 import Intro from "../../components/Intro.astro";
+import LiveScreen from "../../components/LiveScreen.astro";
 import Screen from "../../components/Screen.astro";
 import DocsLayout from "../../layouts/DocsLayout.astro";
 import { withBase } from "../../navigation";
@@ -109,6 +110,10 @@ const SPECS = [
       <Screen file="file-viewers-proposed-audio" alt="The rebuilt WAV viewer: sample rate, channels and length as facts, a player with play and back to the start, then the waveform." caption="Audio: the facts, the player and the waveform." />
     </div>
     <p class="doc-note">Built from the <a href={withBase("/components/description-list/")}>Description list</a>, <a href={withBase("/components/buttons/")}>Buttons</a>, the <a href={withBase("/components/tables/")}>Data table</a>, <a href={withBase("/components/accordions/")}>Disclosure</a>, <a href={withBase("/guidelines/empty-states/")}>Empty states</a> and <a href={withBase("/guidelines/loading/")}>Loading</a>.</p>
+  </DocSection>
+
+  <DocSection title="Try it" lead="Open participants.tsv, a JSON sidecar, or sub-01/anat/sub-01_T1w.nii.gz and press Load.">
+    <LiveScreen path="openneuro-dataset/ds000001" title="OpenNeuro dataset ds000001" size="tall" />
   </DocSection>
 
   <DocSection title="States">
