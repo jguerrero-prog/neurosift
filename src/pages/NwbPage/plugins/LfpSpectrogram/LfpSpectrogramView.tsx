@@ -14,7 +14,6 @@ import {
   Select,
   SettingPair,
   Spinner,
-  TextInput,
   useToast,
 } from "@ui";
 import {
@@ -26,9 +25,13 @@ import {
   useRef,
   useState,
 } from "react";
+import NumberSetting from "../common/NumberSetting";
+import { parseOptional } from "../common/parseOptional";
 import TimeView, {
   TIME_VIEW_CHROME,
   TIME_VIEW_INSET,
+  TIME_VIEW_SETTINGS,
+  TIME_VIEW_TITLE,
 } from "../common/TimeView";
 import TimeseriesClient from "../simple-timeseries/TimeseriesClient";
 import SpectrogramBlockCache from "./blockCache";
@@ -75,9 +78,6 @@ const PER_CHANNEL_PANEL_HEIGHT = 220;
 const COMPUTE_DEBOUNCE_MS = 200;
 // Don't flash a spinner for work that finishes almost immediately (cache hits).
 const BUSY_INDICATOR_DELAY_MS = 150;
-/** The 320px settings panel and the gap before it. */
-const SETTINGS_WIDTH = 336;
-const CHART_TITLE_HEIGHT = 32;
 const RANGE_EPSILON = 1e-9;
 
 const taperOptions: { value: TaperMethod; label: string; short: string }[] = [
@@ -116,12 +116,6 @@ const formatNumber = (n: number, maxDigits = 2, minDigits = 0) =>
 
 const plural = (n: number, word: string) =>
   `${formatNumber(n, 0)} ${word}${n === 1 ? "" : "s"}`;
-
-/** An empty or unreadable field reads as null, a setting that is off. */
-const parseOptional = (text: string): number | null => {
-  const n = parseFloat(text);
-  return text.trim() === "" || !Number.isFinite(n) ? null : n;
-};
 
 const LfpSpectrogramView: FunctionComponent<Props> = ({
   nwbUrl,
@@ -481,11 +475,11 @@ const LfpSpectrogramInner: FunctionComponent<InnerProps> = ({
     return worker.onStatusChange(setComputeStatus);
   }, [worker]);
 
-  const plotAreaWidth = Math.max(240, width - TIME_VIEW_INSET - SETTINGS_WIDTH);
-  const plotHeight = Math.max(
-    200,
-    height - TIME_VIEW_CHROME - CHART_TITLE_HEIGHT,
+  const plotAreaWidth = Math.max(
+    240,
+    width - TIME_VIEW_INSET - TIME_VIEW_SETTINGS,
   );
+  const plotHeight = Math.max(200, height - TIME_VIEW_CHROME - TIME_VIEW_TITLE);
   const margins = plotMargins;
   const plotW = plotAreaWidth - margins.left - margins.right;
   const plotsRef = useCssVars<HTMLDivElement>({ "--plot-w": plotAreaWidth });
@@ -1381,35 +1375,6 @@ const SettingGroup: FunctionComponent<{
     {children}
   </fieldset>
 );
-
-/** A number typed as text: keeps what is typed, such as "1.", while the setting holds the parsed value. */
-const NumberSetting: FunctionComponent<{
-  label: string;
-  value: number | null;
-  onChange: (text: string) => void;
-  placeholder?: string;
-}> = ({ label, value, onChange, placeholder }) => {
-  const [draft, setDraft] = useState(value == null ? "" : String(value));
-  const [lastValue, setLastValue] = useState(value);
-  if (value !== lastValue) {
-    setLastValue(value);
-    if (parseOptional(draft) !== value)
-      setDraft(value == null ? "" : String(value));
-  }
-  return (
-    <TextInput
-      label={label}
-      size="sm"
-      inputMode="decimal"
-      placeholder={placeholder}
-      value={draft}
-      onChange={(text) => {
-        setDraft(text);
-        onChange(text);
-      }}
-    />
-  );
-};
 
 const Readouts: FunctionComponent<{ derived: DerivedReadouts }> = ({
   derived: d,
