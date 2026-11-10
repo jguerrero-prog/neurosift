@@ -1,4 +1,5 @@
 .ns-app-bar {
+  box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-1);
