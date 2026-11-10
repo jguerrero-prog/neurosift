@@ -64,4 +64,13 @@ describe("Checkbox", () => {
     const box = screen.getByRole("checkbox") as HTMLInputElement;
     expect(box.disabled).toBe(true);
   });
+
+  it("can keep its label for screen readers only", () => {
+    render(
+      <Checkbox label="Unit 3" hideLabel checked={false} onChange={() => {}} />,
+    );
+    const box = screen.getByRole("checkbox", { name: "Unit 3" });
+    expect(screen.getByText("Unit 3").className).toBe("ns-visually-hidden");
+    expect(box).toBeTruthy();
+  });
 });

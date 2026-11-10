@@ -203,6 +203,12 @@ export const navigation: NavSection[] = [
         summary:
           "Dialog and Drawer: one decision at a time, and panels beside the data.",
       },
+      {
+        label: "Tables",
+        href: "/components/tables/",
+        summary:
+          "DataTable and Tree: rules, not fills, and the whole row as the target.",
+      },
     ],
   },
 ];

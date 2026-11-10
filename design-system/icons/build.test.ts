@@ -22,7 +22,7 @@ const MUI_REPLACEMENTS = [
   "logo--github",
 ];
 
-// Icons the components draw themselves: status icons, checkbox marks, chevrons, carets, the info button and the app bar.
+// Icons the components draw themselves: status icons, checkbox marks, chevrons, carets, the info button, the app bar, and tree and sort icons.
 const COMPONENT_ICONS = [
   "error",
   "checkmark",
@@ -35,6 +35,12 @@ const COMPONENT_ICONS = [
   "caret--down",
   "help",
   "link",
+  "folder",
+  "folder--open",
+  "data--structured",
+  "document",
+  "arrow--up",
+  "arrow--down",
 ];
 
 const icons = IconSource.load(SOURCE);

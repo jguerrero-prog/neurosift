@@ -589,6 +589,44 @@ test("toasts: wait while hovered or focused, and return focus when they close", 
   await expect(button("Close tab")).toBeFocused();
 });
 
+test("tables and trees: a header sorts and says so; the tree opens and climbs with the arrow keys", async ({
+  page,
+}) => {
+  await page.goto("components/tables/");
+  const table = page.getByRole("table", { name: "Units", exact: true });
+  await table.scrollIntoViewIfNeeded();
+  await expect(
+    table.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  const spikes = table.getByRole("button", { name: "Spikes" });
+  await spikes.focus();
+  await page.keyboard.press("Enter");
+  await expect(
+    table.getByRole("columnheader", { name: "Spikes" }),
+  ).toHaveAttribute("aria-sort", "ascending");
+  await expect(table.locator("tbody tr").first()).toContainText("382");
+
+  const tree = page.getByRole("tree", { name: "Files in this Dandiset" });
+  await tree.scrollIntoViewIfNeeded();
+  await expect(
+    tree.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  const second = tree.getByRole("treeitem", { name: /^sub-491604983(?!_)/ });
+  await tree.getByRole("treeitem").first().focus();
+  await page.keyboard.press("ArrowLeft");
+  await expect(tree.getByRole("treeitem")).toHaveCount(3);
+  await page.keyboard.press("ArrowDown");
+  await expect(second).toBeFocused();
+  await page.keyboard.press("ArrowRight");
+  await expect(second).toHaveAttribute("aria-expanded", "true");
+  await page.keyboard.press("ArrowRight");
+  await expect(
+    tree.getByRole("treeitem", { name: /^sub-491604983_ses-01/ }),
+  ).toBeFocused();
+  await page.keyboard.press("ArrowLeft");
+  await expect(second).toBeFocused();
+});
+
 test("dialogs: focus starts on the title, Tab stays inside, Escape closes and focus returns to the opener", async ({
   page,
   browserName,
