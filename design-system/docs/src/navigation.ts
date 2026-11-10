@@ -291,6 +291,12 @@ export const navigation: NavSection[] = [
         summary:
           "The API keys Neurosift sends to DANDI, the sandbox and EMBER.",
       },
+      {
+        label: "Dataset page",
+        href: "/ui-library/dataset-page/",
+        summary:
+          "What a dataset is and its files, for DANDI, EMBER and OpenNeuro.",
+      },
     ],
   },
   {
