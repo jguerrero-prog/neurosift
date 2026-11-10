@@ -127,6 +127,14 @@ code {
   background: var(--surface-header);
 }
 
+.hero-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: center;
+  justify-content: space-between;
+}
+
 .hero-brand {
   display: inline-flex;
   gap: var(--space-2);

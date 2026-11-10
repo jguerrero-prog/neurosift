@@ -1,4 +1,6 @@
 ---
+import { appBase, appHref } from "../appUrl";
+
 interface Props {
   /** The app path after its root, such as "search?q=hippocampus". */
   path: string;
@@ -8,11 +10,8 @@ interface Props {
   size?: "default" | "tall";
 }
 
-// The published docs carry the app at PUBLIC_APP_BASE; elsewhere the link goes to the published app.
-const PUBLISHED = "https://jguerrero-prog.github.io/neurosift/app/";
-const appBase = import.meta.env.PUBLIC_APP_BASE as string | undefined;
 const { path, title, size = "default" } = Astro.props;
-const src = `${appBase ?? PUBLISHED}${path}`;
+const src = appHref(path);
 ---
 
 <figure class={`live-screen live-screen--${size}`}>
