@@ -49,6 +49,8 @@ export const useTimeseriesData = (
   loadedTimestamps: number[];
   loadedData: number[][];
   zoomInRequired: boolean;
+  /** Draws the current window though it holds more than the usual limit. */
+  drawAnyway: () => void;
   visibleChannelsStart: number;
   setVisibleChannelsStart: (start: number) => void;
   numVisibleChannels: number;
@@ -153,8 +155,11 @@ export const useTimeseriesData = (
       return { bufferedVisibleStartTimeSec, bufferedVisibleEndTimeSec };
     }, [timeseriesClient, visibleStartTimeSec, visibleEndTimeSec]);
 
-  // State for zoom limit warning
+  // State for zoom limit warning. Draw anyway accepts this many points;
+  // a wider window asks again.
   const [zoomInRequired, setZoomInRequired] = useState(false);
+  const [estimatedPoints, setEstimatedPoints] = useState(0);
+  const [acceptedPoints, setAcceptedPoints] = useState(0);
 
   useEffect(() => {
     if (!timeseriesClient) return;
@@ -166,8 +171,10 @@ export const useTimeseriesData = (
       timeseriesClient.samplingFrequency *
       numVisibleChannels;
 
+    setEstimatedPoints(estimatedDataPoints);
     if (
       estimatedDataPoints > 5e5 &&
+      estimatedDataPoints > acceptedPoints &&
       visibleEndTimeSec - visibleStartTimeSec > 0.1
     ) {
       setZoomInRequired(true);
@@ -179,6 +186,7 @@ export const useTimeseriesData = (
     visibleStartTimeSec,
     visibleEndTimeSec,
     numVisibleChannels,
+    acceptedPoints,
   ]);
 
   // Load data when view parameters change. A load that is superseded by a
@@ -235,6 +243,7 @@ export const useTimeseriesData = (
     loadedTimestamps,
     loadedData,
     zoomInRequired,
+    drawAnyway: () => setAcceptedPoints(estimatedPoints),
     visibleChannelsStart,
     setVisibleChannelsStart,
     numVisibleChannels,

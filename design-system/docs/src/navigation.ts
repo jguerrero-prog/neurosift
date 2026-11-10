@@ -320,6 +320,12 @@ export const navigation: NavSection[] = [
         summary:
           "The file as stored and the NWB specifications, each with details beside.",
       },
+      {
+        label: "Time series views",
+        href: "/ui-library/time-series/",
+        summary:
+          "Traces, events and intervals on recording time, and signals aligned to trials.",
+      },
     ],
   },
   {
