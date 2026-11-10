@@ -4,6 +4,7 @@ import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
 import Intro from "../../components/Intro.astro";
 import Screen from "../../components/Screen.astro";
+import LiveScreen from "../../components/LiveScreen.astro";
 import DocsLayout from "../../layouts/DocsLayout.astro";
 import { withBase } from "../../navigation";
 
@@ -83,6 +84,10 @@ const SPECS = [
       <Screen file="spikes-proposed-psth" alt="The rebuilt PSTH: the raster and histogram for unit 0 around start_time, with Units, Align to, Controls, Categories and Sort units by settings beside it." caption="PSTH: settings beside the charts, each saying what it’s set to." />
     </div>
     <p class="doc-note">Built from the <a href={withBase("/components/view-panel/")}>View panel</a>, <a href={withBase("/components/time-controls/")}>Time controls</a> and <a href={withBase("/components/accordions/")}>Accordion</a>.</p>
+  </DocSection>
+
+  <DocSection title="Try it" lead="Select the first 5 units, align to a column and group by a category.">
+    <LiveScreen path="nwb?url=https://api.dandiarchive.org/api/assets/65a7e913-45c7-48db-bf19-b9f5e910110a/download/&dandisetId=000673&dandisetVersion=0.250122.0110&tab=view:PSTH|/intervals/trials" title="PSTH of trials, Dandiset 000673 sub-1" size="tall" />
   </DocSection>
 
   <DocSection title="States">

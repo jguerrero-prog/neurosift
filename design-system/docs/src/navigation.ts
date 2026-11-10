@@ -303,12 +303,6 @@ export const navigation: NavSection[] = [
           "Where an NWB file opens: the overview, the objects and their views.",
       },
       {
-        label: "File viewer layout",
-        href: "/ui-library/file-viewer/",
-        summary:
-          "Where an NWB file opens: the overview, the objects and their views.",
-      },
-      {
         label: "Neurodata object tree",
         href: "/ui-library/object-tree/",
         summary:
@@ -367,6 +361,12 @@ export const navigation: NavSection[] = [
         label: "Video and pose",
         href: "/ui-library/video-and-pose/",
         summary: "Behavioral video, pose markers over it, and linked videos.",
+      },
+      {
+        label: "Neurosift Chat",
+        href: "/ui-library/neurosift-chat/",
+        summary:
+          "The assistant for datasets: today’s chat and a rebuild from @ui.",
       },
     ],
   },

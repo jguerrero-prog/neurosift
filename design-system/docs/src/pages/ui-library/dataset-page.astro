@@ -4,6 +4,7 @@ import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
 import Intro from "../../components/Intro.astro";
 import Screen from "../../components/Screen.astro";
+import LiveScreen from "../../components/LiveScreen.astro";
 import DocsLayout from "../../layouts/DocsLayout.astro";
 import { withBase } from "../../navigation";
 
@@ -88,6 +89,10 @@ const DIFFERS = [
       <Screen file="dataset-proposed-openneuro" alt="The rebuilt OpenNeuro page: breadcrumbs OpenNeuro › Dataset ds000001, the title, version and View on OpenNeuro, facts with views and downloads, modalities, authors, license and DOI, and the file tree." caption="OpenNeuro: the same overview, with OpenNeuro’s facts." />
     </div>
     <p class="doc-note">Built from <a href={withBase("/components/navigation/")}>Navigation and breadcrumbs</a>, the <a href={withBase("/components/description-list/")}>Description list</a> and the <a href={withBase("/components/tables/")}>Tree</a>.</p>
+  </DocSection>
+
+  <DocSection title="Try it" lead="Pick a version, open folders and files, and download.">
+    <LiveScreen path="dandiset/000673" title="Dandiset 000673" size="tall" />
   </DocSection>
 
   <DocSection title="States">

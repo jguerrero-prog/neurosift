@@ -4,6 +4,7 @@ import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
 import Intro from "../../components/Intro.astro";
 import Screen from "../../components/Screen.astro";
+import LiveScreen from "../../components/LiveScreen.astro";
 import DocsLayout from "../../layouts/DocsLayout.astro";
 import { withBase } from "../../navigation";
 
@@ -86,6 +87,10 @@ const SPECS = [
       <Screen file="search-proposed-narrow" alt="The catalog at 768px: the search field, a Filters disclosure, and the results at full width." caption="At 768px the filters fold behind Filters and the results take the width." />
     </div>
     <p class="doc-note">Built from the <a href={withBase("/components/catalog/")}>Catalog</a> pieces and the <a href={withBase("/components/selects/")}>Multi-select</a>.</p>
+  </DocSection>
+
+  <DocSection title="Try it" lead="Search, filter by archive, switch modes and show more.">
+    <LiveScreen path="search?q=hippocampus" title="Archive search for hippocampus" size="tall" />
   </DocSection>
 
   <DocSection title="States">

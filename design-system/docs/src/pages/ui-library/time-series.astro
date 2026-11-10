@@ -4,6 +4,7 @@ import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
 import Intro from "../../components/Intro.astro";
 import Screen from "../../components/Screen.astro";
+import LiveScreen from "../../components/LiveScreen.astro";
 import DocsLayout from "../../layouts/DocsLayout.astro";
 import { withBase } from "../../navigation";
 
@@ -85,6 +86,10 @@ const SPECS = [
       <Screen file="timeseries-intervals" alt="The rebuilt trials view: a summary of 140 intervals, the Time window, a Label by select, Canvas and Plotly, and the intervals." caption="Intervals: the same frame, with Label by and the renderer." />
     </div>
     <p class="doc-note">Built from the <a href={withBase("/components/view-panel/")}>View panel</a> and <a href={withBase("/components/time-controls/")}>Time controls</a>.</p>
+  </DocSection>
+
+  <DocSection title="Try it" lead="Change the time window and channels, and zoom out until it says there’s too much to draw.">
+    <LiveScreen path="nwb?url=https://api.dandiarchive.org/api/assets/65a7e913-45c7-48db-bf19-b9f5e910110a/download/&dandisetId=000673&dandisetVersion=0.250122.0110&tab=view:SimpleTimeseries|/acquisition/LFPs" title="LFPs time series, Dandiset 000673 sub-1" size="tall" />
   </DocSection>
 
   <DocSection title="States">
