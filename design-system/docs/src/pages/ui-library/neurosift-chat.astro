@@ -96,7 +96,6 @@ const WHERE = [
 ];
 
 const QUESTIONS = [
-  ["Which repo should a redesigned chat live in?", "Where the code lands"],
   ["Should the dataset-page chat and Neurosift Chat become one?", "The dataset page’s “Ask about this dataset in Chat” link, which opens the Dandiset explorer chat in this fork"],
   ["Should the model and cost readout stay visible to everyone?", "Footer readout"],
   ["Does today’s chat still embed Neurosift? The qp source has no listener for Neurosift’s messages.", "Context line and links in answers"],
@@ -132,11 +131,17 @@ const QUESTIONS = [
     </DocTable>
   </DocSection>
 
-  <DocSection title="The proposed chat" lead="A spec, not a build. Each region uses a documented component; the Figma library has the frames.">
+  <DocSection title="The proposed chat" lead="Each region uses a documented component; the Figma library has the frames. The build is under way in a fork of qp.">
     <DocTable caption="The proposed chat" columns={["Region", "Component", "What it shows"]}>
       <DocRows rows={PROPOSED} />
     </DocTable>
     <p class="doc-note">From <a href={withBase("/components/pages/")}>Page and Section</a>, <a href={withBase("/components/buttons/")}>Buttons</a>, <a href={withBase("/components/text-inputs/")}>Text inputs</a>, <a href={withBase("/components/alerts/")}>Alerts, Toast and Inline message</a>, <a href={withBase("/components/code/")}>Code</a>, <a href={withBase("/components/accordions/")}>Disclosure</a>, <a href={withBase("/components/badges/")}>Badges</a>, <a href={withBase("/components/modals/")}>Dialog</a> and <a href={withBase("/guidelines/empty-states/")}>Empty states</a>.</p>
+  </DocSection>
+
+  <DocSection title="Preview" lead="The redesign as it’s built, published from the qp fork.">
+    <p class="type-body">
+      <a href="https://jguerrero-prog.github.io/qp/" target="_blank" rel="noopener noreferrer">Open the Neurosift Chat preview</a>. Sending a message doesn’t work there yet: qp’s chat server accepts requests only from the addresses it lists, and the preview’s isn’t one of them. The code is at <a href="https://github.com/jguerrero-prog/qp">jguerrero-prog/qp</a>.
+    </p>
   </DocSection>
 
   <DocSection title="States">
@@ -161,7 +166,7 @@ const QUESTIONS = [
     </DocTable>
   </DocSection>
 
-  <DocSection title="Where the code lands" lead="Three options. None is picked, and the chat’s code doesn’t change until one is.">
+  <DocSection title="Where the code lands" lead="Three options. A fork of qp was picked, so the redesign changes the look of every qp assistant in the fork and leaves the original untouched.">
     <DocTable caption="Where the code lands" columns={["Option", "Trade-offs"]}>
       <DocRows rows={WHERE} />
     </DocTable>
