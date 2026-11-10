@@ -10,7 +10,7 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
 const STATES = [
   ["First visit", "Recently opened is hidden; nothing else moves."],
   ["Returning", "Recently opened shows up to five datasets from this browser, newest first, from any archive, with their titles."],
-  ["Search submitted", "Enter opens the catalog with the query across all three archives. An empty search opens the DANDI catalog, as Browse DANDI datasets does."],
+  ["Search submitted", "Enter opens the catalog with the query across all three archives. An empty search opens Browse all."],
   ["Link pasted into search", "A link opens like Open a file by link instead of searching."],
   ["Open a file by link", "The two links give way to a Text input and Open file. Escape brings the links back."],
   ["Link isn’t a file Neurosift can open", "The field shows: “This link doesn’t point to an NWB file. Neurosift opens .nwb, .nwb.lindi.json and .zarr files.”"],
@@ -19,7 +19,8 @@ const STATES = [
 
 const BEHAVIOR = [
   ["Search", "Searches DANDI, EMBER and OpenNeuro at once and opens the catalog. The placeholder carries the live dataset count."],
-  ["Browse DANDI datasets", "Opens the catalog with no query, newest first, with only DANDI checked in the Archive filter. EMBER and OpenNeuro are one click away."],
+  ["Browse all datasets", "Opens the catalog with no query, newest first, across all three archives."],
+  ["Browse DANDI datasets", "Opens the same catalog with only DANDI checked in the Archive filter, since most visitors come for DANDI. EMBER and OpenNeuro are one click away."],
   ["Open a file by link", "Enter or Open file submits. The link is checked first; nothing loads until it’s valid."],
   ["Recently opened", "Each row opens the dataset page. Kept in this browser only; there are no accounts."],
   ["Footer", "NWB viewer guide, Neurosift Chat in a new tab, the source on GitHub, Report a problem, and the version with its build date."],
@@ -28,7 +29,7 @@ const BEHAVIOR = [
 const DIFFERS = [
   ["First thing on the page", "“Welcome to Neurosift” and a three-line description", "The logo and one sentence", "Built"],
   ["Search", "Only on each archive’s own page", "One field across all three archives, leading to the catalog", "Built"],
-  ["Archive cards", "Four equal cards with full-width buttons", "Browse DANDI datasets; the catalog’s Archive filter adds EMBER and OpenNeuro", "Built"],
+  ["Archive cards", "Four equal cards with full-width buttons", "Browse all datasets and Browse DANDI datasets; the catalog’s Archive filter picks archives", "Built"],
   ["Open a file by link", "Not on home; only by building a /nwb?url= address", "A link under search that opens a field", "Built"],
   ["Recent", "Dandiset IDs, only on the archive pages, one list per archive", "Recently opened on home, with titles and archive, one list", "Built"],
   ["Neurosift Chat", "A panel with “(experimental)” in the title", "A footer link", "Built"],
@@ -64,7 +65,7 @@ const SPECS = [
 
   <DocSection title="The rebuilt home" lead="This fork, with the live dataset count.">
     <div class="captures">
-      <Screen file="home-proposed" alt="The rebuilt home on a first visit: the logo and Neurosift, one sentence, a search field reading Search 2,635 datasets in DANDI, EMBER and OpenNeuro, Browse DANDI datasets and Open a file by link, and a footer." caption="First visit: search, two links, and the footer." />
+      <Screen file="home-proposed" alt="The rebuilt home on a first visit: the logo and Neurosift, one sentence, a search field reading Search 2,635 datasets in DANDI, EMBER and OpenNeuro, Browse all datasets, Browse DANDI datasets and Open a file by link, and a footer." caption="First visit: search, three links, and the footer." />
       <Screen file="home-proposed-recent" alt="The rebuilt home for a returning visitor: the same search, then Recently opened with Dandisets 000673 and 000728 and OpenNeuro ds000001, each with its title and archive." caption="Returning: Recently opened from any archive, with titles." />
       <Screen file="home-proposed-narrow" alt="The rebuilt home at 390 pixels wide: the title, search, links, Recently opened and footer in one column." caption="At 390px everything stacks in one column." />
     </div>
