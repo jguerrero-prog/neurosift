@@ -11,6 +11,12 @@ import AudioPlayer from "./AudioPlayer";
 import WaveformCanvas from "./WaveformCanvas";
 import { resolveDatasetFileUrl } from "@hdf5Interface";
 import ViewError from "@components/ViewError/ViewError";
+import { useCssVars } from "@components/useCssVars";
+import { DescriptionList, formatSeconds, LoadingState } from "@ui";
+import "./WavFileView.css";
+
+// The player's block size; the waveform gets the rest of the plugin's height.
+const PLAYER_HEIGHT = 48;
 
 type WaveformData = {
   data: Float32Array;
@@ -93,7 +99,7 @@ const WavFileView: FunctionComponent<DatasetPluginProps> = ({
 
   const { canvasWidth, canvasHeight, margins } = useTimeScrollView2({
     width,
-    height: height - 50,
+    height: height - PLAYER_HEIGHT,
     hideToolbar,
     leftMargin,
   });
@@ -113,6 +119,11 @@ const WavFileView: FunctionComponent<DatasetPluginProps> = ({
   }, [waveformData, initializeTimeseriesSelection]);
 
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
+  const root = useCssVars<HTMLDivElement>({
+    "--wav-width": width,
+    "--audio-player-height": PLAYER_HEIGHT,
+    "--wav-waveform-height": height - PLAYER_HEIGHT,
+  });
   useEffect(() => {
     if (!context || !waveformData) return;
     // Clear canvas
@@ -140,45 +151,54 @@ const WavFileView: FunctionComponent<DatasetPluginProps> = ({
     visibleEndTimeSec,
   ]);
 
-  if (isLoading) {
-    return <div>Loading audio file...</div>;
-  }
-
-  if (error || !waveformData || !audioUrl) {
-    return (
-      <ViewError
-        what="the audio file"
-        error={error || "The audio data is missing."}
-      />
-    );
-  }
-
   return (
-    <div style={{ width, height, display: "flex", flexDirection: "column" }}>
-      <AudioPlayer
-        audioUrl={audioUrl}
-        duration={waveformData.duration}
-        height={50}
-      />
-      <div style={{ flex: 1 }}>
-        <TimeScrollView2
-          width={width}
-          height={height - 50}
-          onCanvasElement={(canvas) => {
-            if (!canvas) return;
-            const context = canvas.getContext("2d");
-            setContext(context);
-          }}
-          hideToolbar={hideToolbar}
-          leftMargin={leftMargin}
-          yAxisInfo={{
-            showTicks: true,
-            yMin: waveformData.minValue,
-            yMax: waveformData.maxValue,
-            yLabel: "Amplitude",
-          }}
+    <div className="wav-view" ref={root}>
+      {isLoading ? (
+        <LoadingState label="Loading the audio file" phase="loading" />
+      ) : error || !waveformData || !audioUrl ? (
+        <ViewError
+          what="the audio file"
+          error={error || "The audio data is missing."}
         />
-      </div>
+      ) : (
+        <>
+          <DescriptionList
+            label="Audio"
+            layout="stacked"
+            items={[
+              {
+                term: "Sample rate",
+                value: `${waveformData.sampleRate.toLocaleString("en-US")} Hz`,
+              },
+              { term: "Channels", value: waveformData.channels },
+              {
+                term: "Length",
+                value: `${formatSeconds(waveformData.duration)} s`,
+              },
+            ]}
+          />
+          <AudioPlayer audioUrl={audioUrl} duration={waveformData.duration} />
+          <div className="wav-view-waveform">
+            <TimeScrollView2
+              width={width}
+              height={height - PLAYER_HEIGHT}
+              onCanvasElement={(canvas) => {
+                if (!canvas) return;
+                const context = canvas.getContext("2d");
+                setContext(context);
+              }}
+              hideToolbar={hideToolbar}
+              leftMargin={leftMargin}
+              yAxisInfo={{
+                showTicks: true,
+                yMin: waveformData.minValue,
+                yMax: waveformData.maxValue,
+                yLabel: "Amplitude",
+              }}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };
