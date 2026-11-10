@@ -152,7 +152,7 @@ const DatasetOverview: FunctionComponent<DatasetOverviewProps> = ({
     {chatHref && (
       <p className="dataset-chat">
         <a href={chatHref} target="_blank" rel="noopener noreferrer">
-          Ask about this dataset in Chat
+          Open Neurosift Chat
         </a>
         <Badge status="info">Experimental</Badge>
       </p>
