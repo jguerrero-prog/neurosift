@@ -73,3 +73,4 @@ export type { Description } from "./DescriptionList/DescriptionList";
 export { ColorBar, Legend } from "./Legend/Legend";
 export type { LegendItem } from "./Legend/Legend";
 export { DataTooltip } from "./DataTooltip/DataTooltip";
+export { StatusBar } from "./StatusBar/StatusBar";

@@ -252,6 +252,11 @@ export const navigation: NavSection[] = [
         href: "/components/pages/",
         summary: "Page and Section: a page's title, column and titled panels.",
       },
+      {
+        label: "Status bar",
+        href: "/components/status-bar/",
+        summary: "The build version and what the file has loaded, in words.",
+      },
     ],
   },
   {
