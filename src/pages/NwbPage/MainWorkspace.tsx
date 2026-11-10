@@ -305,15 +305,14 @@ const MainWorkspace: React.FC<MainWorkspaceProps> = ({
               tabId="hdf5"
               selected={activeFixedTab === "hdf5"}
             >
-              <ScrollY width={contentWidth} height={contentHeight}>
-                <ErrorBoundary what="the HDF5 view">
-                  <Hdf5View
-                    nwbUrl={nwbUrl}
-                    width={contentWidth}
-                    isExpanded={showFixedContent && activeFixedTab === "hdf5"}
-                  />
-                </ErrorBoundary>
-              </ScrollY>
+              <ErrorBoundary what="the HDF5 view">
+                <Hdf5View
+                  nwbUrl={nwbUrl}
+                  width={contentWidth}
+                  isExpanded={showFixedContent && activeFixedTab === "hdf5"}
+                  focus={hdf5Focus}
+                />
+              </ErrorBoundary>
             </TabPanel>
             <TabPanel
               tabsId="file-sections"
@@ -374,20 +373,21 @@ const MainWorkspace: React.FC<MainWorkspaceProps> = ({
               selected={activeFixedTab === "specifications"}
             >
               {showFixedContent && activeFixedTab === "specifications" && (
-                <ScrollY width={contentWidth} height={contentHeight}>
-                  <ErrorBoundary what="the schema">
-                    <Suspense
-                      fallback={
-                        <LoadingState
-                          label="Loading the schema"
-                          phase="loading"
-                        />
-                      }
-                    >
-                      <SpecificationsView />
-                    </Suspense>
-                  </ErrorBoundary>
-                </ScrollY>
+                <ErrorBoundary what="the schema">
+                  <Suspense
+                    fallback={
+                      <LoadingState
+                        label="Loading the schema"
+                        phase="loading"
+                      />
+                    }
+                  >
+                    <SpecificationsView
+                      nwbUrl={nwbUrl}
+                      onOpenPath={openInHdf5}
+                    />
+                  </Suspense>
+                </ErrorBoundary>
               )}
             </TabPanel>
             <TabPanel
