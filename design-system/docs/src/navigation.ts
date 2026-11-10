@@ -208,6 +208,12 @@ export const navigation: NavSection[] = [
           "Keys and values: panel fields, dataset facts and HDF5 attributes.",
       },
       {
+        label: "Legend and color bar",
+        href: "/components/legend/",
+        summary:
+          "What each color in a plot means, beside the plot it explains.",
+      },
+      {
         label: "Alerts and toasts",
         href: "/components/alerts/",
         summary: "Alert, Toast and Inline message: what happened, what to do.",
