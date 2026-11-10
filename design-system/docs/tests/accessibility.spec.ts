@@ -904,6 +904,26 @@ test("API key fields: the show button toggles by keyboard and keeps focus", asyn
   await expect(field).toHaveValue("abc123");
 });
 
+test("message box: Shift+Enter adds a line, Enter sends, and the field grows with its text", async ({
+  page,
+}) => {
+  await page.goto("components/text-inputs/");
+  const field = page.getByRole("textbox", { name: "Message", exact: true });
+  await hydrated(field);
+  const oneRow = (await field.boundingBox())?.height ?? 0;
+  await field.pressSequentially("First line");
+  await page.keyboard.press("Shift+Enter");
+  await field.pressSequentially("Second line");
+  await expect(field).toHaveValue("First line\nSecond line");
+  expect((await field.boundingBox())?.height).toBeGreaterThan(oneRow);
+  await page.keyboard.press("Enter");
+  await expect(field).toHaveValue("");
+  await expect(
+    page.getByRole("list", { name: "Sent messages" }).getByRole("listitem"),
+  ).toHaveText("First line\nSecond line");
+  await expect(field).toBeFocused();
+});
+
 test("object tree: checking two objects shows the selection bar, and Clear empties it", async ({
   page,
 }) => {
