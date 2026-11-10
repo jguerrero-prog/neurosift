@@ -935,3 +935,21 @@ test("multi-select: typing filters anywhere in a name, Enter adds a tag, Backspa
     page.getByRole("button", { name: "Remove PlaneSegmentation" }),
   ).toHaveCount(0);
 });
+
+test("object tree: checking two objects shows the selection bar, and Clear empties it", async ({
+  page,
+}) => {
+  await page.goto("components/tables/");
+  const lfps = page.getByRole("checkbox", {
+    name: "Add LFPs to the combined view",
+  });
+  await hydrated(lfps);
+  await lfps.check();
+  await page
+    .getByRole("checkbox", { name: "Add units to the combined view" })
+    .check();
+  const bar = page.getByRole("region", { name: "Combined view selection" });
+  await expect(bar).toContainText("LFPs and units");
+  await bar.getByRole("button", { name: "Clear" }).click();
+  await expect(bar).toHaveCount(0);
+});
