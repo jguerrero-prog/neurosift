@@ -197,6 +197,12 @@ export const navigation: NavSection[] = [
         href: "/components/navigation/",
         summary: "App bar, Breadcrumbs and Object path: where people are.",
       },
+      {
+        label: "Modals and drawers",
+        href: "/components/modals/",
+        summary:
+          "Dialog and Drawer: one decision at a time, and panels beside the data.",
+      },
     ],
   },
 ];

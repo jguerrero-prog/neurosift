@@ -25,6 +25,9 @@ export { useToast } from "./Toast/toastContext";
 export type { ToastApi, ToastOptions } from "./Toast/toastContext";
 export { Page } from "./Page/Page";
 export { Section } from "./Page/Section";
+export { Dialog } from "./Dialog/Dialog";
+export { Drawer } from "./Dialog/Drawer";
+
 export { AppBar } from "./Navigation/AppBar";
 export type { AppBarAction } from "./Navigation/AppBar";
 export { Breadcrumbs } from "./Navigation/Breadcrumbs";
