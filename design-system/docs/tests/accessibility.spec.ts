@@ -921,3 +921,53 @@ test("object tree: checking two objects shows the selection bar, and Clear empti
   await bar.getByRole("button", { name: "Clear" }).click();
   await expect(bar).toHaveCount(0);
 });
+
+test("data tooltip: arrow keys on a focused plot move the cursor and announce the values", async ({
+  page,
+}) => {
+  await page.goto("components/tooltips/");
+  const plot = page.getByRole("group", { name: /LFPs, channels 0 to 3/ });
+  await hydrated(plot);
+  await plot.focus();
+  await page.keyboard.press("ArrowRight");
+  const readout = plot.getByRole("status");
+  await expect(readout).toContainText(" s");
+  await expect(readout).toContainText("µV");
+});
+
+test("multi-select: typing filters anywhere in a name, Enter adds a tag, Backspace removes the last", async ({
+  page,
+}) => {
+  await page.goto("components/selects/");
+  const input = page.getByRole("combobox", { name: "Neurodata types" });
+  await hydrated(input);
+  await input.fill("plane");
+  await page.keyboard.press("ArrowDown");
+  await page.keyboard.press("Enter");
+  await expect(
+    page.getByRole("button", { name: "Remove PlaneSegmentation" }),
+  ).toBeVisible();
+  await expect(input).toHaveValue("");
+  await page.keyboard.press("Backspace");
+  await expect(
+    page.getByRole("button", { name: "Remove PlaneSegmentation" }),
+  ).toHaveCount(0);
+});
+
+test("object tree: checking two objects shows the selection bar, and Clear empties it", async ({
+  page,
+}) => {
+  await page.goto("components/tables/");
+  const lfps = page.getByRole("checkbox", {
+    name: "Add LFPs to the combined view",
+  });
+  await hydrated(lfps);
+  await lfps.check();
+  await page
+    .getByRole("checkbox", { name: "Add units to the combined view" })
+    .check();
+  const bar = page.getByRole("region", { name: "Combined view selection" });
+  await expect(bar).toContainText("LFPs and units");
+  await bar.getByRole("button", { name: "Clear" }).click();
+  await expect(bar).toHaveCount(0);
+});

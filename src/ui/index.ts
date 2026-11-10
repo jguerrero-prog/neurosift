@@ -70,6 +70,8 @@ export { EmptyState } from "./EmptyState/EmptyState";
 
 export { DescriptionList } from "./DescriptionList/DescriptionList";
 export type { Description } from "./DescriptionList/DescriptionList";
+export { SettingPair, TooMuchData, ViewPanel } from "./ViewPanel/ViewPanel";
+
 export {
   ObjectRow,
   SelectionBar,
@@ -82,3 +84,15 @@ export { OverviewPanel } from "./OverviewPanel/OverviewPanel";
 export { StatusBar } from "./StatusBar/StatusBar";
 export { ColorBar, Legend } from "./Legend/Legend";
 export type { LegendItem } from "./Legend/Legend";
+export { DataTooltip } from "./DataTooltip/DataTooltip";
+export { MultiSelect, RemovableTag } from "./MultiSelect/MultiSelect";
+export type { MultiSelectOption } from "./MultiSelect/MultiSelect";
+export {
+  AppliedFilters,
+  FilterGroup,
+  RecentlyOpened,
+  ResultRow,
+  ResultsHead,
+  SearchRow,
+  ShowMore,
+} from "./Catalog/Catalog";
