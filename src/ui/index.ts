@@ -26,3 +26,13 @@ export type { ToastApi, ToastOptions } from "./Toast/toastContext";
 export { Page } from "./Page/Page";
 export { Section } from "./Page/Section";
 export { CodeBlock, InlineCode } from "./CodeBlock/CodeBlock";
+
+export { AccordionItem, Disclosure } from "./Accordion/Accordion";
+
+export { Badge, Tag, TagLink } from "./Badge/Badge";
+export type { BadgeStatus } from "./Badge/Badge";
+
+export { Tabs, TabPanel } from "./Tabs/Tabs";
+export type { TabItem } from "./Tabs/Tabs";
+export { SegmentedControl } from "./SegmentedControl/SegmentedControl";
+export type { SegmentOption } from "./SegmentedControl/SegmentedControl";
