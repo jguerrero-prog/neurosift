@@ -160,7 +160,8 @@ export const navigation: NavSection[] = [
       {
         label: "Text inputs and search",
         href: "/components/text-inputs/",
-        summary: "Text input and Search field: labels, units, errors in words.",
+        summary:
+          "Text input, Text area and Search field: labels, units, errors in words.",
       },
       {
         label: "Dropdowns and selects",

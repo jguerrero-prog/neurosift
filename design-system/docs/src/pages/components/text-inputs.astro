@@ -1,5 +1,7 @@
 ---
 import ApiKeyDemo from "../../components/ApiKeyDemo";
+import MessageBoxDemo from "../../components/MessageBoxDemo";
+import TextAreaDemo from "../../components/TextAreaDemo";
 import Existing from "../../components/Existing.astro";
 import { SearchField, TextInput } from "@ui";
 import CodeSample from "../../components/CodeSample.astro";
@@ -11,6 +13,20 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
 
 const noop = () => {};
 const HELPER = "Seconds from the start of the session.";
+
+const AREA_PROPS = [
+  ["label", "string", "Required", "Names the field. Visible above it unless hideLabel is set."],
+  ["value", "string", "Required", "The text, line breaks included. The field is controlled."],
+  ["onChange", "(value: string) => void", "Required", "Reports each change as the new text."],
+  ["rows", "number", "3", "How many lines the empty field shows."],
+  ["maxRows", "number", "rows", "The field grows with its text up to this many lines, then scrolls."],
+  ["size", "\"md\" | \"sm\"", "\"md\"", "Small for dense control panels."],
+  ["helper", "string", "—", "A sentence below the field, tied to it with aria-describedby."],
+  ["error", "string", "—", "Replaces the helper, with the error icon, and marks the field invalid."],
+  ["hideLabel", "boolean", "false", "Keeps the label for screen readers only, where something nearby already names the field."],
+  ["disabled", "boolean", "false", "The field can’t be edited. Give the reason nearby."],
+  ["onKeyDown, placeholder, name, aria-* …", "textarea attributes", "—", "Passed to the <textarea>, so callers can handle keys such as Enter."],
+];
 
 const MESSAGES = [
   ["Start must come before the end, 1.00 s.", "On leaving either field"],
@@ -37,9 +53,11 @@ const SPECS = [
   ["Hover", "action/secondary-hover", "Same"],
   ["Disabled", "action/disabled fill, border/disabled, text/disabled", "Same"],
   ["Search field", "40px · input/height/lg (Large) or 32px (Medium), 20px or 16px search icon", "—"],
+  ["Text area", "4px padding above and below (space/1); one row is 32px", "No padding above and below; one row is 24px"],
+  ["Text area rows", "rows × the type/body-sm line height, growing to maxRows × the line height", "Same"],
 ];
 
-const code = `import { SearchField, TextInput } from "@ui";
+const code = `import { SearchField, TextArea, TextInput } from "@ui";
 
 <TextInput label="Window start (s)" value={start} onChange={setStart}
   unit="s" inputMode="decimal" helper="Seconds from the start of the session."
@@ -47,13 +65,27 @@ const code = `import { SearchField, TextInput } from "@ui";
 
 <SearchField label="Search Dandisets" value={query} onChange={setQuery}
   onSearch={runSearch} loading={searching}
-  placeholder="Search Dandisets, for example “mouse hippocampus”" />`;
+  placeholder="Search Dandisets, for example “mouse hippocampus”" />
+
+<TextArea label="Session notes" value={notes} onChange={setNotes}
+  rows={2} maxRows={4} helper="Saved with this file in this browser only." />`;
+
+const areaCode = `const sendOnEnter = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+  if (event.key !== "Enter" || event.shiftKey || event.nativeEvent.isComposing) return;
+  event.preventDefault();
+  send();
+};
+
+<TextArea label="Message" hideLabel placeholder="Ask about this Dandiset"
+  helper="Enter sends. Shift+Enter adds a line."
+  value={text} onChange={setText} onKeyDown={sendOnEnter}
+  rows={1} maxRows={6} />`;
 ---
 
-<DocsLayout title="Text inputs and search" description="Text input and Search field: labels, units, helper text and errors in words.">
+<DocsLayout title="Text inputs and search" description="Text input, Text area and Search field: labels, units, helper text and errors in words.">
   <Intro
     lead="Text inputs take values people type: an API key, a time window, a number of bins, a filter cutoff. The search field finds Dandisets and datasets on the archive pages. Every field has a visible label, says which unit it expects, and explains what went wrong in words when a value doesn’t fit."
-    status="Updated November 6, 2026 · Components · Every field on this page is the component the app imports from @ui"
+    status="Updated November 10, 2026 · Components · Every field on this page is the component the app imports from @ui"
     rules={[
       { title: "Labels sit above the field", text: "A short noun, always visible. Placeholders show an example; they never replace the label." },
       { title: "Units live in the label", text: "“Window start (s)”, “Low-pass cutoff (Hz)”. People shouldn’t have to guess seconds or milliseconds." },
@@ -92,6 +124,22 @@ const code = `import { SearchField, TextInput } from "@ui";
     <p class="doc-note">The key is hidden by default and hidden again on reload. The button reads “Show API key” or “Hide API key”, and showing changes only the field’s type, so focus, cursor and value stay put. The error shows after the archive answers 401, never while people type.</p>
   </DocSection>
 
+  <DocSection title="Text area" lead="A Text input for text that runs over one line: a chat message, notes on a session, a description. It shares the Text input’s label, helper, error, disabled state, sizes and tokens. It starts at rows lines, grows with its text up to maxRows, then scrolls. Use a Text input for anything that fits on one line, such as a number, a name or a key.">
+    <TextAreaDemo client:visible />
+    <p class="doc-note">Empty with an example placeholder, with a helper, with an error, disabled, Small, and grown to its maxRows of 4 with the rest of the text scrolling. Type in any of them to see the growth. The message box below shows the hidden label. Where a browser can’t size fields to their content, the field stays at rows lines and scrolls.</p>
+  </DocSection>
+
+  <DocSection title="Message box" lead="In a chat, Enter sends and Shift+Enter adds a line. The Text area doesn’t decide this: the caller handles Enter in onKeyDown, and leaves Shift+Enter and typing in an input method to the field. The label is hidden because the Send button and the conversation name the field; the helper says which key does what.">
+    <MessageBoxDemo client:visible />
+    <CodeSample label="React" code={areaCode} />
+  </DocSection>
+
+  <DocSection title="Text area props" lead="Everything else a <textarea> takes passes through, except className, style and id: the component links its own label and message.">
+    <DocTable caption="Text area props" columns={["Prop", "Type", "Default", "What it does"]}>
+      {AREA_PROPS.map(([prop, type, fallback, does]) => <tr><th scope="row"><code>{prop}</code></th><td><code>{type}</code></td><td>{fallback}</td><td>{does}</td></tr>)}
+    </DocTable>
+  </DocSection>
+
   <DocSection title="Search field" lead="For the DANDI, EMBER and OpenNeuro pages. The magnifier sits inside the field and search runs on Enter. A clear button appears once there is text, and Escape also clears. While results load, a spinner takes the clear button’s place.">
     <div class="field-stack">
       <SearchField label="Search Dandisets" value="" onChange={noop} onSearch={noop} placeholder="Search Dandisets, for example “mouse hippocampus”" />
@@ -116,7 +164,8 @@ const code = `import { SearchField, TextInput } from "@ui";
 
   <DocSection title="Accessibility">
     <ul class="rule-list">
-      <li><strong>Labels.</strong> Every field has a &lt;label&gt; tied to it. In a search field it is visually hidden, never missing.</li>
+      <li><strong>Labels.</strong> Every field has a &lt;label&gt; tied to it. In a search field or a message box it is visually hidden, never missing.</li>
+      <li><strong>Keys.</strong> A Text area keeps Enter for new lines unless the caller sends on Enter; then Shift+Enter still adds a line, and the helper says so.</li>
       <li><strong>Errors.</strong> The field gets aria-invalid, the message is tied to it with aria-describedby, and an icon goes with the color.</li>
       <li><strong>Input hints.</strong> inputMode="decimal" for numbers, autocomplete="off" for keys, and type="search" in the search field.</li>
       <li><strong>Contrast.</strong> Text 17.4:1, placeholder 5.3:1 and the field edge 21:1 on white; the 2px focus border is 7.2:1.</li>
@@ -136,7 +185,7 @@ const code = `import { SearchField, TextInput } from "@ui";
     </DocTable>
   </DocSection>
 
-  <DocSection title="In code" lead="Import from @ui. Both components are controlled: they show the value they’re given and report each change.">
+  <DocSection title="In code" lead="Import from @ui. All three components are controlled: they show the value they’re given and report each change.">
     <CodeSample label="React" code={code} />
   </DocSection>
 </DocsLayout>
