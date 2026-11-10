@@ -35,7 +35,7 @@ const DandisetOverview: FunctionComponent<DandisetOverviewProps> = ({
         href: `https://dandiarchive.org/dandiset/${id}/${info.version}`,
       }}
       {...dandisetContent(info)}
-      chatHref={`https://dandiset-explorer.vercel.app/chat?dandisetId=${id}&dandisetVersion=${info.version}`}
+      chatHref="https://chat.neurosift.app"
     />
   );
 };
