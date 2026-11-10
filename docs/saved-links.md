@@ -2,8 +2,9 @@
 
 Researchers save Neurosift links to datasets, files, views and settings, and put
 them in papers, notebooks and chat messages. Every link below keeps opening the
-same thing in the redesign. If a link form ever has to change, the old form is
-mapped to the new one, not dropped.
+same thing in the redesign, apart from the few marked **Not supported**, which say
+what opens instead. If a link form ever has to change, the old form is mapped to
+the new one, not dropped.
 
 This list was checked on November 10, 2026, against upstream
 `flatironinstitute/neurosift` main at commit `c0e9b8c3` (October 23, 2026), and
@@ -28,7 +29,7 @@ exact address each one is rewritten to.
 | `/` | https://neurosift.app/ | Home | Works as before | Yes |
 | `/search` with `q`, `archive`, `mode`, `sort`, `types` | https://neurosift.app/search?q=mouse&archive=DANDI,EMBER | The catalog with that search | New in the redesign | No |
 | Any unknown path | https://neurosift.app/no-such-page | Home | Works as before | Yes |
-| `/experimental-neurotile` | https://neurosift.app/experimental-neurotile | Home, by way of `/experimental-neurosift-tiles` | Works as before: that page was removed upstream | No |
+| `/experimental-neurotile` | https://neurosift.app/experimental-neurotile | Home | Works as before: upstream sent it on to `/experimental-neurosift-tiles`, a page that no longer exists, so it ended on Home there too | No |
 
 ## Archive pages
 
