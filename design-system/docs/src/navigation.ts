@@ -288,6 +288,17 @@ export const navigation: NavSection[] = [
     ],
   },
   {
+    heading: "UI library",
+    items: [
+      {
+        label: "Settings",
+        href: "/ui-library/settings/",
+        summary:
+          "The API keys Neurosift sends to DANDI, the sandbox and EMBER.",
+      },
+    ],
+  },
+  {
     heading: "Resources",
     items: [
       {
