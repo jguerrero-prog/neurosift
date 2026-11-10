@@ -268,6 +268,12 @@ export const navigation: NavSection[] = [
         href: "/components/view-panel/",
         summary: "The frame every view shares, around Neurosift’s own charts.",
       },
+      {
+        label: "Catalog",
+        href: "/components/catalog/",
+        summary:
+          "Search, filters and result rows across DANDI, EMBER and OpenNeuro.",
+      },
     ],
   },
   {
