@@ -1,4 +1,5 @@
 ---
+import Existing from "../../components/Existing.astro";
 import CodeSample from "../../components/CodeSample.astro";
 import { ConfirmDemo, DockedDrawerDemo, OverlayDrawerDemo, ShareDemo } from "../../components/DialogDemo";
 import DoDont from "../../components/DoDont.astro";
@@ -62,12 +63,18 @@ const code = `import { Dialog, Drawer } from "@ui";
     ]}
   />
 
+  <Existing page="modals" />
+
   <DocSection title="Dialog" lead="Two sizes, 400 and 560px, and two kinds. Title, short message, an optional content area, and Cancel beside the main action on the right. Open one and try Escape, Tab and Cancel.">
     <div class="demo-row dialog-demos">
       <ConfirmDemo client:visible />
       <ShareDemo client:visible />
     </div>
     <p class="doc-note">The confirmation is for the Remove API key button in Settings: the title asks the question, and the red button repeats the verb. Share is a task with a field, so focus starts in the field.</p>
+  </DocSection>
+
+  <DocSection title="In context" lead="A dialog sits centered on a backdrop that dims the page. The page behind can’t be used until the dialog closes.">
+    <p class="doc-note">Open Remove key above to see it: the backdrop is navy at 40%, the page behind is inert, and focus returns to the button when the dialog closes.</p>
   </DocSection>
 
   <DocSection title="Drawer" lead="320px wide, the default panel width. Docked drawers sit beside the workspace with a 1px black edge; overlay drawers slide over it with a shadow and a backdrop.">

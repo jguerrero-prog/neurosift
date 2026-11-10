@@ -1,4 +1,6 @@
 ---
+import DocRows from "../../components/DocRows.astro";
+import Existing from "../../components/Existing.astro";
 import CodeSample from "../../components/CodeSample.astro";
 import DoDont from "../../components/DoDont.astro";
 import DocSection from "../../components/DocSection.astro";
@@ -55,6 +57,48 @@ const code = `import { Playback, TimeOverview, TimeWindow, timeKey } from "@ui";
 // In the plot's key handler:
 const next = timeKey(event.key, window, session, cursor);
 if (next) setWindow(next);`;
+const CHANNEL_WINDOW = [
+  [
+    "Channels, 0–3 of 70",
+    "In a timeseries. Fewer and More change how many show; Previous and Next move through the list."
+  ],
+  [
+    "Units, 0–3 of 46",
+    "In a raster. Numbers stay zero-based, matching the indices people use in Python. To confirm with the team."
+  ]
+];
+const OVERVIEW_STATES = [
+  [
+    "Default",
+    "1px navy outline around the visible window."
+  ],
+  [
+    "Hover",
+    "2px outline; the pointer becomes a grab hand."
+  ],
+  [
+    "Focus",
+    "Link-blue ring. Arrow keys step, Shift steps a whole window."
+  ],
+  [
+    "Dragging",
+    "The fill turns navy 50 while the window moves."
+  ]
+];
+const PLAYBACK_STATES = [
+  [
+    "Stopped",
+    "The Play button, the speed and the cursor time."
+  ],
+  [
+    "Playing",
+    "Pause keeps the position. Space toggles play when the view has focus."
+  ],
+  [
+    "Speed menu",
+    "0.1×, 0.25×, 0.5×, 1×, 2×, 4× and 8×."
+  ]
+];
 ---
 
 <DocsLayout title="Time controls" description="Time window, Channel window, Time overview and Playback: one shared time for every view.">
@@ -68,6 +112,8 @@ if (next) setWindow(next);`;
     ]}
   />
 
+  <Existing page="time-controls" />
+
   <DocSection title="Plot toolbar" lead="The order is the same in every view: a one-line summary of the recording, then time, then the other axis, then playback. Groups wrap to a second line when the panel is narrow. All of these share one window and cursor.">
     <TimeDemo client:visible />
     <p class="doc-note">The plot itself stays as it is; the stand-in here takes the same keys a focused plot would. For long sessions the Time overview sits under the toolbar, so people always see where they are.</p>
@@ -80,8 +126,24 @@ if (next) setWindow(next);`;
     <p class="doc-note">A value that won’t fit gets a reason, such as “Start must be between 0 and 1,371.94 s.”, in place of snapping back. Times show two decimals, with a thousands comma past 1,000 s.</p>
   </DocSection>
 
-  <DocSection title="Channel window, overview and playback" lead="The same pattern for the other axis: Channels in a timeseries, Units in a raster, zero-based like the indices people use in Python. The overview is the whole session as a strip: the outlined box is the visible window, and the red line is the shared cursor. Playback plays at a chosen speed from 0.1× to 8×, and pause keeps the position.">
-    <p class="doc-note">Drag the overview’s box to move it, or click the strip to center the window there. Playback never starts by itself.</p>
+  <DocSection title="Channel window" lead="The same pattern for the other axis. Channels in a timeseries, units in a raster: the label and total change, the behavior doesn’t.">
+    <DocTable caption="Channel window" columns={["Label","Where and how"]}>
+      <DocRows rows={CHANNEL_WINDOW} />
+    </DocTable>
+  </DocSection>
+
+  <DocSection title="Time overview" lead="The whole session as a strip, under the toolbar above. The outlined box is the visible window; the red line is the cursor shared with every view.">
+    <DocTable caption="Time overview states" columns={["State","Look"]}>
+      <DocRows rows={OVERVIEW_STATES} />
+    </DocTable>
+    <p class="doc-note">Drag the box to move it, or click the strip to center the window there. Session start and end sit at either end in Plex Mono. It replaces today’s light-gray strip with a black box and red line.</p>
+  </DocSection>
+
+  <DocSection title="Playback" lead="For video, pose and behavior alongside neural data. Play moves the shared cursor at the chosen speed.">
+    <DocTable caption="Playback states" columns={["State","Look and behavior"]}>
+      <DocRows rows={PLAYBACK_STATES} />
+    </DocTable>
+    <p class="doc-note">Playback never starts by itself.</p>
   </DocSection>
 
   <DocSection title="Pointer and keyboard" lead="The plot takes keys once it has focus; the focus ring shows when it does.">

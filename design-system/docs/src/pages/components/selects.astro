@@ -1,4 +1,5 @@
 ---
+import Existing from "../../components/Existing.astro";
 import { Select } from "@ui";
 import CodeSample from "../../components/CodeSample.astro";
 import DoDont from "../../components/DoDont.astro";
@@ -108,6 +109,8 @@ const code = `import { Menu, Select } from "@ui";
       { title: "Change in place", text: "Picking an option updates the view right away. It never navigates away or resets other settings." },
     ]}
   />
+
+  <Existing page="selects" />
 
   <DocSection title="Choosing the control" lead="Selects hide their options until opened. Use one only when the list is too long to show.">
     <DocTable caption="Choosing the control" columns={["Choices", "Use", "In Neurosift"]}>
