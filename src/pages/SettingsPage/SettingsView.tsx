@@ -10,6 +10,8 @@ export interface ApiKeys {
 interface SettingsViewProps {
   keys: ApiKeys;
   onChange: (key: keyof ApiKeys, value: string) => void;
+  shown: Record<keyof ApiKeys, boolean>;
+  onShownChange: (key: keyof ApiKeys, shown: boolean) => void;
   showReload: boolean;
   onReload: () => void;
 }
@@ -17,6 +19,8 @@ interface SettingsViewProps {
 export function SettingsView({
   keys,
   onChange,
+  shown,
+  onShownChange,
   showReload,
   onReload,
 }: SettingsViewProps) {
@@ -27,6 +31,11 @@ export function SettingsView({
       helper={helper}
       value={keys[key]}
       onChange={(value) => onChange(key, value)}
+      reveal={{
+        shown: shown[key],
+        onShownChange: (next) => onShownChange(key, next),
+        name: "API key",
+      }}
     />
   );
   return (

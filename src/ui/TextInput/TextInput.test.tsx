@@ -111,4 +111,53 @@ describe("TextInput", () => {
       "ns-visually-hidden",
     );
   });
+
+  describe("show and hide, for password fields", () => {
+    const Secret = ({
+      shown,
+      onShownChange = noop,
+    }: {
+      shown: boolean;
+      onShownChange?: (shown: boolean) => void;
+    }) => (
+      <TextInput
+        type="password"
+        label="DANDI API key"
+        value="7f3a9c2e"
+        onChange={noop}
+        reveal={{ shown, onShownChange, name: "API key" }}
+      />
+    );
+
+    it("hides the key by default, with a button that says what it shows", () => {
+      render(<Secret shown={false} />);
+      expect(screen.getByLabelText("DANDI API key").getAttribute("type")).toBe(
+        "password",
+      );
+      expect(screen.getByRole("button", { name: "Show API key" })).toBeTruthy();
+    });
+
+    it("shows the key as text, with a button to hide it again", () => {
+      render(<Secret shown />);
+      expect(screen.getByLabelText("DANDI API key").getAttribute("type")).toBe(
+        "text",
+      );
+      expect(screen.getByRole("button", { name: "Hide API key" })).toBeTruthy();
+    });
+
+    it("reports the new state, and keeps the value", () => {
+      const onShownChange = vi.fn();
+      render(<Secret shown={false} onShownChange={onShownChange} />);
+      fireEvent.click(screen.getByRole("button", { name: "Show API key" }));
+      expect(onShownChange).toHaveBeenCalledWith(true);
+      expect(
+        (screen.getByLabelText("DANDI API key") as HTMLInputElement).value,
+      ).toBe("7f3a9c2e");
+    });
+
+    it("adds no button to fields that aren’t passwords", () => {
+      render(<TextInput label="Dandiset ID" value="" onChange={noop} />);
+      expect(screen.queryByRole("button")).toBeNull();
+    });
+  });
 });
