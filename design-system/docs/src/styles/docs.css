@@ -1404,3 +1404,22 @@ main {
 .example-plot-body > .ns-legend {
   align-self: start;
 }
+
+.data-tooltip-demo {
+  position: relative;
+  max-inline-size: 30rem;
+  padding: var(--space-2);
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-panel);
+  cursor: crosshair;
+}
+
+.data-tooltip-demo svg {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.data-tooltip-demo-cursor {
+  stroke: var(--data-cursor);
+}

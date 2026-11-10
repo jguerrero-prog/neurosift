@@ -903,3 +903,16 @@ test("API key fields: the show button toggles by keyboard and keeps focus", asyn
   await expect(field).toHaveAttribute("type", "password");
   await expect(field).toHaveValue("abc123");
 });
+
+test("data tooltip: arrow keys on a focused plot move the cursor and announce the values", async ({
+  page,
+}) => {
+  await page.goto("components/tooltips/");
+  const plot = page.getByRole("group", { name: /LFPs, channels 0 to 3/ });
+  await hydrated(plot);
+  await plot.focus();
+  await page.keyboard.press("ArrowRight");
+  const readout = plot.getByRole("status");
+  await expect(readout).toContainText(" s");
+  await expect(readout).toContainText("µV");
+});
