@@ -30,3 +30,15 @@ export type { AppBarAction } from "./Navigation/AppBar";
 export { Breadcrumbs } from "./Navigation/Breadcrumbs";
 export type { Crumb } from "./Navigation/Breadcrumbs";
 export { ObjectPath } from "./Navigation/ObjectPath";
+
+export { CodeBlock, InlineCode } from "./CodeBlock/CodeBlock";
+
+export { AccordionItem, Disclosure } from "./Accordion/Accordion";
+
+export { Badge, Tag, TagLink } from "./Badge/Badge";
+export type { BadgeStatus } from "./Badge/Badge";
+
+export { Tabs, TabPanel } from "./Tabs/Tabs";
+export type { TabItem } from "./Tabs/Tabs";
+export { SegmentedControl } from "./SegmentedControl/SegmentedControl";
+export type { SegmentOption } from "./SegmentedControl/SegmentedControl";
