@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page not found</title>
+    <script>
+      // The docs site's 404. A deep link into the app under /<repo>/app/ is
+      // sent to the app root with its path in the query, which the app's
+      // index.html restores. Any other missing page shows the message below.
+      (function (l) {
+        var segments = l.pathname.split("/").filter(Boolean);
+        var appIndex = segments.indexOf("app");
+        var siteRoot =
+          "/" + (segments.length > 0 && appIndex !== 0 ? segments[0] + "/" : "");
+        window.__notFoundSiteRoot = siteRoot;
+        if (appIndex < 1) return;
+        var appRoot = "/" + segments.slice(0, appIndex + 1).join("/") + "/";
+        var rest = segments.slice(appIndex + 1).join("/");
+        var query = l.search.slice(1);
+        var alreadyRedirected = l.search.slice(0, 2) === "?/";
+        if (alreadyRedirected || (!rest && !query)) return;
+        l.replace(
+          l.protocol +
+            "//" +
+            l.host +
+            appRoot +
+            "?/" +
+            rest.replace(/&/g, "~and~") +
+            (query ? "&" + query.replace(/&/g, "~and~") : "") +
+            l.hash,
+        );
+      })(window.location);
+    </script>
+    <style>
+      body {
+        margin: 0;
+        padding: 48px 24px;
+        font-family:
+          "IBM Plex Sans",
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+        color: #161616;
+        background: #ffffff;
+      }
+      main {
+        max-width: 620px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0 0 12px;
+      }
+      p {
+        font-size: 14px;
+        line-height: 1.6;
+        margin: 0 0 12px;
+      }
+      code {
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 13px;
+      }
+      a {
+        color: #0f62fe;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Page not found</h1>
+      <p>Nothing is published at <code id="requested"></code>.</p>
+      <p><a id="home" href="/">Go to the design system</a></p>
+    </main>
+    <script>
+      (function (l) {
+        document.getElementById("requested").textContent = l.pathname + l.search;
+        document.getElementById("home").href = window.__notFoundSiteRoot || "/";
+      })(window.location);
+    </script>
+  </body>
+</html>

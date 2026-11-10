@@ -22,12 +22,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Update submodules
+        run: git submodule update --init --recursive
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
           cache: npm
-          cache-dependency-path: design-system/docs/package-lock.json
+          cache-dependency-path: |
+            package-lock.json
+            design-system/docs/package-lock.json
 
       - name: Install docs dependencies
         run: npm run docs:install
@@ -36,6 +41,21 @@ jobs:
         run: npm run docs:build
         env:
           DOCS_BASE: /${{ github.event.repository.name }}/
+          PUBLIC_APP_BASE: /${{ github.event.repository.name }}/app/
+
+      # The app goes beside the docs, so the UI library pages can embed the
+      # real screens. The 404 page sends deep links into the app to its root.
+      - name: Install app dependencies
+        run: npm ci
+
+      - name: Build the app under the docs, at app/
+        run: npm run build -- --base /${{ github.event.repository.name }}/app/
+
+      - name: Put the app and the 404 page into the docs site
+        run: |
+          mkdir -p design-system/docs/dist/app
+          cp -R dist/. design-system/docs/dist/app/
+          cp devel/gh-pages-docs/404.html design-system/docs/dist/404.html
 
       - uses: actions/upload-pages-artifact@v3
         with:
