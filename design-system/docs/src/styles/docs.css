@@ -1155,3 +1155,21 @@ main {
   justify-self: start;
   border: 1px solid var(--border-subtle);
 }
+
+.principles {
+  display: grid;
+  gap: var(--space-6);
+  max-inline-size: var(--layout-text-max);
+  margin: 0;
+  padding-inline-start: var(--space-6);
+}
+
+.principles li {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.principles li::marker {
+  font: var(--type-h4);
+  color: var(--text-muted);
+}
