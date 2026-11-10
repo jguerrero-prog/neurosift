@@ -1,0 +1,31 @@
+.file-viewer {
+  display: flex;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: hidden;
+  background: var(--surface-page);
+}
+
+.file-viewer-workspace {
+  position: relative;
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+}
+
+.file-viewer--panel-only > .ns-overview-panel {
+  inline-size: 100%;
+}
+
+.file-viewer--panel-only > .file-viewer-workspace {
+  display: none;
+}
+
+.file-overview-lindi {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font: var(--type-body-sm);
+}
