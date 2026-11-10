@@ -1,0 +1,7 @@
+.timeseries-canvas {
+  position: relative;
+}
+
+.timeseries-separation {
+  inline-size: 12rem;
+}
