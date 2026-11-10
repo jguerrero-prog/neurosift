@@ -65,6 +65,15 @@ const VIEWERS = [
   ["NWB viewer guide", "/guide", "How to use the viewer."],
 ];
 
+const LINKS = [
+  ["Pages", "/, /search, /dandi, /ember, /openneuro, /settings, /guide", "As they are."],
+  ["Datasets", "/dandiset/:id?dandisetVersion=…&tab=…, /ember-dandiset/:id?tab=…, /openneuro-dataset/:id?tab=…", "As they are; tab names a file in the dataset."],
+  ["NWB files", "/nwb?url=…&dandisetId=…&dandisetVersion=…&tab=…, or path= instead of url=", "As they are; tab is a section, an object path, view:Plugin|path^secondary or a JSON list, and a renamed plugin keeps its old name."],
+  ["View settings", "Search parameters and the # of each view", "As they are."],
+  ["Other viewers", "/edf, /video, /slp with url=", "As they are."],
+  ["Neurosift v1", "/?p=/dandi, /dandiset, /ember-dandiset, /openneuro-dataset, /nwb, /edf, /avi", "Redirected once, replacing the history entry, by src/util/legacyUrl.ts; embedded=1 and the # are kept."],
+];
+
 const BLOCKS = [
   ["Time window and step buttons", "Every time view", "Time window, Time overview", "Time series views"],
   ["Channel or unit window", "Timeseries, raster", "Channel window", "Time series views; Spike views"],
@@ -138,6 +147,10 @@ const CONFIRM = [
 
   <DocSection title="Other file viewers">
     <DocTable caption="Other file viewers" columns={["Viewer", "Route", "Opens, and must keep"]}><DocRows rows={VIEWERS} /></DocTable>
+  </DocSection>
+
+  <DocSection title="Links" lead="Researchers save Neurosift links, so these forms open the same thing forever. A redesign that renames a route, tab or plugin maps the old form; docs/saved-links.md lists every form with an example.">
+    <DocTable caption="Saved link forms" columns={["Kind", "Form", "Opens"]}><DocRows rows={LINKS} /></DocTable>
   </DocSection>
 
   <DocSection title="Shared building blocks" lead="Parts that repeat. Each has a component in this system, and a UI library page that uses it.">

@@ -12,7 +12,6 @@ import {
   BrowserRouter as Router,
   Routes,
   useLocation,
-  useNavigate,
   useSearchParams,
 } from "react-router-dom";
 import { AIComponentRegistryProvider } from "./ai-integration/AIComponentRegistry";
@@ -64,130 +63,6 @@ const theme = createTheme({
     },
   },
 });
-
-const LegacyUrlHandler = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [searchParams] = useSearchParams();
-
-  useEffect(() => {
-    const p = searchParams.get("p");
-    if (!p) return;
-
-    let newPath = "";
-    let newSearch = "";
-
-    if (p === "/dandi") {
-      newPath = "/dandi";
-    } else if (p === "/dandiset") {
-      const dandisetId = searchParams.get("dandisetId");
-      const dandisetVersion = searchParams.get("dandisetVersion");
-      if (dandisetId) {
-        newPath = `/dandiset/${dandisetId}`;
-        if (dandisetVersion) {
-          newSearch = `?dandisetVersion=${dandisetVersion}`;
-        }
-      }
-    } else if (p === "/ember") {
-      newPath = "/ember";
-    } else if (p === "/ember-dandiset") {
-      const emberDandisetId = searchParams.get("emberDandisetId");
-      const emberDandisetVersion = searchParams.get("emberDandisetVersion");
-      if (emberDandisetId) {
-        newPath = `/ember-dandiset/${emberDandisetId}`;
-        if (emberDandisetVersion) {
-          newSearch = `?ember-dandisetVersion=${emberDandisetVersion}`;
-        }
-      }
-    } else if (p === "/edf") {
-      newPath = "/edf";
-      const urlParam = searchParams.get("url");
-      const versionParam = searchParams.get("versionId");
-      if (urlParam) {
-        newSearch = `?url=${urlParam}${versionParam ? `&versionId=${versionParam}` : ""}`;
-      }
-    } else if (p === "/nwb") {
-      newPath = "/nwb";
-      const urlParam = searchParams.get("url");
-      const tabParam = searchParams.get("tab");
-
-      // Handle encoded parameters
-      const params = new URLSearchParams();
-      ["dandisetId", "dandisetVersion"].forEach((param) => {
-        const value = searchParams.get(param);
-        if (value) params.append(param, value);
-      });
-
-      // Build query string with parameters in specific order
-      const queryParts = [];
-
-      // 1. url (unencoded)
-      if (urlParam) queryParts.push(`url=${urlParam}`);
-
-      // 2. dandisetId
-      const dandisetId = searchParams.get("dandisetId");
-      if (dandisetId)
-        queryParts.push(`dandisetId=${encodeURIComponent(dandisetId)}`);
-
-      // 3. dandisetVersion
-      const dandisetVersion = searchParams.get("dandisetVersion");
-      if (dandisetVersion)
-        queryParts.push(
-          `dandisetVersion=${encodeURIComponent(dandisetVersion)}`,
-        );
-
-      // 4. tab
-      if (tabParam?.startsWith("neurodata-item:")) {
-        const path = tabParam.split("|")[0].replace("neurodata-item:", "");
-        queryParts.push(`tab=${path}`);
-      }
-      if (tabParam?.startsWith("view:")) {
-        const b = tabParam.slice("view:".length).split("|");
-        if (b[0] === "X/Y") {
-          queryParts.push(`tab=SpatialSeriesXY|${b[1]}`);
-        }
-      }
-      if (tabParam?.startsWith("neurodata-items:")) {
-        const x = tabParam.slice("neurodata-items:".length).split("@");
-        let y = x.map((z) => {
-          if (z.startsWith("neurodata-item")) {
-            const b = z.slice("neurodata-item:".length).split("|");
-            return b[0];
-          } else if (z.startsWith("view:")) {
-            const b = z.slice("view:".length).split("|");
-            if (b[0] === "X/Y") {
-              return `SpatialSeriesXY|${b[1]}`;
-            } else if (b[0] === "RasterPlot") {
-              return `Raster|${b[1]}`;
-            }
-          }
-          return "";
-        });
-        y = y.filter((z) => z !== "");
-        queryParts.push(`tab=${JSON.stringify(y)}`);
-      }
-
-      if (queryParts.length > 0) {
-        newSearch = "?" + queryParts.join("&");
-      }
-    }
-
-    if (newPath) {
-      // Preserve embedded=1 if present
-      const hideParam = searchParams.get("embedded");
-      if (hideParam === "1") {
-        if (newSearch) {
-          newSearch += "&embedded=1";
-        } else {
-          newSearch = "?embedded=1";
-        }
-      }
-      navigate(newPath + newSearch, { replace: true });
-    }
-  }, [location, searchParams, navigate]);
-
-  return null;
-};
 
 const PageLoading = () => (
   <div style={{ padding: 20 }}>
@@ -376,12 +251,6 @@ const AppContent = () => {
                 path="/slp"
                 element={<SlpPage width={width} height={mainHeight} />}
               />
-              <Route
-                path="/experimental-neurotile"
-                element={
-                  <Navigate to="/experimental-neurosift-tiles" replace />
-                }
-              />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>
@@ -409,7 +278,6 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router basename={import.meta.env.BASE_URL}>
         <AIComponentRegistryProvider>
-          <LegacyUrlHandler />
           <AppContent />
         </AIComponentRegistryProvider>
       </Router>
