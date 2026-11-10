@@ -1,4 +1,6 @@
+import ViewError from "@components/ViewError/ViewError";
 import React, { useState, useEffect, useCallback } from "react";
+import { useHdf5GroupResult } from "../../hdf5Results";
 import {
   useHdf5Group,
   useHdf5Dataset,
@@ -292,7 +294,8 @@ const DefaultGroupView: React.FC<Props> = ({
   onOpenObjectInNewTab,
   width,
 }) => {
-  const group = useHdf5Group(nwbUrl, path);
+  const { value: group, error } = useHdf5GroupResult(nwbUrl, path);
+  if (error) return <ViewError what={path} error={error} />;
   if (!group) return <>Loading group...</>;
 
   return (
