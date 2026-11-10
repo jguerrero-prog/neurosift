@@ -326,6 +326,11 @@ export const navigation: NavSection[] = [
         summary:
           "Traces, events and intervals on recording time, and signals aligned to trials.",
       },
+      {
+        label: "Spike views",
+        href: "/ui-library/spike-views/",
+        summary: "The raster of spike times, and the PSTH around each trial.",
+      },
     ],
   },
   {
