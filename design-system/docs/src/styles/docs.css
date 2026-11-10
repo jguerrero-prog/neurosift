@@ -1415,3 +1415,7 @@ main {
   min-block-size: var(--layout-target-min);
   min-inline-size: var(--layout-target-min);
 }
+
+.screen {
+  max-inline-size: 100%;
+}
