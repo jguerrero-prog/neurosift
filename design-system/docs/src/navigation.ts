@@ -279,6 +279,12 @@ export const navigation: NavSection[] = [
         summary:
           "Where an NWB file opens: the overview, the objects and their views.",
       },
+      {
+        label: "Time series views",
+        href: "/ui-library/time-series/",
+        summary:
+          "Traces, events and intervals on recording time, and signals aligned to trials.",
+      },
     ],
   },
   {
