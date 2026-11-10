@@ -27,3 +27,8 @@ export { Page } from "./Page/Page";
 export { Section } from "./Page/Section";
 export { Badge, Tag, TagLink } from "./Badge/Badge";
 export type { BadgeStatus } from "./Badge/Badge";
+
+export { Tabs, TabPanel } from "./Tabs/Tabs";
+export type { TabItem } from "./Tabs/Tabs";
+export { SegmentedControl } from "./SegmentedControl/SegmentedControl";
+export type { SegmentOption } from "./SegmentedControl/SegmentedControl";
