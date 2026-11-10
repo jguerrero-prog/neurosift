@@ -31,6 +31,10 @@ type Row = {
   position: number;
 };
 
+// A folder known to be empty has nothing to open.
+const opens = (node: TreeNode) =>
+  node.kind === "folder" && node.children?.length !== 0;
+
 const KIND_ICONS: Record<TreeNode["kind"], IconName> = {
   folder: "folder",
   nwb: "data--structured",
@@ -77,20 +81,20 @@ export function Tree({
       open ? [...expanded, id] : expanded.filter((e) => e !== id),
     );
   const activate = (node: TreeNode) => {
-    if (node.kind === "folder") setOpen(node.id, !expanded.includes(node.id));
+    if (opens(node)) setOpen(node.id, !expanded.includes(node.id));
     else onOpen?.(node);
   };
 
   const onKeyDown = (event: KeyboardEvent, index: number) => {
     const { node, parent } = rows[index];
-    const isOpen = node.kind === "folder" && expanded.includes(node.id);
+    const isOpen = opens(node) && expanded.includes(node.id);
     const moves: Record<string, () => void> = {
       ArrowDown: () => rows[index + 1] && focus(rows[index + 1].node.id),
       ArrowUp: () => rows[index - 1] && focus(rows[index - 1].node.id),
       Home: () => focus(rows[0].node.id),
       End: () => focus(rows[rows.length - 1].node.id),
       ArrowRight: () => {
-        if (node.kind !== "folder") return;
+        if (!opens(node)) return;
         if (!isOpen) setOpen(node.id, true);
         else if (rows[index + 1]?.parent === node.id)
           focus(rows[index + 1].node.id);
@@ -111,7 +115,7 @@ export function Tree({
     <ul role="tree" aria-label={label} className="ns-tree">
       {rows.map((row, index) => {
         const { node } = row;
-        const folder = node.kind === "folder";
+        const folder = opens(node);
         const isOpen = folder && expanded.includes(node.id);
         return (
           <li

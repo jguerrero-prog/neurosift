@@ -274,6 +274,12 @@ export const navigation: NavSection[] = [
         summary:
           "Where an NWB file opens: the overview, the objects and their views.",
       },
+      {
+        label: "HDF5 and schema",
+        href: "/ui-library/hdf5-schema/",
+        summary:
+          "The file as stored and the NWB specifications, each with details beside.",
+      },
     ],
   },
   {
