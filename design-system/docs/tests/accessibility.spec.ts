@@ -42,6 +42,12 @@ const clipped = (page: Page) =>
         if (el.closest(".doc-table, .ns-visually-hidden, .visually-hidden"))
           return false;
         const style = getComputedStyle(el);
+        // An ellipsis that keeps its full text in title, such as an object's description, isn't lost.
+        if (
+          style.textOverflow === "ellipsis" &&
+          el.getAttribute("title") === el.textContent
+        )
+          return false;
         const hides = ["hidden", "clip"].some(
           (v) => style.overflowX === v || style.overflowY === v,
         );
