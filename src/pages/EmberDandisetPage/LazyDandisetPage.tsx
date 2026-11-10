@@ -5,7 +5,8 @@ import DatasetWorkspace from "../common/DatasetWorkspace/DatasetWorkspace";
 import { DatasetFile } from "../common/DatasetWorkspace/plugins/pluginInterface";
 import EmberDandisetOverview from "./EmberDandisetOverview.tsx";
 import { useEmberDandisetVersionInfo } from "./useEmberDandisetVersionInfo.ts";
-import useQueryEmberDandiset from "./useQueryEmberDandiset.ts";
+import DandisetError from "../DandisetPage/DandisetError";
+import { useDandisetResult } from "../DandisetPage/useQueryDandiset";
 import useLazyDandisetPaths from "./hooks/useLazyDandisetPaths";
 import useRegisterAIComponent from "./useRegisterAIComponent";
 
@@ -26,7 +27,11 @@ const LazyDandisetPage: FunctionComponent<LazyDandisetPageProps> = ({
   const staging = false;
 
   // Query the dandiset info
-  const dandisetResponse = useQueryEmberDandiset(effectiveDandisetId, staging);
+  const { dandiset: dandisetResponse, failure } = useDandisetResult(
+    effectiveDandisetId,
+    staging,
+    true,
+  );
   const dandisetVersion = "";
   const dandisetVersionInfo = useEmberDandisetVersionInfo(
     effectiveDandisetId,
@@ -93,6 +98,9 @@ const LazyDandisetPage: FunctionComponent<LazyDandisetPageProps> = ({
     nwbFilesOwnlyControlVisible: true,
   });
 
+  if (failure && effectiveDandisetId) {
+    return <DandisetError dandisetId={effectiveDandisetId} failure={failure} />;
+  }
   if (loading || !dandisetResponse || !dandisetVersionInfo) {
     return <div>Loading...</div>;
   }
