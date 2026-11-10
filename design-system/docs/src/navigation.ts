@@ -357,6 +357,12 @@ export const navigation: NavSection[] = [
         href: "/ui-library/spectrogram/",
         summary: "Power by frequency over recording time, and its settings.",
       },
+      {
+        label: "Neurosift Chat",
+        href: "/ui-library/neurosift-chat/",
+        summary:
+          "The assistant for datasets: today’s chat and a rebuild from @ui.",
+      },
     ],
   },
   {
