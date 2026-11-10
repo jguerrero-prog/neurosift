@@ -291,6 +291,11 @@ export const navigation: NavSection[] = [
         summary:
           "The API keys Neurosift sends to DANDI, the sandbox and EMBER.",
       },
+      {
+        label: "Archive search",
+        href: "/ui-library/archive-search/",
+        summary: "One search across DANDI, OpenNeuro and EMBER.",
+      },
     ],
   },
   {
