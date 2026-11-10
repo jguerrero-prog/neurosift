@@ -6,7 +6,11 @@
     "../tokens/build.d.mts",
     "../../src/ui"
   ],
-  "exclude": ["dist", "../../src/ui/**/*.test.tsx"],
+  "exclude": [
+    "dist",
+    "../../src/ui/**/*.test.ts",
+    "../../src/ui/**/*.test.tsx"
+  ],
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "react",
