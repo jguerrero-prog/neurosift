@@ -295,6 +295,11 @@ export const navigation: NavSection[] = [
         href: "/ui-library/imaging-views/",
         summary: "Two-photon frames, ROI masks and image collections.",
       },
+      {
+        label: "Spectrogram",
+        href: "/ui-library/spectrogram/",
+        summary: "Power by frequency over recording time, and its settings.",
+      },
     ],
   },
   {
