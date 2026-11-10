@@ -296,6 +296,11 @@ export const navigation: NavSection[] = [
         href: "/ui-library/archive-search/",
         summary: "One search across DANDI, OpenNeuro and EMBER.",
       },
+      {
+        label: "Home",
+        href: "/ui-library/home/",
+        summary: "One search, open a file by link, and what was opened last.",
+      },
     ],
   },
   {
