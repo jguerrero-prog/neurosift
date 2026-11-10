@@ -1,4 +1,5 @@
 import { useHdf5Dataset, useHdf5Group } from "@hdf5Interface";
+import { EmptyState, LoadingState } from "@ui";
 import { neurodataTypeInheritsFrom } from "../../neurodataTypeInheritance";
 import { useNwbFileSpecifications } from "../../SpecificationsView/SetupNwbFileSpecificationsProvider";
 import ImagesItemView, { ImageItem } from "./ImagesItemView";
@@ -44,14 +45,19 @@ const ImagePluginView: React.FC<Props> = ({
 const ImagePluginViewDataset: React.FC<Props> = ({ nwbUrl, path }) => {
   const dataset = useHdf5Dataset(nwbUrl, path);
   const specifications = useNwbFileSpecifications();
-  if (!dataset) return <div>Loading dataset...</div>;
+  if (!dataset)
+    return <LoadingState label="Reading the image" phase="loading" />;
   const neurodataType = dataset.attrs.neurodata_type;
   if (neurodataTypeInheritsFrom(neurodataType, "Image", specifications)) {
     return (
       <ImageItem nwbUrl={nwbUrl} path={path} neurodataType={neurodataType} />
     );
   } else {
-    return <div>Unexpected neurodata_type: {neurodataType}</div>;
+    return (
+      <EmptyState title="Not an image">
+        {`Neurosift can’t draw ${neurodataType} as an image.`}
+      </EmptyState>
+    );
   }
 };
 
@@ -63,7 +69,8 @@ const ImagePluginViewGroup: React.FC<Props> = ({
 }) => {
   const group = useHdf5Group(nwbUrl, path);
   const specifications = useNwbFileSpecifications();
-  if (!group) return <div>Loading group...</div>;
+  if (!group)
+    return <LoadingState label="Reading the images" phase="loading" />;
   const neurodataType = group.attrs.neurodata_type;
   if (neurodataTypeInheritsFrom(neurodataType, "Images", specifications)) {
     return (
@@ -75,7 +82,11 @@ const ImagePluginViewGroup: React.FC<Props> = ({
       />
     );
   } else {
-    return <div>Unexpected neurodata_type: {neurodataType}</div>;
+    return (
+      <EmptyState title="Not an image">
+        {`Neurosift can’t draw ${neurodataType} as an image.`}
+      </EmptyState>
+    );
   }
 };
 

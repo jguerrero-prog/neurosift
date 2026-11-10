@@ -1,0 +1,109 @@
+---
+import DocRows from "../../components/DocRows.astro";
+import DocSection from "../../components/DocSection.astro";
+import DocTable from "../../components/DocTable.astro";
+import Intro from "../../components/Intro.astro";
+import Screen from "../../components/Screen.astro";
+import DocsLayout from "../../layouts/DocsLayout.astro";
+import { withBase } from "../../navigation";
+
+const TODAY = [
+  ["Two-photon series", "Frames of a TwoPhotonSeries or OnePhotonSeries, with a plane slider for 3D data", "plugins/TwoPhotonSeries", "Unlabeled frame arrows and display-range slider; no frame readout"],
+  ["Orientation", "xy swap, x flip, y flip", "PlaneTransformSelector.tsx", "Lowercase, abbreviated"],
+  ["Image segmentation", "ROI masks of each PlaneSegmentation, picked from a table of radio buttons", "plugins/ImageSegmentation", "“Loaded 171 regions” under the masks"],
+  ["Image", "One image; brightness and contrast for grayscale", "plugins/Image", "Two unlabeled sliders"],
+  ["Images", "Every image in the collection, side by side", "plugins/Image", "Names as large headings; pictures squeeze when there are many"],
+];
+
+const STATES = [
+  ["Opening a movie", "Frame size and count appear first; “Loading frame 1” in place of the frame."],
+  ["3D data", "A Plane slider joins the controls, 0 to planes − 1."],
+  ["One plane segmentation", "Its name shows in the summary; no picker."],
+  ["Several plane segmentations", "A Plane segmentation select joins the controls."],
+  ["Many images", "The gallery loads images as they scroll into view."],
+  ["Not an image", "“Neurosift can’t draw … as an image.”, in place of a bare sentence."],
+];
+
+const BEHAVIOR = [
+  ["Frame", "Previous and Next step one frame; the readout says which frame of how many."],
+  ["Time overview", "The bar under the controls shows the frame’s place in the recording."],
+  ["Display range", "Two handles set the darkest and brightest values; the range shows beside the label."],
+  ["Orientation", "Swap x and y, Flip x, Flip y; kept per object."],
+  ["Gallery", "Each image with its name, brightness and contrast for grayscale."],
+];
+
+const DIFFERS = [
+  ["Frame controls", "Unlabeled arrows", "Previous frame, Next frame and “Frame 1 of 113,855”", "Built"],
+  ["Display range", "An unlabeled two-thumb slider", "Display range, with its values", "Built"],
+  ["Orientation", "xy swap, x flip, y flip", "Swap x and y, Flip x, Flip y, as a labeled group", "Built"],
+  ["Segmentation picker", "A table of radio buttons beside the masks", "A select, only when there is more than one", "Built"],
+  ["Gallery", "Headings and squeezed pictures", "A grid of named images at their size", "Built"],
+  ["Play and speed", "—", "Play, pause and speed", "Next"],
+  ["Open the ROI table", "—", "Opens the PlaneSegmentation table in a tab", "Next"],
+];
+
+const SPECS = [
+  ["Frame", "View panel · summary in type/body-sm: frames, size, dtype"],
+  ["Frame controls", "Icon button, Small · readout in type/body-sm"],
+  ["Display range", "Range slider, value shown, 14rem"],
+  ["Orientation", "Checkbox group with a type/label legend, beside the frame"],
+  ["Gallery", "Grid, auto-fill at the widest image · names in type/code-sm"],
+];
+---
+
+<DocsLayout title="Imaging views" description="Two-photon frames, ROI masks and image collections.">
+  <Intro
+    lead="Imaging views show optical physiology: the frames of a two-photon or one-photon movie, the ROI masks a segmentation found in them, and collections of still images. Neurosift draws the pictures as it does today. Around them, every control gets a name, the frame says which of how many it is, and the orientation options read as words."
+    status="Updated November 10, 2026 · UI library · Captured at 1440 × 900 with Dandiset 000728, sub-491604967 · Built from View panel, Icon button, Slider, Range slider, Checkbox, Select and Empty state"
+    rules={[
+      { title: "Name every control", text: "Previous frame, Display range, Swap x and y: no unlabeled arrows or sliders." },
+      { title: "Say where you are", text: "“Frame 1 of 113,855” beside the frame controls." },
+      { title: "Only when needed", text: "The plane and segmentation pickers appear only when there is more than one." },
+    ]}
+  />
+
+  <DocSection title="Imaging views today" lead="neurosift.app with Dandiset 000728, captured with Playwright.">
+    <div class="captures">
+      <Screen file="imaging-2p" alt="Today’s two-photon view: a frame, two tiny arrows, an unlabeled slider and xy swap, x flip and y flip checkboxes under it." caption="Two-photon series: unlabeled arrows and slider under the frame." />
+      <Screen file="imaging-seg" alt="Today’s image segmentation: a table of radio buttons beside colored ROI masks, with “Loaded 171 regions” below." caption="Image segmentation: a radio table and the masks." />
+    </div>
+  </DocSection>
+
+  <DocSection title="What the views do today" lead="Read from the source and checked on the live site.">
+    <DocTable caption="What the views do today" columns={["Part", "Today", "Code", "Notes"]}>
+      <DocRows rows={TODAY} />
+    </DocTable>
+  </DocSection>
+
+  <DocSection title="The rebuilt views" lead="This fork’s viewer with the same files, with live data. The pictures are drawn as today.">
+    <div class="captures">
+      <Screen file="imaging-proposed-2p" alt="The rebuilt two-photon view: a summary of 113,855 frames at 512 by 512, Previous and Next frame with “Frame 1 of 113,855”, a Display range slider, the frame and Orientation checkboxes beside it." caption="Two-photon series: named controls, a frame readout and Orientation beside the frame." />
+      <Screen file="imaging-proposed-seg" alt="The rebuilt segmentation: a summary of 171 ROIs, the colored masks and Orientation checkboxes beside them." caption="Image segmentation: the masks, with Orientation beside them." />
+    </div>
+    <p class="doc-note">Built from the <a href={withBase("/components/view-panel/")}>View panel</a> and <a href={withBase("/components/sliders/")}>Sliders</a>.</p>
+  </DocSection>
+
+  <DocSection title="States">
+    <DocTable caption="States" columns={["When", "What changes"]}>
+      <DocRows rows={STATES} />
+    </DocTable>
+  </DocSection>
+
+  <DocSection title="Behavior">
+    <DocTable caption="Behavior" columns={["Part", "Behavior"]}>
+      <DocRows rows={BEHAVIOR} />
+    </DocTable>
+  </DocSection>
+
+  <DocSection title="What differs" lead="Built is in this fork now. Next comes with a later change.">
+    <DocTable caption="What differs" columns={["Area", "Existing", "Proposed", "Status"]}>
+      <DocRows rows={DIFFERS} />
+    </DocTable>
+  </DocSection>
+
+  <DocSection title="Specs" lead="Values for developers. Every value is a token.">
+    <DocTable caption="Specs" columns={["Property", "Value"]}>
+      <DocRows rows={SPECS} />
+    </DocTable>
+  </DocSection>
+</DocsLayout>

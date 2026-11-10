@@ -167,4 +167,25 @@ describe("Object tabs", () => {
     fireEvent.keyDown(main, { key: "Delete" });
     expect(onClose).toHaveBeenCalledTimes(1);
   });
+
+  it("pushes the first end tab, and the ones after it, to the end of the bar", () => {
+    const { container } = render(
+      <Tabs
+        id="sections"
+        label="File views"
+        tabs={[
+          { id: "widgets", label: "Widgets" },
+          { id: "schema", label: "Schema", end: true },
+          { id: "hdf5", label: "HDF5", end: true },
+        ]}
+        selected="widgets"
+        onSelect={() => {}}
+      />,
+    );
+    expect(
+      [...container.querySelectorAll(".ns-tab-item")].map(
+        (item) => item.className,
+      ),
+    ).toEqual(["ns-tab-item", "ns-tab-item ns-tab-item--end", "ns-tab-item"]);
+  });
 });

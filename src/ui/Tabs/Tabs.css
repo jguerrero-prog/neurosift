@@ -104,3 +104,7 @@
     text-decoration-thickness: 3px;
   }
 }
+
+.ns-tab-item--end {
+  margin-inline-start: auto;
+}

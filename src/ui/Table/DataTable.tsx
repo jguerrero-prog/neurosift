@@ -32,6 +32,9 @@ interface DataTableProps<Row> {
   onSelectedChange?: (keys: string[]) => void;
   /** Names each row's checkbox, such as "Unit 3". */
   rowLabel?: (row: Row) => string;
+  /** With onActivate, one row at a time opens its details; its first cell is the button. */
+  active?: string;
+  onActivate?: (key: string) => void;
 }
 
 const format = (value: CellValue, column: Column<unknown>) => {
@@ -58,6 +61,8 @@ export function DataTable<Row>({
   selected,
   onSelectedChange,
   rowLabel,
+  active,
+  onActivate,
 }: DataTableProps<Row>) {
   const selectable = Boolean(selected && onSelectedChange);
   const toggle = (key: string) =>
@@ -129,12 +134,18 @@ export function DataTable<Row>({
         <tbody>
           {rows.map((row) => {
             const key = rowKey(row);
-            const isSelected = selectable && selected!.includes(key);
+            const isSelected =
+              (selectable && selected!.includes(key)) || key === active;
+            const onClick = selectable
+              ? () => toggle(key)
+              : onActivate
+                ? () => onActivate(key)
+                : undefined;
             return (
               <tr
                 key={key}
                 className={isSelected ? "ns-row--selected" : undefined}
-                onClick={selectable ? () => toggle(key) : undefined}
+                onClick={onClick}
               >
                 {selectable && (
                   <td
@@ -149,7 +160,7 @@ export function DataTable<Row>({
                     />
                   </td>
                 )}
-                {columns.map((column) => {
+                {columns.map((column, index) => {
                   const text = format(
                     column.value(row),
                     column as Column<unknown>,
@@ -157,13 +168,26 @@ export function DataTable<Row>({
                   const type = column.type ?? "text";
                   return (
                     <td key={column.key} className={`ns-cell--${type}`}>
-                      {text ?? (
-                        <>
-                          <span className="ns-cell-missing" aria-hidden="true">
-                            —
-                          </span>
-                          <span className="ns-visually-hidden">No value</span>
-                        </>
+                      {index === 0 && onActivate && !selectable ? (
+                        <button
+                          type="button"
+                          className="ns-table-activate"
+                          aria-current={key === active ? "true" : undefined}
+                        >
+                          {text ?? key}
+                        </button>
+                      ) : (
+                        (text ?? (
+                          <>
+                            <span
+                              className="ns-cell-missing"
+                              aria-hidden="true"
+                            >
+                              —
+                            </span>
+                            <span className="ns-visually-hidden">No value</span>
+                          </>
+                        ))
                       )}
                     </td>
                   );
