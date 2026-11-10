@@ -14,7 +14,27 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 export const withBase = (href: string): string => `${base}${href}`;
 
 export const navigation: NavSection[] = [
-  { items: [{ label: "Overview", href: "/" }] },
+  {
+    heading: "Get started",
+    items: [
+      { label: "Overview", href: "/" },
+      {
+        label: "About Neurosift",
+        href: "/get-started/about/",
+        summary: "What Neurosift is, and who this system is for.",
+      },
+      {
+        label: "Vision and principles",
+        href: "/get-started/vision/",
+        summary: "The vision, and five rules that settle design decisions.",
+      },
+      {
+        label: "How to use the system",
+        href: "/get-started/how-to-use/",
+        summary: "Where designers, developers and scientists start.",
+      },
+    ],
+  },
   {
     heading: "Foundations",
     items: [
@@ -143,71 +163,14 @@ export const navigation: NavSection[] = [
         summary: "Text input and Search field: labels, units, errors in words.",
       },
       {
-        label: "Checkboxes",
-        href: "/components/checkboxes/",
-        summary: "On, off and mixed, with the whole row as the target.",
-      },
-      {
         label: "Dropdowns and selects",
         href: "/components/selects/",
         summary: "Select and Menu: one value or one action from a list.",
       },
       {
-        label: "Tabs and segmented controls",
-        href: "/components/tabs/",
-        summary:
-          "Tabs between views of a file; segments for two to four settings.",
-      },
-      {
-        label: "Alerts and toasts",
-        href: "/components/alerts/",
-        summary: "Alert, Toast and Inline message: what happened, what to do.",
-      },
-      {
-        label: "Tooltips",
-        href: "/components/tooltips/",
-        summary:
-          "Tooltip, Toggletip and Info button: names and help on request.",
-      },
-      {
-        label: "Pages and sections",
-        href: "/components/pages/",
-        summary: "Page and Section: a page's title, column and titled panels.",
-      },
-      {
-        label: "Badges and tags",
-        href: "/components/badges/",
-        summary:
-          "Badge, Tag / Link and Tag / Static: statuses, counts and values.",
-      },
-      {
-        label: "Accordions",
-        href: "/components/accordions/",
-        summary:
-          "Accordion item and Disclosure: sections of a panel, and more on request.",
-      },
-      {
-        label: "Code block",
-        href: "/components/code/",
-        summary:
-          "Code block and Inline code: Python people can copy, read and run.",
-      },
-      {
-        label: "Navigation and breadcrumbs",
-        href: "/components/navigation/",
-        summary: "App bar, Breadcrumbs and Object path: where people are.",
-      },
-      {
-        label: "Modals and drawers",
-        href: "/components/modals/",
-        summary:
-          "Dialog and Drawer: one decision at a time, and panels beside the data.",
-      },
-      {
-        label: "Tables",
-        href: "/components/tables/",
-        summary:
-          "DataTable and Tree: rules, not fills, and the whole row as the target.",
+        label: "Checkboxes",
+        href: "/components/checkboxes/",
+        summary: "On, off and mixed, with the whole row as the target.",
       },
       {
         label: "Sliders",
@@ -219,6 +182,63 @@ export const navigation: NavSection[] = [
         label: "Time controls",
         href: "/components/time-controls/",
         summary: "Time window, Channel window, Time overview and Playback.",
+      },
+      {
+        label: "Tabs and segmented controls",
+        href: "/components/tabs/",
+        summary:
+          "Tabs between views of a file; segments for two to four settings.",
+      },
+      {
+        label: "Accordions",
+        href: "/components/accordions/",
+        summary:
+          "Accordion item and Disclosure: sections of a panel, and more on request.",
+      },
+      {
+        label: "Tables",
+        href: "/components/tables/",
+        summary:
+          "DataTable and Tree: rules, not fills, and the whole row as the target.",
+      },
+      {
+        label: "Alerts and toasts",
+        href: "/components/alerts/",
+        summary: "Alert, Toast and Inline message: what happened, what to do.",
+      },
+      {
+        label: "Modals and drawers",
+        href: "/components/modals/",
+        summary:
+          "Dialog and Drawer: one decision at a time, and panels beside the data.",
+      },
+      {
+        label: "Tooltips",
+        href: "/components/tooltips/",
+        summary:
+          "Tooltip, Toggletip and Info button: names and help on request.",
+      },
+      {
+        label: "Navigation and breadcrumbs",
+        href: "/components/navigation/",
+        summary: "App bar, Breadcrumbs and Object path: where people are.",
+      },
+      {
+        label: "Badges and tags",
+        href: "/components/badges/",
+        summary:
+          "Badge, Tag / Link and Tag / Static: statuses, counts and values.",
+      },
+      {
+        label: "Code block",
+        href: "/components/code/",
+        summary:
+          "Code block and Inline code: Python people can copy, read and run.",
+      },
+      {
+        label: "Pages and sections",
+        href: "/components/pages/",
+        summary: "Page and Section: a page's title, column and titled panels.",
       },
     ],
   },

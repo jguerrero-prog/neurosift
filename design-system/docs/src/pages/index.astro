@@ -22,7 +22,7 @@ const sections = navigation.filter(({ heading }) => heading);
     sections.map(({ heading, items }) => (
       <DocSection title={heading ?? ""}>
         <ul class="page-list">
-          {items.map(({ label, href, summary }) => (
+          {items.filter(({ href }) => href !== "/").map(({ label, href, summary }) => (
             <li>
               <a href={withBase(href)}>{label}</a>
               <p class="type-body-sm">{summary}</p>
