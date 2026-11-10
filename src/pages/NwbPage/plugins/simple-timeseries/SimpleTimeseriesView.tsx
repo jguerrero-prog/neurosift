@@ -7,7 +7,8 @@ import {
   TooMuchData,
 } from "@ui";
 import ViewError from "@components/ViewError/ViewError";
-import { FunctionComponent, useMemo, useState } from "react";
+import { useCssVars } from "@components/useCssVars";
+import { FunctionComponent, ReactNode, useMemo, useState } from "react";
 import TimeView, { TIME_VIEW_INSET } from "../common/TimeView";
 import { useTimeWindow } from "../common/useTimeWindow";
 import { useTimeseriesData } from "./hooks";
@@ -19,6 +20,21 @@ import { Props } from "./types";
 import "./SimpleTimeseriesView.css";
 
 /** Traces of a TimeSeries: the shared time and channel windows, then Neurosift's plot. */
+const CanvasFrame = ({
+  height,
+  children,
+}: {
+  height: number;
+  children: ReactNode;
+}) => {
+  const ref = useCssVars<HTMLDivElement>({ "--plot-height": height });
+  return (
+    <div ref={ref} className="timeseries-canvas">
+      {children}
+    </div>
+  );
+};
+
 export const SimpleTimeseriesView: FunctionComponent<
   Props & { condensed?: boolean }
 > = ({ nwbUrl, path, width = 700, condensed = false }) => {
@@ -108,9 +124,9 @@ export const SimpleTimeseriesView: FunctionComponent<
   else if (renderer === "plotly") plot = <TimeseriesPlot {...plotProps} />;
   else
     plot = (
-      <div className="timeseries-canvas">
+      <CanvasFrame height={height}>
         <TimeseriesPlotTSV2 {...plotProps} />
-      </div>
+      </CanvasFrame>
     );
 
   return (
