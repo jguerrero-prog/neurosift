@@ -80,12 +80,15 @@ test("every internal link and every asset a page loads responds", async ({
   expect(failed).toEqual([]);
 });
 
-test("every page passes axe at WCAG 2.2 AA", async ({ page }) => {
+// A fresh tab per page keeps memory flat; one tab for every page crashed Firefox in CI.
+test("every page passes axe at WCAG 2.2 AA", async ({ context }) => {
   for (const path of pages) {
+    const page = await context.newPage();
     await page.goto(path);
     const { violations } = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
       .analyze();
+    await page.close();
     expect(violations.map((v) => `${path} ${v.id}`)).toEqual([]);
   }
 });
