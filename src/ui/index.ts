@@ -70,7 +70,29 @@ export { EmptyState } from "./EmptyState/EmptyState";
 
 export { DescriptionList } from "./DescriptionList/DescriptionList";
 export type { Description } from "./DescriptionList/DescriptionList";
+export { SettingPair, TooMuchData, ViewPanel } from "./ViewPanel/ViewPanel";
+
 export { ColorBar, Legend } from "./Legend/Legend";
 export type { LegendItem } from "./Legend/Legend";
 export { DataTooltip } from "./DataTooltip/DataTooltip";
 export { StatusBar } from "./StatusBar/StatusBar";
+export { OverviewPanel } from "./OverviewPanel/OverviewPanel";
+export { MultiSelect, RemovableTag } from "./MultiSelect/MultiSelect";
+export type { MultiSelectOption } from "./MultiSelect/MultiSelect";
+export {
+  ObjectRow,
+  SelectionBar,
+  SelectionList,
+  ViewChip,
+} from "./ObjectTree/ObjectTree";
+export type { ObjectView } from "./ObjectTree/ObjectTree";
+export { neurodataIcon } from "./ObjectTree/neurodataIcon";
+export {
+  AppliedFilters,
+  FilterGroup,
+  RecentlyOpened,
+  ResultRow,
+  ResultsHead,
+  SearchRow,
+  ShowMore,
+} from "./Catalog/Catalog";
