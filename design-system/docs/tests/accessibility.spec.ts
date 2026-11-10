@@ -953,5 +953,3 @@ test("object tree: checking two objects shows the selection bar, and Clear empti
   await bar.getByRole("button", { name: "Clear" }).click();
   await expect(bar).toHaveCount(0);
 });
-});
-

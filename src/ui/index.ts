@@ -87,6 +87,7 @@ export {
 } from "./ObjectTree/ObjectTree";
 export type { ObjectView } from "./ObjectTree/ObjectTree";
 export { neurodataIcon } from "./ObjectTree/neurodataIcon";
+export {
   AppliedFilters,
   FilterGroup,
   RecentlyOpened,
