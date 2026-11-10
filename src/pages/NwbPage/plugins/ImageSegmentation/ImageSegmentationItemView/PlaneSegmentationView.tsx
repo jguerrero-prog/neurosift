@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FunctionComponent, useEffect, useState } from "react";
+import { LoadingState, ViewPanel } from "@ui";
+import { FunctionComponent, ReactNode, useEffect, useState } from "react";
+import { TIME_VIEW_CHROME } from "../../common/TimeView";
+import "./PlaneSegmentationView.css";
 import PlaneTransformSelector, {
   PlaneTransform,
 } from "./PlaneTransformSelector";
@@ -18,6 +21,8 @@ type Props = {
   imageSegmentationGroup: Hdf5Group;
   nwbUrl: string;
   selectedSegmentationName: string;
+  /** Picks among the plane segmentations, when there is more than one. */
+  picker?: ReactNode;
 };
 
 // important to store localized masks, otherwise we run out of RAM quick
@@ -205,6 +210,7 @@ const PlaneSegmentationView: FunctionComponent<Props> = ({
   imageSegmentationGroup,
   nwbUrl,
   selectedSegmentationName,
+  picker,
 }) => {
   const [client, setClient] = useState<PlaneSegmentationClient | undefined>(
     undefined,
@@ -225,8 +231,17 @@ const PlaneSegmentationView: FunctionComponent<Props> = ({
       canceled = true;
     };
   }, [nwbUrl, selectedSegmentationName, imageSegmentationGroup.path]);
-  if (!client) return <div>Loading client...</div>;
-  return <Test1 width={width} height={height} client={client} />;
+  if (!client)
+    return <LoadingState label="Reading the ROI masks" phase="loading" />;
+  return (
+    <Test1
+      width={width}
+      height={height}
+      client={client}
+      name={selectedSegmentationName}
+      picker={picker}
+    />
+  );
 };
 
 const v1 = 255;
@@ -251,12 +266,18 @@ const Test1: FunctionComponent<{
   client: PlaneSegmentationClient;
   width: number;
   height: number;
-}> = ({ client, width, height }) => {
+  name: string;
+  picker?: ReactNode;
+}> = ({ client, width, height, name, picker }) => {
   const [canvasElement, setCanvasElement] = useState<
     HTMLCanvasElement | undefined
   >(undefined);
 
-  const statusBarHeight = 20;
+  // The masks take up to half the width, beside the orientation controls.
+  const area = {
+    w: Math.max(width / 2, 200),
+    h: Math.max(height - TIME_VIEW_CHROME, 200),
+  };
 
   const [planeTransform, setPlaneTransform] = useState<PlaneTransform>({
     xyswap: false,
@@ -269,9 +290,7 @@ const Test1: FunctionComponent<{
   const N2a = client.shape[2];
   const N1 = planeTransform.xyswap ? N2a : N1a;
   const N2 = planeTransform.xyswap ? N1a : N2a;
-  const scale = Math.min(width / N1, (height - statusBarHeight) / N2);
-  const offsetX = (width - N1 * scale) / 2;
-  const offsetY = (height - statusBarHeight - N2 * scale) / 2;
+  const scale = Math.min(area.w / N1, area.h / N2);
 
   const [loadingMessage, setLoadingMessage] = useState("");
 
@@ -369,47 +388,32 @@ const Test1: FunctionComponent<{
   }, [canvasElement, client, N0, N1, N2, scale, planeTransform]);
 
   return (
-    <div style={{ position: "relative", width, height, fontSize: 12 }}>
-      <div
-        style={{
-          position: "absolute",
-          width: N1 * scale,
-          height: N2 * scale,
-          left: offsetX,
-          top: offsetY,
-        }}
-      >
+    <ViewPanel
+      label={name}
+      summary={`${name} · ${N0.toLocaleString("en-US")} ROI${N0 === 1 ? "" : "s"}`}
+      busy={
+        loadingMessage.startsWith("Loaded") &&
+        !loadingMessage.endsWith("regions")
+      }
+      controls={picker}
+    >
+      <div className="segmentation-view">
         <canvas
           ref={(elmt) => elmt && setCanvasElement(elmt)}
           width={N1 * scale}
           height={N2 * scale}
         />
+        <div className="segmentation-side">
+          <PlaneTransformSelector
+            planeTransform={planeTransform}
+            setPlaneTransform={setPlaneTransform}
+          />
+          <p className="segmentation-status" role="status">
+            {loadingMessage}
+          </p>
+        </div>
       </div>
-      <div
-        style={{
-          position: "absolute",
-          width,
-          height: statusBarHeight,
-          top: height - statusBarHeight,
-        }}
-      >
-        <PlaneTransformSelector
-          planeTransform={planeTransform}
-          setPlaneTransform={setPlaneTransform}
-        />
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          width,
-          height: statusBarHeight,
-          top: height - statusBarHeight + 5,
-          left: 200,
-        }}
-      >
-        {loadingMessage}
-      </div>
-    </div>
+    </ViewPanel>
   );
 };
 
