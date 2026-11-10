@@ -61,11 +61,32 @@ export { Tabs, TabPanel } from "./Tabs/Tabs";
 export type { TabItem } from "./Tabs/Tabs";
 export { SegmentedControl } from "./SegmentedControl/SegmentedControl";
 export type { SegmentOption } from "./SegmentedControl/SegmentedControl";
+export { LoadingState, ProgressBar, SkeletonRows } from "./Loading/Loading";
+export type { Progress } from "./Loading/Loading";
+export { useLoadingPhase } from "./Loading/useLoadingPhase";
+export type { LoadingPhase } from "./Loading/useLoadingPhase";
+
+export { EmptyState } from "./EmptyState/EmptyState";
+
 export { DescriptionList } from "./DescriptionList/DescriptionList";
 export type { Description } from "./DescriptionList/DescriptionList";
+export { SettingPair, TooMuchData, ViewPanel } from "./ViewPanel/ViewPanel";
+
+export { ColorBar, Legend } from "./Legend/Legend";
+export type { LegendItem } from "./Legend/Legend";
+export { DataTooltip } from "./DataTooltip/DataTooltip";
+export { StatusBar } from "./StatusBar/StatusBar";
+export { OverviewPanel } from "./OverviewPanel/OverviewPanel";
 export { MultiSelect, RemovableTag } from "./MultiSelect/MultiSelect";
 export type { MultiSelectOption } from "./MultiSelect/MultiSelect";
 export {
+  ObjectRow,
+  SelectionBar,
+  SelectionList,
+  ViewChip,
+} from "./ObjectTree/ObjectTree";
+export type { ObjectView } from "./ObjectTree/ObjectTree";
+export { neurodataIcon } from "./ObjectTree/neurodataIcon";
   AppliedFilters,
   FilterGroup,
   RecentlyOpened,

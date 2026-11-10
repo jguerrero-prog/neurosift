@@ -1,5 +1,6 @@
 ---
-import { Button } from "@ui";
+import { EmptyState } from "@ui";
+import CodeSample from "../../components/CodeSample.astro";
 import DocRows from "../../components/DocRows.astro";
 import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
@@ -39,6 +40,7 @@ const WRITING = [
   ["Offer one next step", "Select first 5 units", "Several equal buttons"],
   ["Stay calm", "This file has no external videos.", "Oops! No videos found!"],
 ];
+const code = `import { EmptyState } from "@ui";\n\n<EmptyState\n  title="No units chosen yet"\n  action={{ label: "Select first 5 units", onClick: selectFirstFive }}\n>\n  Pick units from the list to plot their firing around each trial.\n</EmptyState>`;
 ---
 
 <DocsLayout title="Empty states" description="Say why it’s empty and offer one way forward, quietly.">
@@ -59,10 +61,10 @@ const WRITING = [
   </DocSection>
 
   <DocSection title="Anatomy" lead="Centered in the space the content would fill, so the layout doesn’t jump when the content arrives.">
-    <div class="empty-demo">
-      <p class="type-h4">No units chosen yet</p>
-      <p class="type-body-sm">Pick units from the list to plot their firing around each trial. This file has 46 units.</p>
-      <Button onClick={noop}>Select first 5 units</Button>
+    <div class="empty-frame">
+      <EmptyState title="No units chosen yet" action={{ label: "Select first 5 units", onClick: noop }}>
+        Pick units from the list to plot their firing around each trial. This file has 46 units.
+      </EmptyState>
     </div>
     <DocTable caption="Empty state parts" columns={["Part", "Spec"]}>
       <DocRows rows={ANATOMY} />
@@ -80,5 +82,8 @@ const WRITING = [
     <DocTable caption="Writing empty states" columns={["Guideline", "Write", "Not"]}>
       <DocRows rows={WRITING} />
     </DocTable>
+  </DocSection>
+  <DocSection title="In code" lead="Import from @ui. EmptyState fills the space it’s given and centers its contents; the view decides when to show it.">
+    <CodeSample label="Empty state" code={code} />
   </DocSection>
 </DocsLayout>

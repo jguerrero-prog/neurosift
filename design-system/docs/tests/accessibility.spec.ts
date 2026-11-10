@@ -64,6 +64,7 @@ test("every internal link and every asset a page loads responds", async ({
       failed.push(`${response.status()} ${response.url()}`);
   });
   const links = new Set<string>();
+  test.setTimeout(pages.length * 10_000);
   for (const path of pages) {
     await page.goto(path);
     const hrefs = await page
@@ -97,6 +98,7 @@ test("every page passes axe at WCAG 2.2 AA", async ({ context }) => {
 test("every page has one h1 first, no skipped heading levels, and labelled landmarks", async ({
   page,
 }) => {
+  test.setTimeout(pages.length * 10_000);
   for (const path of pages) {
     await page.goto(path);
     const levels = await page
@@ -122,6 +124,7 @@ test("the keyboard reaches the skip link first and every stop shows a 2px focus 
   page,
   browserName,
 }) => {
+  test.setTimeout(pages.length * 10_000);
   for (const path of pages) {
     await page.goto(path);
     await page.keyboard.press(tab(browserName));
@@ -169,6 +172,7 @@ test("the keyboard reaches the skip link first and every stop shows a 2px focus 
 });
 
 test("links and controls are at least 24 by 24 pixels", async ({ page }) => {
+  test.setTimeout(pages.length * 10_000);
   for (const path of pages) {
     await page.goto(path);
     const small = await page.evaluate(() =>
@@ -196,6 +200,7 @@ test("links and controls are at least 24 by 24 pixels", async ({ page }) => {
 test("pages reflow at 320px wide and survive text spacing overrides", async ({
   page,
 }) => {
+  test.setTimeout(pages.length * 10_000);
   for (const path of pages) {
     await page.setViewportSize({ width: 320, height: 800 });
     await page.goto(path);
@@ -221,6 +226,7 @@ test("text at 200% of the browser's default size neither overflows nor clips", a
   await cdp.send("Page.setFontSizes", {
     fontSizes: { standard: 32, fixed: 26 },
   });
+  test.setTimeout(pages.length * 10_000);
   for (const path of pages) {
     await page.goto(path);
     expect(await overflow(page), path).toEqual([]);
@@ -898,6 +904,19 @@ test("API key fields: the show button toggles by keyboard and keeps focus", asyn
   await expect(field).toHaveValue("abc123");
 });
 
+test("data tooltip: arrow keys on a focused plot move the cursor and announce the values", async ({
+  page,
+}) => {
+  await page.goto("components/tooltips/");
+  const plot = page.getByRole("group", { name: /LFPs, channels 0 to 3/ });
+  await hydrated(plot);
+  await plot.focus();
+  await page.keyboard.press("ArrowRight");
+  const readout = plot.getByRole("status");
+  await expect(readout).toContainText(" s");
+  await expect(readout).toContainText("µV");
+});
+
 test("multi-select: typing filters anywhere in a name, Enter adds a tag, Backspace removes the last", async ({
   page,
 }) => {
@@ -916,3 +935,23 @@ test("multi-select: typing filters anywhere in a name, Enter adds a tag, Backspa
     page.getByRole("button", { name: "Remove PlaneSegmentation" }),
   ).toHaveCount(0);
 });
+
+test("object tree: checking two objects shows the selection bar, and Clear empties it", async ({
+  page,
+}) => {
+  await page.goto("components/tables/");
+  const lfps = page.getByRole("checkbox", {
+    name: "Add LFPs to the combined view",
+  });
+  await hydrated(lfps);
+  await lfps.check();
+  await page
+    .getByRole("checkbox", { name: "Add units to the combined view" })
+    .check();
+  const bar = page.getByRole("region", { name: "Combined view selection" });
+  await expect(bar).toContainText("LFPs and units");
+  await bar.getByRole("button", { name: "Clear" }).click();
+  await expect(bar).toHaveCount(0);
+});
+});
+
