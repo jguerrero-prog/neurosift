@@ -23,7 +23,7 @@ const TODAY = [
   ["Figures", "Image parts of a message render as images in the transcript", "Not seen in these captures."],
   ["Footer readout", "“openai/gpt-6-luna • 0 in • 0 out • $0.000”", "The model name opens a model list with prices per million tokens. Tokens and cost add up over the conversation."],
   ["Settings", "⚙️ at bottom right opens a dialog: OpenRouter API Key, “Required for premium models”, a key field with Show, Cancel and Save", "Save is off until a key is typed. The key is kept in this browser’s localStorage."],
-  ["Dataset-page chat", "“Ask about this dataset in Chat” on a DANDI dataset page opens dandiset-explorer.vercel.app/chat in a new tab", "Returned 404 DEPLOYMENT_NOT_FOUND on November 10, 2026. In this fork the link reads “Open Neurosift Chat” and opens chat.neurosift.app."],
+  ["Dataset-page chat", "“Ask about this dataset in Chat” on a DANDI dataset page opens dandiset-explorer.vercel.app/chat in a new tab", "Returned 404 DEPLOYMENT_NOT_FOUND on November 10, 2026. The chat moved to dandiset-explorer.neurosift.app; this fork links there with the Dandiset ID and version."],
 ];
 
 const PROPOSED = [
@@ -86,7 +86,7 @@ const DIFFERS = [
   ["Input label", "Placeholder only", "A label, a helper and a Send button with text", "Proposed"],
   ["Model and cost readout", "Always visible", "Kept, moved or hidden", "To confirm"],
   ["Archives named", "DANDI Archive, OpenNeuro, EBRAINS", "The archives the assistant searches, named as Neurosift names them", "To confirm"],
-  ["Dataset-page chat", "A second site, dandiset-explorer.vercel.app, offline on November 10, 2026", "Neurosift Chat opened with that dataset", "To confirm"],
+  ["Dataset-page chat", "A second assistant, now at dandiset-explorer.neurosift.app, that reads the Dandiset ID from the address", "Neurosift Chat opened with that dataset", "To confirm"],
 ];
 
 const WHERE = [
@@ -97,7 +97,7 @@ const WHERE = [
 
 const QUESTIONS = [
   ["Which repo should a redesigned chat live in?", "Where the code lands"],
-  ["Should the dataset-page chat and Neurosift Chat become one?", "The dataset page’s “Ask about this dataset in Chat” link, which opens an offline site on neurosift.app and general Neurosift Chat in this fork"],
+  ["Should the dataset-page chat and Neurosift Chat become one?", "The dataset page’s “Ask about this dataset in Chat” link, which opens the Dandiset explorer chat in this fork"],
   ["Should the model and cost readout stay visible to everyone?", "Footer readout"],
   ["Does today’s chat still embed Neurosift? The qp source has no listener for Neurosift’s messages.", "Context line and links in answers"],
   ["Should the chat name EBRAINS or EMBER?", "Description and Empty state"],
@@ -122,7 +122,7 @@ const QUESTIONS = [
       <Screen file="chat-conversation" alt="The answered question: a collapsed Executed script. row, then an answer bubble saying 472 published dandisets, thumbs-up and thumbs-down buttons, and a footer reading 8,664 in, 33 out, $0.000." caption="An answer: one tool call, closed, and the answer with feedback buttons." />
       <Screen file="chat-tool-call" alt="An opened tool call for Break down OpenNeuro datasets by modality: Script in a highlighted block, then Output as a single line of JSON that runs off the right edge, then the start of an answer with a table of modalities." caption="An opened tool call: the script, and output on one line that runs past the panel." />
       <Screen file="chat-settings" alt="The Settings dialog over the chat: OpenRouter API Key, Required for premium models with a link to openrouter.ai/keys, a key field with a Show button, and Cancel and Save buttons." caption="Settings: an OpenRouter API key, kept in this browser." />
-      <Screen file="chat-dandiset" alt="dandiset-explorer.vercel.app/chat for Dandiset 000673: a Vercel page reading This page doesn’t exist, 404 DEPLOYMENT_NOT_FOUND." caption="The dataset page’s “Ask about this dataset in Chat” link opens a site that is offline." />
+      <Screen file="chat-dandiset" alt="dandiset-explorer.vercel.app/chat for Dandiset 000673: a Vercel page reading This page doesn’t exist, 404 DEPLOYMENT_NOT_FOUND." caption="The address the dataset page’s link used, dandiset-explorer.vercel.app, is offline. The chat now lives at dandiset-explorer.neurosift.app." />
     </div>
   </DocSection>
 
