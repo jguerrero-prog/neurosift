@@ -62,3 +62,6 @@ export type { TabItem } from "./Tabs/Tabs";
 export { SegmentedControl } from "./SegmentedControl/SegmentedControl";
 export type { SegmentOption } from "./SegmentedControl/SegmentedControl";
 export { EmptyState } from "./EmptyState/EmptyState";
+
+export { DescriptionList } from "./DescriptionList/DescriptionList";
+export type { Description } from "./DescriptionList/DescriptionList";
