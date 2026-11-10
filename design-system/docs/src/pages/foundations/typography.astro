@@ -1,4 +1,6 @@
 ---
+import { Button } from "@ui";
+import DocRows from "../../components/DocRows.astro";
 import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
 import Intro from "../../components/Intro.astro";
@@ -53,6 +55,23 @@ const SCIENCE = [
   ["Time and units", "400 Hz · 1,375.28 s · 30 ms", "SI symbols with a space before the unit. One unit per axis or column, the same decimals throughout, tabular figures so digits line up."],
   ["Species names", "Mus musculus · Homo sapiens", "Latin names in IBM Plex Sans Italic. Common names such as mouse and human stay upright."],
   ["Missing values", "—", "Never show NaN, undefined or null. Show an em dash and say why, in a caption or a toggletip."],
+];
+const IN_USE_UNITS = [
+  [
+    "0",
+    "1,652",
+    "1.20 Hz"
+  ],
+  [
+    "1",
+    "382",
+    "0.28 Hz"
+  ],
+  [
+    "2",
+    "1,149",
+    "0.84 Hz"
+  ]
 ];
 ---
 
@@ -118,5 +137,27 @@ const SCIENCE = [
       <li><strong>Spacing.</strong> Line height of at least 1.5 for running text. Every panel, including plot labels, must survive 200% zoom without text overlapping.</li>
       <li><strong>Emphasis.</strong> Use SemiBold for emphasis, never color alone. Uppercase only for small labels. Underline only links.</li>
     </ul>
+  </DocSection>
+
+  <DocSection title="The scale in use" lead="A synced view, the feature the Neurosift paper leads with, set only in the styles on this page.">
+    <div class="type-in-use">
+      <p class="type-label-sm type-in-use-eyebrow">Synced view</p>
+      <p class="type-h3">LFPs and units</p>
+      <p class="type-code-sm">/acquisition/LFPs + /units</p>
+      <p class="type-body-sm type-in-use-secondary">Zoom or pan either plot and the other follows. Times are seconds from the start of the session.</p>
+      <p class="type-axis type-in-use-secondary">LFP · Units · 0 s · 1 s · 2 s · 3 s</p>
+      <DocTable caption="Units in the synced view" columns={["Unit ID", "Spikes", "Mean rate"]}>
+        <DocRows rows={IN_USE_UNITS} />
+      </DocTable>
+      <p class="type-caption type-in-use-secondary">Showing units 0–2 of 46 · Dandiset 000673, session 1</p>
+      <div class="demo-row">
+        <Button variant="secondary" icon="share">Share view</Button>
+        <Button variant="ghost">Load in Python</Button>
+      </div>
+    </div>
+  </DocSection>
+
+  <DocSection title="Type tokens" lead="In code, each style is one token that bundles family, weight, size, line height and letter spacing.">
+    <p class="doc-note">Every style, with its values, is on <a href={withBase("/tokens/typography/")}>Typography tokens</a>.</p>
   </DocSection>
 </DocsLayout>

@@ -22,6 +22,28 @@ export interface Existing {
 const CHROMIUM = "What Neurosift shows today, as Chromium draws it.";
 
 export const EXISTING: Record<string, Existing> = {
+  iconography: {
+    title: "Existing icons",
+    lead: "What Neurosift ships today: three sources, each drawn differently.",
+    problems: [
+      { title: "Material Icons, filled", text: "19 icons from @mui/icons-material, in the app bar, tab bars, share buttons and media controls: Search, Close, Share, ContentCopy, Launch, FileDownload, Download, History, Settings, RestartAlt, ChevronLeft, ChevronRight, ArrowLeft, ArrowRight, PlayArrow, Pause, Stop, SkipPrevious and GitHub." },
+      { title: "Font Awesome", text: "4 icons from react-icons/fa, in the file tree, HDF5 view and default view: FaFolder, FaFolderOpen, FaEye and FaExternalLinkAlt. A second set, with heavier shapes than Material." },
+      { title: "Text characters standing in for icons", text: "Emoji and symbols typed into labels. Each operating system draws them in its own font, some fonts lack them entirely, and screen readers read them aloud, such as “magnifying glass tilted left, plus”." },
+    ],
+    table: {
+      caption: "Characters used as icons today",
+      columns: ["Characters", "Uses", "Where"],
+      rows: [
+        ["Magnifying glass emoji with full-width plus and minus (U+1F50D, U+FF0B, U+FF0D)", "9", "Time toolbars: TimeScrollToolbar, TimeseriesControls, the selection bar, the spectrogram"],
+        ["Arrows ← → ↑ ↓", "13", "Panning and channel paging in the same toolbars; ← Back links on EMBER pages"],
+        ["Pointer and triangle characters (U+25BA, U+25BC and others)", "19", "Expand and collapse in the file tree, SLEAP tree and overview; sort in tables"],
+        ["Two joined squares (U+29C9)", "2", "Copy a path in the file tree and the dataset file list"],
+        ["Downwards black arrow (U+2B07)", "1", "Download in the dataset file list"],
+        ["Small black square emoji (U+25AA)", "3", "Leaf items in the file tree"],
+        ["Check mark (U+2713)", "2", "Figpack job status, spectrogram settings"],
+      ],
+    },
+  },
   buttons: {
     title: "Existing buttons",
     lead: `${CHROMIUM} index.css gives every <button> 8px corners and a #dde4ed border, and Material UI adds its own uppercase, shadowed style on top.`,

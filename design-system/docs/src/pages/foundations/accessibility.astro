@@ -1,4 +1,5 @@
 ---
+import DocRows from "../../components/DocRows.astro";
 import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
 import Intro from "../../components/Intro.astro";
@@ -66,6 +67,28 @@ const SUITE = [
   "Forced colors and reduced motion",
   "Keyboard checks for each interactive component",
 ];
+const TARGETS = [
+  [
+    "Toolbar buttons: zoom, pan, channels",
+    "32 × 32px",
+    "Pass. Today's buttons are smaller, about 22px"
+  ],
+  [
+    "File tree and HDF5 rows",
+    "24px tall, full width",
+    "Pass. The whole row is the target"
+  ],
+  [
+    "Table rows",
+    "32px tall",
+    "Pass"
+  ],
+  [
+    "Checkboxes in the tree",
+    "16px box, 24px target",
+    "Pass, with padding"
+  ]
+];
 ---
 
 <DocsLayout title="Accessibility" description="WCAG 2.2 AA as the floor, and plots that come with words and numbers.">
@@ -114,9 +137,15 @@ const SUITE = [
     </ul>
   </DocSection>
 
-  <DocSection title="Announcements" lead="Changes that happen without a page load are announced once, in the same words people see. Errors interrupt; everything else waits.">
+  <DocSection title="Screen reader announcements" lead="Changes that happen without a page load are announced once, in the same words people see. Errors interrupt; everything else waits.">
     <DocTable caption="Announcements" columns={["Moment", "What is announced", "How"]}>
       {ANNOUNCE.map(([moment, said, how]) => <tr><th scope="row">{moment}</th><td>{said}</td><td>{how}</td></tr>)}
+    </DocTable>
+  </DocSection>
+
+  <DocSection title="Target size" lead="WCAG 2.2 asks for at least 24 × 24px. The sizes come from Spacing and layout grid.">
+    <DocTable caption="Target sizes" columns={["Control","Size","Result"]}>
+      <DocRows rows={TARGETS} />
     </DocTable>
   </DocSection>
 
