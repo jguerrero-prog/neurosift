@@ -25,6 +25,14 @@ export { useToast } from "./Toast/toastContext";
 export type { ToastApi, ToastOptions } from "./Toast/toastContext";
 export { Page } from "./Page/Page";
 export { Section } from "./Page/Section";
+export { TimeWindow } from "./TimeControls/TimeWindow";
+export { ChannelWindow } from "./TimeControls/ChannelWindow";
+export type { ChannelRange } from "./TimeControls/ChannelWindow";
+export { TimeOverview } from "./TimeControls/TimeOverview";
+export { Playback } from "./TimeControls/Playback";
+export { timeKey, formatSeconds } from "./TimeControls/timeMath";
+export type { Session, TimeWindowValue } from "./TimeControls/timeMath";
+
 export { Slider } from "./Slider/Slider";
 export { RangeSlider } from "./Slider/RangeSlider";
 

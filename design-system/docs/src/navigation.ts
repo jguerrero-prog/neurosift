@@ -215,6 +215,11 @@ export const navigation: NavSection[] = [
         summary:
           "Slider and Range slider: feel by eye, exact numbers in a field.",
       },
+      {
+        label: "Time controls",
+        href: "/components/time-controls/",
+        summary: "Time window, Channel window, Time overview and Playback.",
+      },
     ],
   },
 ];

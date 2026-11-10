@@ -22,6 +22,7 @@ interface SelectProps extends Omit<
   size?: "md" | "sm";
   helper?: string;
   error?: string;
+  hideLabel?: boolean;
 }
 
 export function Select({
@@ -32,11 +33,19 @@ export function Select({
   size = "md",
   helper,
   error,
+  hideLabel,
   ...native
 }: SelectProps) {
   const id = useId();
   return (
-    <Field id={id} label={label} size={size} helper={helper} error={error}>
+    <Field
+      id={id}
+      label={label}
+      size={size}
+      helper={helper}
+      error={error}
+      hideLabel={hideLabel}
+    >
       <select
         {...native}
         id={id}

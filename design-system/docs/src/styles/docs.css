@@ -681,6 +681,43 @@ main {
   max-inline-size: var(--layout-text-max);
 }
 
+.time-demo {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.time-demo-summary {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.time-demo-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: flex-start;
+}
+
+.time-demo-plot {
+  display: grid;
+  place-items: center;
+  min-block-size: calc(var(--space-16) * 2);
+  padding: var(--space-4);
+  color: var(--text-secondary);
+  text-align: center;
+  background: var(--surface-panel);
+  border: var(--border-width-1) solid var(--border-subtle);
+}
+
+.time-demo-plot:focus {
+  outline: none;
+}
+
+.time-demo-plot:focus-visible {
+  outline: var(--border-width-2) solid var(--border-focus);
+  outline-offset: var(--space-0-5);
+}
+
 .slider-demos {
   display: grid;
   gap: var(--space-6);
