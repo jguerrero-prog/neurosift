@@ -63,3 +63,5 @@ export { SegmentedControl } from "./SegmentedControl/SegmentedControl";
 export type { SegmentOption } from "./SegmentedControl/SegmentedControl";
 export { DescriptionList } from "./DescriptionList/DescriptionList";
 export type { Description } from "./DescriptionList/DescriptionList";
+export { MultiSelect, RemovableTag } from "./MultiSelect/MultiSelect";
+export type { MultiSelectOption } from "./MultiSelect/MultiSelect";
