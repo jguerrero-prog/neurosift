@@ -916,3 +916,22 @@ test("data tooltip: arrow keys on a focused plot move the cursor and announce th
   await expect(readout).toContainText(" s");
   await expect(readout).toContainText("µV");
 });
+
+test("multi-select: typing filters anywhere in a name, Enter adds a tag, Backspace removes the last", async ({
+  page,
+}) => {
+  await page.goto("components/selects/");
+  const input = page.getByRole("combobox", { name: "Neurodata types" });
+  await hydrated(input);
+  await input.fill("plane");
+  await page.keyboard.press("ArrowDown");
+  await page.keyboard.press("Enter");
+  await expect(
+    page.getByRole("button", { name: "Remove PlaneSegmentation" }),
+  ).toBeVisible();
+  await expect(input).toHaveValue("");
+  await page.keyboard.press("Backspace");
+  await expect(
+    page.getByRole("button", { name: "Remove PlaneSegmentation" }),
+  ).toHaveCount(0);
+});

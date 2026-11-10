@@ -75,3 +75,5 @@ export type { LegendItem } from "./Legend/Legend";
 export { DataTooltip } from "./DataTooltip/DataTooltip";
 export { StatusBar } from "./StatusBar/StatusBar";
 export { OverviewPanel } from "./OverviewPanel/OverviewPanel";
+export { MultiSelect, RemovableTag } from "./MultiSelect/MultiSelect";
+export type { MultiSelectOption } from "./MultiSelect/MultiSelect";
