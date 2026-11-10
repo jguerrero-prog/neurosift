@@ -6,6 +6,9 @@ import { useTimeWindow } from "./useTimeWindow";
 export const TIME_VIEW_CHROME = 150;
 /** Width the frame takes beside the chart: padding and the plot's border. */
 export const TIME_VIEW_INSET = 34;
+/** The 320px settings panel and the gap before it. */
+export const TIME_VIEW_SETTINGS = 336;
+export const TIME_VIEW_TITLE = 32;
 
 type Props = {
   label: string;
