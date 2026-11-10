@@ -568,6 +568,18 @@
   },
   "button": {
     "height": {
+      "lg": {
+        "$type": "dimension",
+        "$value": "{input.height.lg}",
+        "$extensions": {
+          "com.figma": {
+            "collection": "Dimensions",
+            "scopes": [
+              "WIDTH_HEIGHT"
+            ]
+          }
+        }
+      },
       "md": {
         "$type": "dimension",
         "$value": {

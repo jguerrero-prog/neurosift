@@ -20,7 +20,7 @@ const AREA_PROPS = [
   ["onChange", "(value: string) => void", "Required", "Reports each change as the new text."],
   ["rows", "number", "3", "How many lines the empty field shows."],
   ["maxRows", "number", "rows", "The field grows with its text up to this many lines, then scrolls."],
-  ["size", "\"md\" | \"sm\"", "\"md\"", "Small for dense control panels."],
+  ["size", "\"lg\" | \"md\" | \"sm\"", "\"md\"", "Large for a message box, matching the Large Search field. Small for dense control panels."],
   ["helper", "string", "—", "A sentence below the field, tied to it with aria-describedby."],
   ["error", "string", "—", "Replaces the helper, with the error icon, and marks the field invalid."],
   ["hideLabel", "boolean", "false", "Keeps the label for screen readers only, where something nearby already names the field."],
@@ -54,7 +54,8 @@ const SPECS = [
   ["Disabled", "action/disabled fill, border/disabled, text/disabled", "Same"],
   ["Search field", "40px · input/height/lg (Large) or 32px (Medium), 20px or 16px search icon", "—"],
   ["Text area", "4px padding above and below (space/1); one row is 32px", "No padding above and below; one row is 24px"],
-  ["Text area rows", "rows × the type/body-sm line height, growing to maxRows × the line height", "Same"],
+  ["Text area, Large", "40px for one row · input/height/lg, the Large Search field’s height · 12px at the sides (space/3), 6px above and below once it grows · type/body · radius/sm", "—"],
+  ["Text area rows", "rows × the line height (type/body-sm, or type/body in Large), growing to maxRows × the line height", "Same"],
 ];
 
 const code = `import { SearchField, TextArea, TextInput } from "@ui";
@@ -77,9 +78,10 @@ const areaCode = `const sendOnEnter = (event: KeyboardEvent<HTMLTextAreaElement>
 };
 
 <TextArea label="Message" hideLabel placeholder="Ask about this Dandiset"
-  helper="Enter sends. Shift+Enter adds a line."
+  helper="Enter to send, Shift+Enter for a new line"
   value={text} onChange={setText} onKeyDown={sendOnEnter}
-  rows={1} maxRows={6} />`;
+  size="lg" rows={1} maxRows={6} />
+<Button type="submit" variant="primary" size="lg">Send</Button>`;
 ---
 
 <DocsLayout title="Text inputs and search" description="Text input, Text area and Search field: labels, units, helper text and errors in words.">
@@ -126,10 +128,10 @@ const areaCode = `const sendOnEnter = (event: KeyboardEvent<HTMLTextAreaElement>
 
   <DocSection title="Text area" lead="A Text input for text that runs over one line: a chat message, notes on a session, a description. It shares the Text input’s label, helper, error, disabled state, sizes and tokens. It starts at rows lines, grows with its text up to maxRows, then scrolls. Use a Text input for anything that fits on one line, such as a number, a name or a key.">
     <TextAreaDemo client:visible />
-    <p class="doc-note">Empty with an example placeholder, with a helper, with an error, disabled, Small, and grown to its maxRows of 4 with the rest of the text scrolling. Type in any of them to see the growth. The message box below shows the hidden label. Where a browser can’t size fields to their content, the field stays at rows lines and scrolls.</p>
+    <p class="doc-note">Empty with an example placeholder, with a helper, with an error, disabled, Small, Large, and grown to its maxRows of 4 with the rest of the text scrolling. Type in any of them to see the growth. Large is the message box on Neurosift Chat’s new chat: one row is as tall as the Large Search field, with the same padding, type and radius, and it grows with the message. The message box below shows the hidden label. Where a browser can’t size fields to their content, the field stays at rows lines and scrolls.</p>
   </DocSection>
 
-  <DocSection title="Message box" lead="In a chat, Enter sends and Shift+Enter adds a line. The Text area doesn’t decide this: the caller handles Enter in onKeyDown, and leaves Shift+Enter and typing in an input method to the field. The label is hidden because the Send button and the conversation name the field; the helper says which key does what.">
+  <DocSection title="Message box" lead="In a chat, Enter sends and Shift+Enter adds a line. The Text area doesn’t decide this: the caller handles Enter in onKeyDown, and leaves Shift+Enter and typing in an input method to the field. The label is hidden because the Send button and the conversation name the field; the helper says which key does what. The box is a Large Text area beside a Large Primary Send button, both 40px tall.">
     <MessageBoxDemo client:visible />
     <CodeSample label="React" code={areaCode} />
   </DocSection>

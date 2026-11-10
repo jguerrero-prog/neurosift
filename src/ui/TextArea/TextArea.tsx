@@ -11,7 +11,8 @@ interface TextAreaProps extends Omit<
   label: string;
   value: string;
   onChange: (value: string) => void;
-  size?: "md" | "sm";
+  /** Large matches the Large Search field, for a message box. */
+  size?: "lg" | "md" | "sm";
   helper?: string;
   error?: string;
   hideLabel?: boolean;

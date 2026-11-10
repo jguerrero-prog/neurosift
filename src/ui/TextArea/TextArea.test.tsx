@@ -28,6 +28,15 @@ describe("TextArea", () => {
     );
   });
 
+  it("is Large where it matches the Large Search field", () => {
+    const { container } = render(
+      <TextArea label="Message" value="" onChange={noop} size="lg" rows={1} />,
+    );
+    expect(container.firstElementChild?.className).toBe(
+      "ns-field ns-field--lg",
+    );
+  });
+
   it("shows three rows by default", () => {
     render(<TextArea label="Notes" value="" onChange={noop} />);
     const area = screen.getByLabelText("Notes") as HTMLTextAreaElement;
