@@ -22,7 +22,7 @@ const MUI_REPLACEMENTS = [
   "logo--github",
 ];
 
-// Icons the components draw themselves: status icons, the checkbox marks, the select chevron and the info button.
+// Icons the components draw themselves: status icons, checkbox marks, chevrons, carets, the info button, the app bar, and tree and sort icons.
 const COMPONENT_ICONS = [
   "error",
   "checkmark",
@@ -31,6 +31,16 @@ const COMPONENT_ICONS = [
   "information",
   "checkmark--outline",
   "warning--alt",
+  "caret--right",
+  "caret--down",
+  "help",
+  "link",
+  "folder",
+  "folder--open",
+  "data--structured",
+  "document",
+  "arrow--up",
+  "arrow--down",
 ];
 
 const icons = IconSource.load(SOURCE);
@@ -51,11 +61,19 @@ describe("icons", () => {
     expect(icons.search.every((path) => path.evenOdd === undefined)).toBe(true);
   });
 
+  it("draws circles as path data", () => {
+    const svg =
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="23.5" r="1.5"/></svg>';
+    expect(IconSource.parse("dot", svg)).toEqual([
+      { d: "M14.5,23.5a1.5,1.5,0,1,0,3,0a1.5,1.5,0,1,0,-3,0Z" },
+    ]);
+  });
+
   it("rejects markup it can't draw, instead of dropping it", () => {
     const svg =
-      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="4"/></svg>';
-    expect(() => IconSource.parse("dot", svg)).toThrow(
-      "dot: unsupported markup",
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect x="4" y="4" width="8" height="8"/></svg>';
+    expect(() => IconSource.parse("box", svg)).toThrow(
+      "box: unsupported markup",
     );
   });
 

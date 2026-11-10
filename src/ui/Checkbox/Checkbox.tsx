@@ -1,5 +1,6 @@
 import { useEffect, useRef, type InputHTMLAttributes } from "react";
 import { Icon } from "../Icon/Icon";
+import "../base.css";
 import "./Checkbox.css";
 
 interface CheckboxProps extends Omit<
@@ -10,6 +11,8 @@ interface CheckboxProps extends Omit<
   checked: boolean | "mixed";
   onChange: (checked: boolean) => void;
   count?: number | string;
+  /** Keeps the label for screen readers only, where the row around the box already says what it is. */
+  hideLabel?: boolean;
 }
 
 export function Checkbox({
@@ -17,6 +20,7 @@ export function Checkbox({
   checked,
   onChange,
   count,
+  hideLabel = false,
   ...native
 }: CheckboxProps) {
   const input = useRef<HTMLInputElement>(null);
@@ -43,7 +47,9 @@ export function Checkbox({
           <Icon name="subtract" />
         </span>
       </span>
-      <span>{label}</span>
+      <span className={hideLabel ? "ns-visually-hidden" : undefined}>
+        {label}
+      </span>
       {count !== undefined && (
         <span className="ns-checkbox-count">{count}</span>
       )}
