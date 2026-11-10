@@ -186,6 +186,12 @@ export const navigation: NavSection[] = [
         summary:
           "Accordion item and Disclosure: sections of a panel, and more on request.",
       },
+      {
+        label: "Code block",
+        href: "/components/code/",
+        summary:
+          "Code block and Inline code: Python people can copy, read and run.",
+      },
     ],
   },
 ];

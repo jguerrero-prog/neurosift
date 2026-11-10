@@ -25,6 +25,8 @@ export { useToast } from "./Toast/toastContext";
 export type { ToastApi, ToastOptions } from "./Toast/toastContext";
 export { Page } from "./Page/Page";
 export { Section } from "./Page/Section";
+export { CodeBlock, InlineCode } from "./CodeBlock/CodeBlock";
+
 export { AccordionItem, Disclosure } from "./Accordion/Accordion";
 
 export { Badge, Tag, TagLink } from "./Badge/Badge";

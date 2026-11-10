@@ -676,3 +676,35 @@ test("accordions: Enter and Space open and close a section; a disclosure says wh
   ).toBeVisible();
   await expect(less).toBeFocused();
 });
+
+test("code blocks: Copy copies the code without the $ prompt or line numbers, and says Copied", async ({
+  page,
+  browserName,
+  context,
+}) => {
+  test.skip(
+    browserName !== "chromium",
+    "Only Chromium lets tests grant clipboard access.",
+  );
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("components/code/");
+  const copyShell = page.getByRole("button", { name: "Copy Shell code" });
+  await copyShell.scrollIntoViewIfNeeded();
+  await expect(
+    copyShell.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  await copyShell.focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("button", { name: "Copied" })).toBeVisible();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+    "pip install --upgrade lindi",
+  );
+  const copyPython = page.getByRole("button", { name: "Copy Python code" });
+  await expect(
+    copyPython.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  await copyPython.click();
+  const copied = await page.evaluate(() => navigator.clipboard.readText());
+  expect(copied.startsWith("import lindi\n\nurl = ")).toBe(true);
+  expect(copied).not.toMatch(/^\d/m);
+});

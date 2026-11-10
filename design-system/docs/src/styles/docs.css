@@ -681,6 +681,16 @@ main {
   max-inline-size: var(--layout-text-max);
 }
 
+.code-demo {
+  display: grid;
+  gap: var(--space-4);
+  max-inline-size: var(--layout-page-max);
+}
+
+.inline-code-demo {
+  margin: 0;
+}
+
 .accordion-demo {
   inline-size: min(100%, var(--layout-panel-default));
   background: var(--surface-panel);
