@@ -11,14 +11,14 @@ import DatasetWorkspace from "../common/DatasetWorkspace/DatasetWorkspace";
 import { DatasetFile } from "../common/DatasetWorkspace/plugins/pluginInterface";
 import {
   AssetsResponseItem,
-  DandisetSearchResultItem,
   DandisetVersionInfo,
 } from "../DandiPage/dandi-types";
 import { addRecentEmberDandiset } from "../util/recentEmberDandisets";
 import EmberDandisetOverview from "./EmberDandisetOverview.tsx";
 import { useEmberDandisetVersionInfo } from "./useEmberDandisetVersionInfo.ts";
 import useQueryEmberAssets from "./useQueryEmberAssets.ts";
-import useQueryEmberDandiset from "./useQueryEmberDandiset.ts";
+import DandisetError from "../DandisetPage/DandisetError";
+import { useDandisetResult } from "../DandisetPage/useQueryDandiset";
 import useRegisterAIComponent from "./useRegisterAIComponent";
 
 type DandisetPageProps = {
@@ -36,8 +36,11 @@ const EmberDandisetPage: FunctionComponent<DandisetPageProps> = ({
   const { dandisetId: urlDandisetId } = useParams();
   const effectiveDandisetId = propDandisetId || urlDandisetId;
   const staging = false;
-  const dandisetResponse: DandisetSearchResultItem | undefined | null =
-    useQueryEmberDandiset(effectiveDandisetId, staging);
+  const { dandiset: dandisetResponse, failure } = useDandisetResult(
+    effectiveDandisetId,
+    staging,
+    true,
+  );
 
   // todo: get dandisetVersion from the route
   const dandisetVersion = "";
@@ -274,6 +277,9 @@ const EmberDandisetPage: FunctionComponent<DandisetPageProps> = ({
     nwbFilesOwnlyControlVisible,
   });
 
+  if (failure && effectiveDandisetId) {
+    return <DandisetError dandisetId={effectiveDandisetId} failure={failure} />;
+  }
   if (!dandisetResponse || !dandisetVersionInfo) {
     return <div>Loading...</div>;
   }
