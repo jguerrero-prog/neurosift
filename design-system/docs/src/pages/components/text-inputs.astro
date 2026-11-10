@@ -1,4 +1,5 @@
 ---
+import ApiKeyDemo from "../../components/ApiKeyDemo";
 import Existing from "../../components/Existing.astro";
 import { SearchField, TextInput } from "@ui";
 import CodeSample from "../../components/CodeSample.astro";
@@ -86,12 +87,9 @@ const code = `import { SearchField, TextInput } from "@ui";
     </div>
   </DocSection>
 
-  <DocSection title="API key field" lead="A password field per archive. The helper names the archive it opens, so DANDI and EMBER keys are never confused.">
-    <div class="section-demo">
-      <TextInput type="password" label="EMBER API key" helper="Opens embargoed Dandisets on dandi.emberarchive.org. Saved in this browser only." value="" onChange={noop} />
-      <TextInput type="password" label="DANDI API key" error="DANDI didn’t accept this key. Copy it again from your DANDI account page." value="7f3a9c2e51d84b06a1c3" onChange={noop} />
-    </div>
-    <p class="doc-note">The error shows after the archive answers 401, never while people type. Figma adds a show and hide button, labeled “Show API key” and “Hide API key”; TextInput doesn’t have it yet.</p>
+  <DocSection title="API key field" lead="A password field per archive, with a button to show and hide the key. The helper names the archive it opens, so DANDI and EMBER keys are never confused.">
+    <ApiKeyDemo client:visible />
+    <p class="doc-note">The key is hidden by default and hidden again on reload. The button reads “Show API key” or “Hide API key”, and showing changes only the field’s type, so focus, cursor and value stay put. The error shows after the archive answers 401, never while people type.</p>
   </DocSection>
 
   <DocSection title="Search field" lead="For the DANDI, EMBER and OpenNeuro pages. The magnifier sits inside the field and search runs on Enter. A clear button appears once there is text, and Escape also clears. While results load, a spinner takes the clear button’s place.">

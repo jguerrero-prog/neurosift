@@ -248,4 +248,34 @@ export const navigation: NavSection[] = [
       },
     ],
   },
+  {
+    heading: "Resources",
+    items: [
+      {
+        label: "Figma library",
+        href: "/resources/figma-library/",
+        summary: "The Figma file: component frames, variables and pages.",
+      },
+      {
+        label: "Changelog",
+        href: "/resources/changelog/",
+        summary: "What changed, newest first, in code and in Figma.",
+      },
+      {
+        label: "Contribution guide",
+        href: "/resources/contribution-guide/",
+        summary: "How a change moves from an idea to a merged pull request.",
+      },
+      {
+        label: "Research and audit",
+        href: "/resources/research-and-audit/",
+        summary: "Sources, code counts, findings and open questions.",
+      },
+      {
+        label: "Contact the team",
+        href: "/resources/contact/",
+        summary: "Who to ask about the app, the data and this system.",
+      },
+    ],
+  },
 ];

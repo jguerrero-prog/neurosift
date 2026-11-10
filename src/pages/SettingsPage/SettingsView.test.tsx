@@ -15,6 +15,12 @@ const setup = (overrides = {}) => {
   const props = {
     keys: KEYS,
     onChange: vi.fn(),
+    shown: {
+      dandiApiKey: false,
+      dandiStagingApiKey: false,
+      emberApiKey: false,
+    },
+    onShownChange: vi.fn(),
     showReload: false,
     onReload: vi.fn(),
     ...overrides,
@@ -80,5 +86,30 @@ describe("SettingsView", () => {
     expect(document.activeElement).toBe(document.body);
     fireEvent.click(screen.getByRole("button", { name: "Reload page" }));
     expect(onReload).toHaveBeenCalledTimes(1);
+  });
+
+  it("gives each key a show button that reports which key to show", () => {
+    const { onShownChange } = setup();
+    expect(
+      screen.getAllByRole("button", { name: "Show API key" }),
+    ).toHaveLength(3);
+    fireEvent.click(screen.getAllByRole("button", { name: "Show API key" })[2]);
+    expect(onShownChange).toHaveBeenCalledWith("emberApiKey", true);
+  });
+
+  it("shows a key as text when asked", () => {
+    setup({
+      shown: {
+        dandiApiKey: true,
+        dandiStagingApiKey: false,
+        emberApiKey: false,
+      },
+    });
+    expect(screen.getByLabelText("DANDI API key").getAttribute("type")).toBe(
+      "text",
+    );
+    expect(screen.getByLabelText("EMBER API key").getAttribute("type")).toBe(
+      "password",
+    );
   });
 });

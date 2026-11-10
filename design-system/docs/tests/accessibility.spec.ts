@@ -177,7 +177,10 @@ test("links and controls are at least 24 by 24 pixels", async ({ page }) => {
           (el) =>
             el.checkVisibility() &&
             !el.matches(".skip-link") &&
-            !(getComputedStyle(el).display === "inline" && el.closest("p, li, figcaption")),
+            !(
+              getComputedStyle(el).display === "inline" &&
+              el.closest("p, li, figcaption")
+            ),
         )
         .map((el) => ({
           el: el.textContent?.trim(),
@@ -875,4 +878,22 @@ test("code blocks: Copy copies the code without the $ prompt or line numbers, an
   const copied = await page.evaluate(() => navigator.clipboard.readText());
   expect(copied.startsWith("import lindi\n\nurl = ")).toBe(true);
   expect(copied).not.toMatch(/^\d/m);
+});
+
+test("API key fields: the show button toggles by keyboard and keeps focus", async ({
+  page,
+}) => {
+  await page.goto("components/text-inputs/");
+  const field = page.getByLabel("EMBER API key");
+  await hydrated(field);
+  await field.fill("abc123");
+  const show = page.getByRole("button", { name: "Show API key" }).first();
+  await show.focus();
+  await page.keyboard.press("Enter");
+  await expect(field).toHaveAttribute("type", "text");
+  const hide = page.getByRole("button", { name: "Hide API key" });
+  await expect(hide).toBeFocused();
+  await page.keyboard.press(" ");
+  await expect(field).toHaveAttribute("type", "password");
+  await expect(field).toHaveValue("abc123");
 });

@@ -1,6 +1,7 @@
 import { useId, type InputHTMLAttributes } from "react";
 import { Field } from "../Field/Field";
 import { fieldAria } from "../Field/fieldAria";
+import { IconButton } from "../IconButton/IconButton";
 import "./TextInput.css";
 
 interface TextInputProps extends Omit<
@@ -16,6 +17,12 @@ interface TextInputProps extends Omit<
   error?: string;
   unit?: string;
   hideLabel?: boolean;
+  /** A show and hide button for password fields; name says what the field holds, such as "API key". */
+  reveal?: {
+    shown: boolean;
+    onShownChange: (shown: boolean) => void;
+    name: string;
+  };
 }
 
 export function TextInput({
@@ -28,9 +35,12 @@ export function TextInput({
   error,
   unit,
   hideLabel,
+  reveal,
   ...native
 }: TextInputProps) {
   const id = useId();
+  const secret = type === "password" && reveal;
+  const shown = secret && reveal.shown;
   return (
     <Field
       id={id}
@@ -43,12 +53,21 @@ export function TextInput({
       <input
         {...native}
         id={id}
-        type={type}
+        type={shown ? "text" : type}
         className="ns-field-input"
         value={value}
         onChange={(event) => onChange(event.target.value)}
         {...fieldAria(id, helper, error)}
       />
+      {secret && (
+        <IconButton
+          icon={shown ? "view--off" : "view"}
+          label={`${shown ? "Hide" : "Show"} ${reveal.name}`}
+          variant="ghost"
+          size="sm"
+          onClick={() => reveal.onShownChange(!shown)}
+        />
+      )}
       {unit && (
         <span className="ns-field-unit" aria-hidden="true">
           {unit}
