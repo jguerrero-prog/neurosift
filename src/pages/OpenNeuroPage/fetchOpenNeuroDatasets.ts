@@ -128,13 +128,14 @@ export const fetchOpenNeuroPage = async (
     data: {
       datasets: {
         pageInfo?: { hasNextPage: boolean; endCursor: string; count: number };
-        edges: { node: OpenNeuroDataset }[];
+        edges: ({ node: OpenNeuroDataset | null } | null)[];
       };
     };
   };
   const { datasets } = ((await resp.json()) as GraphQLResponse).data;
   return {
-    datasets: datasets.edges.map((edge) => edge.node),
+    // A deleted dataset comes back as a null node with an error beside the rest.
+    datasets: datasets.edges.flatMap((edge) => (edge?.node ? [edge.node] : [])),
     count: datasets.pageInfo?.count,
     cursor: datasets.pageInfo?.hasNextPage
       ? datasets.pageInfo.endCursor

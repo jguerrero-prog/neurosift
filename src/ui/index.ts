@@ -77,8 +77,6 @@ export { StatusBar } from "./StatusBar/StatusBar";
 export { OverviewPanel } from "./OverviewPanel/OverviewPanel";
 export { MultiSelect, RemovableTag } from "./MultiSelect/MultiSelect";
 export type { MultiSelectOption } from "./MultiSelect/MultiSelect";
-export { MultiSelect, RemovableTag } from "./MultiSelect/MultiSelect";
-export type { MultiSelectOption } from "./MultiSelect/MultiSelect";
 export {
   AppliedFilters,
   FilterGroup,

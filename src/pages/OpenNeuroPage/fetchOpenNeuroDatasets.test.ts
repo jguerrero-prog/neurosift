@@ -107,4 +107,21 @@ describe("fetchOpenNeuroDatasets", () => {
       query: { sortBy: "relevance", keywords: ["hippocampus"] },
     });
   });
+
+  it("skips a deleted dataset that comes back as a null node", async () => {
+    vi.stubGlobal(
+      "fetch",
+      async () =>
+        new Response(
+          JSON.stringify({
+            errors: [{ message: "Dataset ds008958 has been deleted." }],
+            data: {
+              datasets: { edges: [{ node: node("ds1") }, { node: null }] },
+            },
+          }),
+        ),
+    );
+    const datasets = await fetchOpenNeuroDatasets("");
+    expect(datasets.map((d) => d.id)).toEqual(["ds1"]);
+  });
 });

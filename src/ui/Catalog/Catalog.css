@@ -140,3 +140,8 @@
   color: var(--text-default);
   overflow-wrap: anywhere;
 }
+
+/* The sort select keeps the width of its longest option in the flex row. */
+.ns-catalog-sort {
+  inline-size: 12rem;
+}
