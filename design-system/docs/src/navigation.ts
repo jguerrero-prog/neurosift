@@ -246,6 +246,11 @@ export const navigation: NavSection[] = [
         href: "/components/pages/",
         summary: "Page and Section: a page's title, column and titled panels.",
       },
+      {
+        label: "View panel",
+        href: "/components/view-panel/",
+        summary: "The frame every view shares, around Neurosift’s own charts.",
+      },
     ],
   },
   {

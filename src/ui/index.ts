@@ -70,3 +70,4 @@ export { EmptyState } from "./EmptyState/EmptyState";
 
 export { DescriptionList } from "./DescriptionList/DescriptionList";
 export type { Description } from "./DescriptionList/DescriptionList";
+export { SettingPair, TooMuchData, ViewPanel } from "./ViewPanel/ViewPanel";
