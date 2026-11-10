@@ -1,4 +1,5 @@
 ---
+import Existing from "../../components/Existing.astro";
 import CodeSample from "../../components/CodeSample.astro";
 import DoDont from "../../components/DoDont.astro";
 import DocSection from "../../components/DocSection.astro";
@@ -86,13 +87,11 @@ const code = `import { DataTable, Tree } from "@ui";
     ]}
   />
 
+  <Existing page="tables" />
+
   <DocSection title="Data table" lead="The units table of Dandiset 000673: spike counts from the file, and firing rate as spikes over the 1,375.28 s session. Sort from a header; select rows with their checkboxes or a click anywhere on the row.">
     <UnitsTableDemo client:visible />
     <p class="doc-note">The Notes column has no values, so each cell shows —, never NaN, undefined or a blank. Selected rows invert: navy with white text, the same signal as everywhere else. Units go in the header, so cells hold only numbers.</p>
-  </DocSection>
-
-  <DocSection title="Density" lead="Default rows are 32px for reading. Compact rows are 24px, for long selection lists in plot panels, such as units and channels.">
-    <UnitsTableDemo client:visible density="compact" />
   </DocSection>
 
   <DocSection title="File tree" lead="Folders and files of a Dandiset, and the groups and datasets of an HDF5 file. File names and sizes are illustrative.">
@@ -100,10 +99,22 @@ const code = `import { DataTable, Tree } from "@ui";
     <p class="doc-note">Anywhere on a folder row opens or closes it; today only the ► arrow does, which the walkthrough found people missed. Clicking an NWB file opens it, and folders say how many files they hold.</p>
   </DocSection>
 
+  <DocSection title="Density" lead="Default rows are 32px for reading. Compact rows are 24px, for long selection lists in plot panels, such as units and channels.">
+    <UnitsTableDemo client:visible density="compact" />
+  </DocSection>
+
   <DocSection title="Cell types">
     <DocTable caption="Cell types" columns={["Type", "Face", "Align", "Example"]}>
       {CELL_TYPES.map(([type, face, align, example]) => <tr><th scope="row">{type}</th><td>{face}</td><td>{align}</td><td>{example}</td></tr>)}
     </DocTable>
+  </DocSection>
+
+  <DocSection title="Sorting, selection and long values">
+    <ul class="rule-list">
+      <li><strong>Sort from the header.</strong> Click a header to sort ascending, again for descending. The arrow and aria-sort show the direction. One column at a time.</li>
+      <li><strong>Select with checkboxes.</strong> When rows can be picked for a plot, a checkbox column comes first and the toolbar says how many are selected.</li>
+      <li><strong>Long values wrap or open.</strong> Descriptions wrap to three lines with a Disclosure; IDs and paths truncate in the middle with the full value in a tooltip.</li>
+    </ul>
   </DocSection>
 
   <DocSection title="Keyboard" lead="Tables are real tables, reached with Tab through their sort buttons and checkboxes. Trees follow the WAI-ARIA tree view pattern, one stop in the tab order.">

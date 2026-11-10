@@ -1,4 +1,6 @@
 ---
+import DocRows from "../../components/DocRows.astro";
+import Existing from "../../components/Existing.astro";
 import { Button, IconButton, type ButtonVariant } from "@ui";
 import CodeSample from "../../components/CodeSample.astro";
 import DoDont from "../../components/DoDont.astro";
@@ -44,6 +46,28 @@ const code = `import { Button, IconButton } from "@ui";
 <Button size="sm" loading={saving}>Save</Button>
 <Button href="https://dandiarchive.org" icon="launch">View on DANDI</Button>
 <IconButton icon="settings" label="Settings" variant="ghost" />`;
+const ANATOMY = [
+  [
+    "Container",
+    "32px tall (button/height/md), 3px corners (radius/sm), action/primary"
+  ],
+  [
+    "Padding",
+    "16px at the sides (space/4). Height is fixed, so the content centers"
+  ],
+  [
+    "Icon",
+    "16px Carbon icon, only when there is one. The spinner takes its place while loading"
+  ],
+  [
+    "Gap",
+    "8px between the icon or spinner and the label (space/2)"
+  ],
+  [
+    "Label",
+    "type/label, IBM Plex Sans JP SemiBold 14px, text/on-inverse: 10.98:1 on navy"
+  ]
+];
 ---
 
 <DocsLayout title="Buttons" description="Button and Icon button: four styles, two sizes and every state.">
@@ -56,6 +80,8 @@ const code = `import { Button, IconButton } from "@ui";
       { title: "States are always visible", text: "Hover, pressed, focus, disabled and loading each look different, so people always know what the button is doing." },
     ]}
   />
+
+  <Existing page="buttons" />
 
   <DocSection title="Styles" lead="Four styles, from most to least emphasis. Choose by how important the action is, not by which color fits the layout. Secondary is the default, so Primary is always a choice.">
     <DocTable caption="Button styles" columns={["Button", "Style", "Use", "In Neurosift"]}>
@@ -110,6 +136,13 @@ const code = `import { Button, IconButton } from "@ui";
       }
     </DocTable>
     <p class="doc-note">A loading button never changes width. With an icon, the spinner takes the icon’s place. Without one, the spinner sits in the middle and the label stays in place, unseen, so the width holds and screen readers still hear the label. Loading keeps focus on the button, sets aria-busy and ignores clicks. Disabled buttons can’t be focused, so always say nearby why an action isn’t available, such as “Add an API key first”.</p>
+  </DocSection>
+
+  <DocSection title="Anatomy" lead="A Medium Primary button with an icon. Every value comes from the spacing, radius and color tokens.">
+    <div class="demo-row"><Button variant="primary" icon="folder--open">Open file</Button></div>
+    <DocTable caption="Button anatomy" columns={["Part","Value"]}>
+      <DocRows rows={ANATOMY} />
+    </DocTable>
   </DocSection>
 
   <DocSection title="Icon button" lead="For familiar actions in tight toolbars. Secondary or Ghost, 32px with a 20px icon or 24px with a 16px icon. Every icon button is named by its label.">

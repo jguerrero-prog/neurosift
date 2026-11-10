@@ -48,7 +48,10 @@ const code = `import { Page, Section, TextInput } from "@ui";
         <TextInput type="password" label="DANDI sandbox API key" helper="From your account on sandbox.dandiarchive.org." value="" onChange={noop} />
       </Section>
     </div>
-    <p class="doc-note">Page isn’t shown here because it holds a page’s h1, and this page already has one. The Settings page in the app is built from both.</p>
+  </DocSection>
+
+  <DocSection title="Page" lead="The frame of a page in the main area: the page’s one h1, 24px margins and a 720px column, scrolling inside the main area. Sections and alerts go in its content, 24px apart.">
+    <p class="doc-note">Page isn’t shown live here because it holds a page’s h1, and this page already has one. The Settings page in the app is a page with one section: Settings, then DANDI API keys.</p>
   </DocSection>
 
   <DocSection title="Specs" lead="Values for developers. Every value is a token.">

@@ -1,4 +1,5 @@
 ---
+import Existing from "../../components/Existing.astro";
 import { SearchField, TextInput } from "@ui";
 import CodeSample from "../../components/CodeSample.astro";
 import DoDont from "../../components/DoDont.astro";
@@ -59,6 +60,8 @@ const code = `import { SearchField, TextInput } from "@ui";
     ]}
   />
 
+  <Existing page="text-inputs" />
+
   <DocSection title="Text input" lead="One component in two sizes. Focus thickens the edge to a 2px link-blue border, so the label and value don’t move. Click into a field here to see it.">
     <div class="field-grid">
       <TextInput label="Window start (s)" value="" onChange={noop} placeholder="For example, 0.5" helper={HELPER} />
@@ -81,6 +84,14 @@ const code = `import { SearchField, TextInput } from "@ui";
       <TextInput label="Low-pass cutoff (Hz)" value="" onChange={noop} unit="Hz" inputMode="decimal" helper="Leave empty for no filter." />
       <TextInput label="Number of bins" value="50" onChange={noop} inputMode="numeric" helper="Between 1 and 1,000." />
     </div>
+  </DocSection>
+
+  <DocSection title="API key field" lead="A password field per archive. The helper names the archive it opens, so DANDI and EMBER keys are never confused.">
+    <div class="section-demo">
+      <TextInput type="password" label="EMBER API key" helper="Opens embargoed Dandisets on dandi.emberarchive.org. Saved in this browser only." value="" onChange={noop} />
+      <TextInput type="password" label="DANDI API key" error="DANDI didn’t accept this key. Copy it again from your DANDI account page." value="7f3a9c2e51d84b06a1c3" onChange={noop} />
+    </div>
+    <p class="doc-note">The error shows after the archive answers 401, never while people type. Figma adds a show and hide button, labeled “Show API key” and “Hide API key”; TextInput doesn’t have it yet.</p>
   </DocSection>
 
   <DocSection title="Search field" lead="For the DANDI, EMBER and OpenNeuro pages. The magnifier sits inside the field and search runs on Enter. A clear button appears once there is text, and Escape also clears. While results load, a spinner takes the clear button’s place.">

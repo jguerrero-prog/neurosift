@@ -1,4 +1,6 @@
 ---
+import DocRows from "../../components/DocRows.astro";
+import Existing from "../../components/Existing.astro";
 import { ControlPanelDemo, DisclosureDemo } from "../../components/AccordionDemo";
 import CodeSample from "../../components/CodeSample.astro";
 import DoDont from "../../components/DoDont.astro";
@@ -57,6 +59,24 @@ const code = `import { AccordionItem, Disclosure } from "@ui";
 >
   <p>{description}</p>
 </Disclosure>`;
+const ITEM_STATES = [
+  [
+    "Open",
+    "Content is indented to line up with the title."
+  ],
+  [
+    "Closed",
+    "The summary on the right keeps the setting visible."
+  ],
+  [
+    "Closed, hover",
+    "Navy 50 behind the header row."
+  ],
+  [
+    "Closed, focus",
+    "Link-blue ring inside the header."
+  ]
+];
 ---
 
 <DocsLayout title="Accordions" description="Accordion item and Disclosure: named sections of a panel, and show-and-hide for one block.">
@@ -69,6 +89,14 @@ const code = `import { AccordionItem, Disclosure } from "@ui";
       { title: "Open what matters", text: "Sections people need first start open; rarely changed ones, like preprocessing, start closed." },
     ]}
   />
+
+  <Existing page="accordions" />
+
+  <DocSection title="Accordion item" lead="A header button and a content area. The header shows a chevron, the title and a one-line summary of the setting, such as Align to: start_time.">
+    <DocTable caption="Accordion item states" columns={["State","Look"]}>
+      <DocRows rows={ITEM_STATES} />
+    </DocTable>
+  </DocSection>
 
   <DocSection title="In a control panel" lead="The PSTH panel rebuilt from accordion items, 320px wide, the default panel width. Change a setting and its summary follows, even while closed.">
     <ControlPanelDemo client:visible />

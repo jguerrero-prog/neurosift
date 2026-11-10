@@ -1,4 +1,5 @@
 ---
+import Existing from "../../components/Existing.astro";
 import logo from "../../../../../public/neurosift-logo.png";
 import CodeSample from "../../components/CodeSample.astro";
 import DoDont from "../../components/DoDont.astro";
@@ -75,6 +76,8 @@ const code = `import { AppBar, Breadcrumbs, ObjectPath } from "@ui";
     ]}
   />
 
+  <Existing page="navigation" />
+
   <DocSection title="Navigation layers" lead="The file view from top to bottom. Each layer answers one question.">
     <DocTable caption="Navigation layers" columns={["Layer", "Answers", "Height"]}>
       {LAYERS.map(([layer, answers, height]) => <tr><th scope="row">{layer}</th><td>{answers}</td><td>{height}</td></tr>)}
@@ -109,6 +112,14 @@ const code = `import { AppBar, Breadcrumbs, ObjectPath } from "@ui";
     <div class="object-path-demo">
       <ObjectPathDemo client:visible />
     </div>
+  </DocSection>
+
+  <DocSection title="Back, history and links">
+    <ul class="rule-list">
+      <li><strong>Back works.</strong> The browser’s Back returns to the previous view with its state, including the search query (upstream #321).</li>
+      <li><strong>Breadcrumbs keep state.</strong> The DANDI crumb links to the search with the last query and mode in the URL.</li>
+      <li><strong>Copy link, not Share.</strong> The object path’s link button copies a URL to this file and tab; a toast confirms it.</li>
+    </ul>
   </DocSection>
 
   <DocSection title="Writing" lead="Rewrites of strings in the app today.">

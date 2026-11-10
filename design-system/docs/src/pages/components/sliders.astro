@@ -1,4 +1,6 @@
 ---
+import DocRows from "../../components/DocRows.astro";
+import Existing from "../../components/Existing.astro";
 import CodeSample from "../../components/CodeSample.astro";
 import DoDont from "../../components/DoDont.astro";
 import DocSection from "../../components/DocSection.astro";
@@ -56,6 +58,28 @@ const code = `import { RangeSlider, Slider } from "@ui";
   value={range}
   onChange={setRange}
 />`;
+const IN_NEUROSIFT = [
+  [
+    "Brightness",
+    "Image brightness",
+    "A visible label in place of the tooltip"
+  ],
+  [
+    "Trail length (s)",
+    "Pose trail length",
+    "The unit in the label; the scale shows the limits, 0.25 to 5"
+  ],
+  [
+    "Confidence threshold",
+    "Pose confidence",
+    "Keypoints below it aren’t drawn, so a helper below says so"
+  ],
+  [
+    "Plane",
+    "Two-photon plane",
+    "Whole-number steps from 0 to 11; the field takes a plane number"
+  ]
+];
 ---
 
 <DocsLayout title="Sliders" description="Slider and Range slider: settings people judge by eye, with a field for exact numbers.">
@@ -69,6 +93,8 @@ const code = `import { RangeSlider, Slider } from "@ui";
     ]}
   />
 
+  <Existing page="sliders" />
+
   <DocSection title="Slider" lead="One value on a scale. Label and value above, track in the middle, a Small field at the end for exact entry. Drag, use the arrow keys, or type in the field and press Enter.">
     <SliderDemos client:visible />
     <p class="doc-note">Navy fill up to the thumb, a light rail after it. The thumb’s border thickens on hover, and it grows while held. The disabled slider is gray; say nearby why, such as while the image loads.</p>
@@ -77,6 +103,12 @@ const code = `import { RangeSlider, Slider } from "@ui";
   <DocSection title="Range slider" lead="Two thumbs for a low and a high value, with a field at each end. For the display range of images, two-photon frames and heatmaps.">
     <RangeDemo client:visible />
     <p class="doc-note">The thumbs can’t cross: dragging low past high stops at high, and typing a low above high says “Low must be below 3,400.” Name the result, “Display range”, not “Brightness/contrast”: the two numbers are the values shown as black and white.</p>
+  </DocSection>
+
+  <DocSection title="In Neurosift" lead="How the components replace the sliders above.">
+    <DocTable caption="Sliders in Neurosift" columns={["Slider","Replaces","What changes"]}>
+      <DocRows rows={IN_NEUROSIFT} />
+    </DocTable>
   </DocSection>
 
   <DocSection title="Keyboard" lead="The WAI-ARIA slider keys. Each thumb is a slider with its range and value, and its value text includes the unit.">

@@ -1,4 +1,5 @@
 ---
+import Existing from "../../components/Existing.astro";
 import { Badge, Tag, TagLink } from "@ui";
 import CodeSample from "../../components/CodeSample.astro";
 import DoDont from "../../components/DoDont.astro";
@@ -58,6 +59,8 @@ const code = `import { Badge, Tag, TagLink } from "@ui";
       { title: "Data in the code face", text: "IDs and neurodata types in Plex Mono, exactly as the archive writes them." },
     ]}
   />
+
+  <Existing page="badges" />
 
   <DocSection title="Badge" lead="Five statuses and a count. Status badges use the status tokens with a 1px border; the count badge is navy.">
     <dl class="badge-list">

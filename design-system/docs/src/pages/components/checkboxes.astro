@@ -1,4 +1,6 @@
 ---
+import DocRows from "../../components/DocRows.astro";
+import Existing from "../../components/Existing.astro";
 import { Checkbox } from "@ui";
 import CodeSample from "../../components/CodeSample.astro";
 import DocSection from "../../components/DocSection.astro";
@@ -44,6 +46,38 @@ const code = `import { Checkbox } from "@ui";
 <Checkbox label="Show trails" checked={trails} onChange={setTrails} />
 <Checkbox label="All channels" checked={allChannels} onChange={selectAll}
   count="3 of 16" />   // allChannels is true, false or "mixed"`;
+const CHOICE = [
+  [
+    "Turn one option on or off",
+    "Checkbox",
+    "Show NWB files only, Show trails"
+  ],
+  [
+    "Pick any number from a short list",
+    "Checkbox group with a legend",
+    "Catalog filters, PSTH preferences"
+  ],
+  [
+    "Pick any number from a long list",
+    "Multi-select",
+    "Units in the PSTH"
+  ],
+  [
+    "Pick one of a few",
+    "Segmented control",
+    "Plot or table"
+  ],
+  [
+    "Pick one of many",
+    "Select",
+    "Align to"
+  ],
+  [
+    "Show or hide a block of content",
+    "Disclosure",
+    "Show attributes"
+  ]
+];
 ---
 
 <DocsLayout title="Checkboxes" description="Checkbox: on, off and mixed, with the whole row as the target.">
@@ -57,7 +91,9 @@ const code = `import { Checkbox } from "@ui";
     ]}
   />
 
-  <DocSection title="States" lead="Off, On and Mixed, each enabled and disabled. Click a box or its label to see it change.">
+  <Existing page="checkboxes" />
+
+  <DocSection title="Checkbox" lead="A 16px box and its label. Checked is Off, On or Mixed, each enabled or disabled; a count can sit at the end of the row, for filter lists. Click a box or its label to see it change.">
     <DocTable caption="Checkbox states" columns={["State", "Enabled", "Disabled"]}>
       {
         STATES.map(({ name, checked }) => (
@@ -71,7 +107,7 @@ const code = `import { Checkbox } from "@ui";
     </DocTable>
   </DocSection>
 
-  <DocSection title="In a filter list" lead="A group gets a fieldset and legend, so screen readers say “Archive, DANDI, checked”. Counts sit at the end of the row.">
+  <DocSection title="In panels and filter lists" lead="A group gets a fieldset and legend, so screen readers say “Archive, DANDI, checked”. Counts sit at the end of the row.">
     <div class="field-grid">
       <fieldset class="checkbox-group">
         <legend class="type-label">Archive</legend>
@@ -89,6 +125,12 @@ const code = `import { Checkbox } from "@ui";
       </fieldset>
     </div>
     <p class="doc-note">Archive counts are the Dandisets and datasets each archive listed on November 5, 2026.</p>
+  </DocSection>
+
+  <DocSection title="Checkbox or something else">
+    <DocTable caption="Checkbox or something else" columns={["To…","Use","In Neurosift"]}>
+      <DocRows rows={CHOICE} />
+    </DocTable>
   </DocSection>
 
   <DocSection title="Keyboard" lead="A native input inside its label, so all of this comes with the browser.">

@@ -1,4 +1,5 @@
 ---
+import Existing from "../../components/Existing.astro";
 import { Alert, InlineMessage, Toast } from "@ui";
 import CodeSample from "../../components/CodeSample.astro";
 import DoDont from "../../components/DoDont.astro";
@@ -80,6 +81,8 @@ toast.show({ status: "success", message: "Link copied" });`;
       { title: "One look per status", text: "Info, success, warning and error each have one color and one icon, everywhere." },
     ]}
   />
+
+  <Existing page="alerts" />
 
   <DocSection title="Alert" lead="A problem or notice inside a view. A full 1px border in the status color, a light tint, an icon, a title, a message and up to two actions. No colored side bar.">
     <div class="alert-demo">

@@ -1,4 +1,6 @@
 ---
+import DocRows from "../../components/DocRows.astro";
+import Existing from "../../components/Existing.astro";
 import CodeSample from "../../components/CodeSample.astro";
 import DoDont from "../../components/DoDont.astro";
 import DocSection from "../../components/DocSection.astro";
@@ -71,6 +73,24 @@ const code = `import { SegmentedControl, TabPanel, Tabs } from "@ui";
     { value: "desc", label: "Descending" },
   ]}
 />`;
+const TAB_STATES = [
+  [
+    "Default",
+    "Regular weight in text/secondary."
+  ],
+  [
+    "Hover",
+    "Navy 50 behind the tab."
+  ],
+  [
+    "Selected",
+    "SemiBold text/default and a 3px navy underline."
+  ],
+  [
+    "Focus",
+    "A 2px link-blue ring inside the tab."
+  ]
+];
 ---
 
 <DocsLayout title="Tabs and segmented controls" description="Tabs move between views of a file; segmented controls choose one of two to four settings.">
@@ -84,6 +104,8 @@ const code = `import { SegmentedControl, TabPanel, Tabs } from "@ui";
     ]}
   />
 
+  <Existing page="tabs" />
+
   <DocSection title="Section tabs" lead="The top level of the file workspace. Click a tab, or focus one and use the arrow keys: the panel follows.">
     <SectionTabsDemo client:visible />
     <p class="doc-note">Primary sections sit on the left; Schema and HDF5, for people who want the raw structure, sit on the right. Videos and Icephys appear only when the file has them. When tabs don’t fit, the bar scrolls sideways.</p>
@@ -92,6 +114,12 @@ const code = `import { SegmentedControl, TabPanel, Tabs } from "@ui";
   <DocSection title="Object tabs" lead="Each neurodata object people open gets a tab, named as in the file, in Plex Mono, with its full path in the tooltip. Main is the file overview and can’t be closed.">
     <ObjectTabsDemo client:visible />
     <p class="doc-note">Close a tab with its × or with Delete. Closing the open tab opens its neighbor, and focus moves to it.</p>
+  </DocSection>
+
+  <DocSection title="Tab states" lead="Section tabs and object tabs share four states. Hover or Tab to the tabs above to see them.">
+    <DocTable caption="Tab states" columns={["State","Look"]}>
+      <DocRows rows={TAB_STATES} />
+    </DocTable>
   </DocSection>
 
   <DocSection title="Segmented control" lead="Two to four options, all visible, one selected. The selected segment is inverted: navy with white SemiBold text, the same signal as the selected row in tables.">

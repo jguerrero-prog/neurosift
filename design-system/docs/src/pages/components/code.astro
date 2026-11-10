@@ -1,4 +1,5 @@
 ---
+import Existing from "../../components/Existing.astro";
 import { CodeBlock, InlineCode } from "@ui";
 import CodeSample from "../../components/CodeSample.astro";
 import DoDont from "../../components/DoDont.astro";
@@ -67,12 +68,22 @@ const code = `import { CodeBlock, InlineCode } from "@ui";
     ]}
   />
 
+  <Existing page="code" />
+
   <DocSection title="Code block" lead="Two kinds: Script, with line numbers, and Shell, one command with a $ prompt that isn’t copied. Both have a header and a Copy button that confirms for 2 seconds.">
     <div class="code-demo">
       <CodeBlock client:visible language="shell" code="$ pip install --upgrade lindi" />
       <CodeBlock client:visible language="python" code={SCRIPT} />
     </div>
     <p class="doc-note">The Load in Python lines for /acquisition/LFPs, as Neurosift writes them today: a Shell block for the install, then a Script block for the object. Each copies on its own. The Python usage tab uses one Script block for the whole file, with the file name in the header.</p>
+  </DocSection>
+
+  <DocSection title="In Neurosift">
+    <ul class="rule-list">
+      <li><strong>Load in Python.</strong> A Shell block for pip install, then a Script block for the object. Both copy on their own.</li>
+      <li><strong>Python usage tab.</strong> One Script block for the whole file, with the file name in the header and Copy at the top right, replacing the full-width button.</li>
+      <li><strong>Same blocks everywhere.</strong> Usage scripts, Load in Python and any future code use the same component and colors.</li>
+    </ul>
   </DocSection>
 
   <DocSection title="Syntax colors" lead="The code tokens alias existing primitives. Contrast is measured on code/surface.">

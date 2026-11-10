@@ -87,7 +87,7 @@ export function DockedDrawerDemo() {
         onClose={() => setOpen(false)}
         side="left"
         mode="docked"
-        title="Overview"
+        title="Session overview"
       >
         <p>
           Dandiset, session and subject details, as in the overview panel today.
