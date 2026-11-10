@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import ResponsiveLayout from "@components/ResponsiveLayout";
-import { addRecentOpenNeuroDataset } from "../util/recentOpenNeuroDatasets";
+import { addRecentDataset } from "../util/recentDatasets";
 import OpenNeuroDatasetOverview from "./OpenNeuroDatasetOverview";
 import { DatasetFile } from "../common/DatasetWorkspace/plugins/pluginInterface";
 import DatasetWorkspace from "../common/DatasetWorkspace/DatasetWorkspace";
@@ -41,7 +41,7 @@ const OpenNeuroDatasetPage: FunctionComponent<OpenNeuroDatasetPageProps> = ({
         setDatasetInfo(info);
         setError(null);
         // Add to recent datasets
-        addRecentOpenNeuroDataset(info.id);
+        addRecentDataset("OpenNeuro", info.id);
       } catch (err) {
         console.error("Error fetching dataset:", err);
         setError(err instanceof Error ? err.message : "Failed to load dataset");

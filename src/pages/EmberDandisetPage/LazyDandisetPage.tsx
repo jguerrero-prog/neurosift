@@ -1,5 +1,6 @@
+import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { Checkbox, LoadingState } from "@ui";
-import { FunctionComponent, useCallback, useState } from "react";
+import { addRecentDataset } from "../util/recentDatasets";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ResponsiveLayout from "@components/ResponsiveLayout";
 import DatasetWorkspace from "../common/DatasetWorkspace/DatasetWorkspace";
@@ -25,6 +26,10 @@ const LazyDandisetPage: FunctionComponent<LazyDandisetPageProps> = ({
   const navigate = useNavigate();
   const { dandisetId: urlDandisetId } = useParams();
   const effectiveDandisetId = propDandisetId || urlDandisetId;
+
+  useEffect(() => {
+    if (effectiveDandisetId) addRecentDataset("EMBER", effectiveDandisetId);
+  }, [effectiveDandisetId]);
   const staging = false;
 
   // Query the dandiset info

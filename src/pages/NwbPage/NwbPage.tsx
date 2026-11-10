@@ -10,7 +10,7 @@ import { Breadcrumbs, EmptyState, LoadingState } from "@ui";
 import useRegisterNwbAIComponent from "./useRegisterNwbAIComponent";
 import { useDandisetVersionInfo } from "../DandisetPage/useDandisetVersionInfo";
 import useQueryDandiset from "../DandisetPage/useQueryDandiset";
-import { addRecentDandiset } from "../util/recentDandisets";
+import { addRecentDataset } from "../util/recentDatasets";
 import MainWorkspace from "./MainWorkspace";
 import FileOverview from "./FileOverview";
 import "./FileViewer.css";
@@ -120,7 +120,7 @@ const NwbPage: FunctionComponent<NwbPageProps> = ({
 
   useEffect(() => {
     if (dandisetId) {
-      addRecentDandiset(dandisetId);
+      addRecentDataset("DANDI", dandisetId);
     }
   }, [dandisetId]);
 

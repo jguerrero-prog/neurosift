@@ -14,6 +14,7 @@ import {
   fetchOpenNeuroPage,
   type OpenNeuroDataset,
 } from "../OpenNeuroPage/fetchOpenNeuroDatasets";
+import { fetchDatasetInfo } from "../OpenNeuroDatasetPage/openNeuroApi";
 import type { Archive, CatalogItem, Order, Page, Source } from "./catalogFeed";
 
 export const PAGE = 25;
@@ -231,3 +232,43 @@ export function exactId(
 }
 
 export const ARCHIVES: Archive[] = ["DANDI", "OpenNeuro", "EMBER"];
+
+/** How many datasets an archive lists, for the search placeholder. */
+export async function archiveTotal(archive: Archive): Promise<number> {
+  if (archive === "OpenNeuro") {
+    const page = await fetchOpenNeuroPage("");
+    return page.count ?? page.datasets.length;
+  }
+  const { headers } = DANDI_LIKE[archive].headers();
+  const response = await fetch(
+    buildDandisetsSearchUrl({
+      apiBaseUrl: DANDI_LIKE[archive].api,
+      searchQuery: "",
+      embargoed: false,
+      pageSize: 1,
+    }),
+    { headers },
+  );
+  if (!response.ok) throw new Error(`${archive} answered ${response.status}`);
+  return ((await response.json()) as DandisetsResponse).count;
+}
+
+/** A Dandiset's or dataset's title, for Recently opened. */
+export async function datasetTitle(
+  archive: Archive,
+  id: string,
+): Promise<string | undefined> {
+  if (archive === "OpenNeuro")
+    return (await fetchDatasetInfo(id))?.snapshot.description.Name;
+  const response = await fetch(
+    `${DANDI_LIKE[archive].api}/api/dandisets/${id}/`,
+    {
+      headers: DANDI_LIKE[archive].headers().headers,
+    },
+  );
+  if (!response.ok) return undefined;
+  return dandisetItem(
+    archive,
+    (await response.json()) as DandisetSearchResultItem,
+  ).title;
+}
