@@ -274,6 +274,11 @@ export const navigation: NavSection[] = [
         summary:
           "Search, filters and result rows across DANDI, EMBER and OpenNeuro.",
       },
+      {
+        label: "Status bar",
+        href: "/components/status-bar/",
+        summary: "The build version and what the file has loaded, in words.",
+      },
     ],
   },
   {
@@ -296,6 +301,18 @@ export const navigation: NavSection[] = [
         href: "/ui-library/file-viewer/",
         summary:
           "Where an NWB file opens: the overview, the objects and their views.",
+      },
+      {
+        label: "File viewer layout",
+        href: "/ui-library/file-viewer/",
+        summary:
+          "Where an NWB file opens: the overview, the objects and their views.",
+      },
+      {
+        label: "Neurodata object tree",
+        href: "/ui-library/object-tree/",
+        summary:
+          "The Main tab: every object, its type, its views and its description.",
       },
     ],
   },

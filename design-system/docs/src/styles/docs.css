@@ -1397,6 +1397,25 @@ main {
   min-inline-size: var(--layout-target-min);
 }
 
+.object-tree-demo {
+  max-inline-size: var(--layout-text-max);
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-panel);
+}
+
+.object-tree-demo-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.icon-name {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font: var(--type-code-sm);
+}
+
 .overview-demo {
   display: flex;
   min-inline-size: 0;
