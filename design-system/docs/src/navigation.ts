@@ -246,6 +246,12 @@ export const navigation: NavSection[] = [
         href: "/components/pages/",
         summary: "Page and Section: a page's title, column and titled panels.",
       },
+      {
+        label: "Catalog",
+        href: "/components/catalog/",
+        summary:
+          "Search, filters and result rows across DANDI, EMBER and OpenNeuro.",
+      },
     ],
   },
   {

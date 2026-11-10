@@ -65,3 +65,12 @@ export { DescriptionList } from "./DescriptionList/DescriptionList";
 export type { Description } from "./DescriptionList/DescriptionList";
 export { MultiSelect, RemovableTag } from "./MultiSelect/MultiSelect";
 export type { MultiSelectOption } from "./MultiSelect/MultiSelect";
+export {
+  AppliedFilters,
+  FilterGroup,
+  RecentlyOpened,
+  ResultRow,
+  ResultsHead,
+  SearchRow,
+  ShowMore,
+} from "./Catalog/Catalog";
