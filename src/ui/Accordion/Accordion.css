@@ -45,8 +45,7 @@
 }
 
 .ns-accordion-title {
-  flex: 1;
-  min-inline-size: 0;
+  flex: 1 0 auto;
   font: var(--type-label);
   letter-spacing: var(--type-label-letter-spacing);
 }

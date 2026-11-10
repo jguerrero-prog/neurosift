@@ -352,6 +352,11 @@ export const navigation: NavSection[] = [
         href: "/ui-library/home/",
         summary: "One search, open a file by link, and what was opened last.",
       },
+      {
+        label: "Spectrogram",
+        href: "/ui-library/spectrogram/",
+        summary: "Power by frequency over recording time, and its settings.",
+      },
     ],
   },
   {

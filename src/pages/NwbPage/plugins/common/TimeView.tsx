@@ -13,6 +13,7 @@ type Props = {
   /** The view's own options, after the time window. */
   controls?: ReactNode;
   settings?: ReactNode;
+  chartTitle?: string;
   busy?: boolean;
   /** Small views in a combined tab leave out the overview. */
   condensed?: boolean;
@@ -25,6 +26,7 @@ const TimeView: FunctionComponent<Props> = ({
   summary,
   controls,
   settings,
+  chartTitle,
   busy,
   condensed,
   children,
@@ -36,6 +38,7 @@ const TimeView: FunctionComponent<Props> = ({
       summary={summary}
       busy={busy}
       settings={settings}
+      chartTitle={chartTitle}
       controls={
         <>
           <TimeWindow
