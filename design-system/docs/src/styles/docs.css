@@ -230,6 +230,7 @@ main {
   padding-block-start: var(--space-4);
   font: var(--type-body-sm);
   color: var(--text-secondary);
+  overflow-wrap: anywhere;
   border-block-start: var(--border-width-1) solid var(--border-subtle);
 }
 
