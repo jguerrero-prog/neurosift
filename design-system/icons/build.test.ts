@@ -22,7 +22,7 @@ const MUI_REPLACEMENTS = [
   "logo--github",
 ];
 
-// Icons the components draw themselves: status icons, the checkbox marks, the select chevron and the info button.
+// Icons the components draw themselves: status icons, checkbox marks, chevrons, carets and the info button.
 const COMPONENT_ICONS = [
   "error",
   "checkmark",
@@ -31,6 +31,8 @@ const COMPONENT_ICONS = [
   "information",
   "checkmark--outline",
   "warning--alt",
+  "caret--right",
+  "caret--down",
 ];
 
 const icons = IconSource.load(SOURCE);

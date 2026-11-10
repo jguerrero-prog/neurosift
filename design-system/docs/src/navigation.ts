@@ -155,7 +155,8 @@ export const navigation: NavSection[] = [
       {
         label: "Tabs and segmented controls",
         href: "/components/tabs/",
-        summary: "Tabs between views of a file; segments for two to four settings.",
+        summary:
+          "Tabs between views of a file; segments for two to four settings.",
       },
       {
         label: "Alerts and toasts",
@@ -176,7 +177,14 @@ export const navigation: NavSection[] = [
       {
         label: "Badges and tags",
         href: "/components/badges/",
-        summary: "Badge, Tag / Link and Tag / Static: statuses, counts and values.",
+        summary:
+          "Badge, Tag / Link and Tag / Static: statuses, counts and values.",
+      },
+      {
+        label: "Accordions",
+        href: "/components/accordions/",
+        summary:
+          "Accordion item and Disclosure: sections of a panel, and more on request.",
       },
     ],
   },
