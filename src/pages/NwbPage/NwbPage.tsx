@@ -17,6 +17,8 @@ import MainWorkspace from "./MainWorkspace";
 import NwbOverview from "./NwbOverview";
 import "@css/NwbPage.css";
 import { TAB_BAR_HEIGHT, tabsStyle, tabStyle } from "./tabStyles";
+import FileError from "./components/FileError";
+import { NwbFileOverview } from "./Types";
 import { useNwbFileOverview } from "./useNwbFileOverview";
 import { setCurrentDandisetId, setTryUsingLindi } from "@hdf5Interface";
 import { toWithCurrentHash } from "./urlHash";
@@ -116,6 +118,7 @@ const NwbPage: FunctionComponent<NwbPageProps> = ({
   const initialSplitterPosition = Math.max(200, Math.min(450, width / 3));
 
   useNwbPageAnalytics(nwbUrl, dandisetId, dandisetVersion);
+  const { nwbFileOverview, error: fileError } = useNwbFileOverview(nwbUrl);
 
   useEffect(() => {
     if (dandisetId) {
@@ -140,6 +143,8 @@ const NwbPage: FunctionComponent<NwbPageProps> = ({
     return "No NWB file URL provided.";
   }
 
+  if (fileError) return <FileError nwbUrl={nwbUrl} error={fileError} />;
+
   return (
     <ResponsiveLayout
       width={width}
@@ -149,6 +154,7 @@ const NwbPage: FunctionComponent<NwbPageProps> = ({
     >
       <LeftArea
         nwbUrl={nwbUrl || ""}
+        nwbFileOverview={nwbFileOverview}
         width={0}
         height={0}
         dandisetId={dandisetId || undefined}
@@ -167,6 +173,7 @@ const NwbPage: FunctionComponent<NwbPageProps> = ({
 
 type LeftAreaProps = {
   nwbUrl: string;
+  nwbFileOverview: NwbFileOverview | null;
   width: number;
   height: number;
   dandisetId?: string;
@@ -176,6 +183,7 @@ type LeftAreaProps = {
 
 const LeftArea: FunctionComponent<LeftAreaProps> = ({
   nwbUrl,
+  nwbFileOverview,
   width,
   height,
   dandisetId,
@@ -192,7 +200,6 @@ const LeftArea: FunctionComponent<LeftAreaProps> = ({
     dandisetResponse || null,
     useEmber,
   );
-  const { nwbFileOverview } = useNwbFileOverview(nwbUrl);
   const tabBarHeight = TAB_BAR_HEIGHT;
   const contentHeight = height - tabBarHeight;
 
