@@ -173,6 +173,11 @@ export const navigation: NavSection[] = [
         href: "/components/pages/",
         summary: "Page and Section: a page's title, column and titled panels.",
       },
+      {
+        label: "Badges and tags",
+        href: "/components/badges/",
+        summary: "Badge, Tag / Link and Tag / Static: statuses, counts and values.",
+      },
     ],
   },
 ];
