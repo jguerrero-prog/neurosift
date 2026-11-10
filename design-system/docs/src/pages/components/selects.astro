@@ -1,4 +1,5 @@
 ---
+import MultiSelectDemo from "../../components/MultiSelectDemo";
 import Existing from "../../components/Existing.astro";
 import { Select } from "@ui";
 import CodeSample from "../../components/CodeSample.astro";
@@ -159,6 +160,15 @@ const code = `import { Menu, Select } from "@ui";
       <MenuDemo client:visible label="Share" icon="share" items={SHARE} size="sm" />
     </div>
     <p class="doc-note">Medium and Small. Each item here only says it ran.</p>
+  </DocSection>
+
+  <DocSection title="Multi-select" lead="Several values from a long list, picked by typing. Matches anywhere in the name, so “Series” finds ElectricalSeries. Chosen values become removable tags inside the field.">
+    <MultiSelectDemo client:visible />
+    <ul class="rule-list">
+      <li><strong>Type, then pick.</strong> Up and Down move through matches, Enter adds the active one, Escape closes the list.</li>
+      <li><strong>Remove either way.</strong> Each tag’s × is named after its value, such as “Remove Units”; Backspace in the empty field removes the last one.</li>
+      <li><strong>Chosen values leave the list,</strong> so the list only offers what can still be added.</li>
+    </ul>
   </DocSection>
 
   <DocSection title="Keyboard" lead="The Select’s keys come from the browser; the Menu’s follow the WAI-ARIA menu button pattern.">
