@@ -1397,14 +1397,6 @@ main {
   min-inline-size: var(--layout-target-min);
 }
 
-<<<<<<< HEAD
-.colorbar-demo {
-  block-size: 10rem;
-}
-
-.example-plot-body > .ns-legend {
-  align-self: start;
-=======
 .overview-demo {
   display: flex;
   min-inline-size: 0;
@@ -1421,5 +1413,12 @@ main {
   min-inline-size: 0;
   color: var(--text-muted);
   background: var(--surface-page);
->>>>>>> 81-overview-panel
+}
+
+.colorbar-demo {
+  block-size: 10rem;
+}
+
+.example-plot-body > .ns-legend {
+  align-self: start;
 }
