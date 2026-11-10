@@ -1,5 +1,6 @@
 /* HDF5 and Schema: a summary, Find, then the content beside a 440px details panel. */
 .reference-view {
+  box-sizing: border-box;
   display: grid;
   grid-template-rows: auto auto 1fr;
   gap: var(--space-4);
