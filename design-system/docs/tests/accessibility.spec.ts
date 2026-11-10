@@ -80,12 +80,16 @@ test("every internal link and every asset a page loads responds", async ({
   expect(failed).toEqual([]);
 });
 
-test("every page passes axe at WCAG 2.2 AA", async ({ page }) => {
+// A fresh tab per page keeps memory flat; one tab for every page crashed Firefox in CI.
+test("every page passes axe at WCAG 2.2 AA", async ({ context }) => {
+  test.setTimeout(pages.length * 10_000);
   for (const path of pages) {
+    const page = await context.newPage();
     await page.goto(path);
     const { violations } = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
       .analyze();
+    await page.close();
     expect(violations.map((v) => `${path} ${v.id}`)).toEqual([]);
   }
 });
@@ -108,7 +112,9 @@ test("every page has one h1 first, no skipped heading levels, and labelled landm
       path,
     ).toBe(false);
     await expect(page.locator("main"), path).toHaveCount(1);
-    await expect(page.locator("nav[aria-label]"), path).toHaveCount(1);
+    // The side menu, plus any navigation a component page demonstrates; each is labelled.
+    await expect(page.locator(".side-menu[aria-label]"), path).toHaveCount(1);
+    await expect(page.locator("nav:not([aria-label])"), path).toHaveCount(0);
   }
 });
 
@@ -622,4 +628,151 @@ test("dialogs: focus starts on the title, Tab stays inside, Escape closes and fo
   await page.keyboard.press("Escape");
   await expect(drawer).toHaveCount(0);
   await expect(info).toBeFocused();
+});
+
+test("breadcrumbs: a folded trail shows every level again, and focus moves to the first one revealed", async ({
+  page,
+}) => {
+  await page.goto("components/navigation/");
+  const more = page
+    .locator(".breadcrumbs-narrow-demo")
+    .getByRole("button", { name: "Show all levels" });
+  await more.scrollIntoViewIfNeeded();
+  await expect(
+    more.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  const nav = page.locator(".breadcrumbs-narrow-demo nav");
+  const middle = nav.getByRole("link", { name: "sub-1", exact: true });
+  await expect(middle).toBeHidden();
+  await more.focus();
+  await page.keyboard.press("Enter");
+  await expect(middle).toBeVisible();
+  await expect(
+    nav.getByRole("link", { name: "000673 · Control of working memory" }),
+  ).toBeFocused();
+  await expect(nav.locator("[aria-current='page']")).toHaveText(
+    "sub-1_ses-1_ecephys+image.nwb",
+  );
+});
+
+// Waits for the island that holds this element; islands below the fold load when scrolled to.
+const hydrated = async (locator: Locator) => {
+  await locator.scrollIntoViewIfNeeded();
+  await expect(
+    locator.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+};
+
+test("tabs: arrows move and open tabs, Home and End reach the ends, and Delete closes an object tab", async ({
+  page,
+}) => {
+  await page.goto("components/tabs/");
+  const sections = page.getByRole("tablist", { name: "File views" });
+  await hydrated(sections);
+  await sections.getByRole("tab", { name: "Widgets" }).focus();
+  await page.keyboard.press("ArrowRight");
+  const alignment = sections.getByRole("tab", { name: "Timeseries alignment" });
+  await expect(alignment).toBeFocused();
+  await expect(alignment).toHaveAttribute("aria-selected", "true");
+  await expect(
+    page.getByRole("tabpanel", { name: "Timeseries alignment" }),
+  ).toBeVisible();
+  await page.keyboard.press("End");
+  await expect(sections.getByRole("tab", { name: "HDF5" })).toBeFocused();
+  await page.keyboard.press("Home");
+  await expect(sections.getByRole("tab", { name: "Widgets" })).toBeFocused();
+
+  const objects = page.getByRole("tablist", { name: "Open objects" });
+  await hydrated(objects);
+  await objects.getByRole("tab", { name: "LFPs" }).focus();
+  await page.keyboard.press("Delete");
+  await expect(objects.getByRole("tab", { name: "LFPs" })).toHaveCount(0);
+  await expect(objects.getByRole("tab", { name: "units" })).toBeFocused();
+  await objects.getByRole("tab", { name: "Main" }).focus();
+  await page.keyboard.press("Delete");
+  await expect(objects.getByRole("tab", { name: "Main" })).toHaveCount(1);
+});
+
+test("segmented controls: one stop in the tab order, arrows move the selection and skip disabled options", async ({
+  page,
+}) => {
+  await page.goto("components/tabs/");
+  const group = page.getByRole("radiogroup", { name: "Search by" });
+  await hydrated(group);
+  await group.getByRole("radio", { name: "Basic" }).focus();
+  await page.keyboard.press("ArrowRight");
+  const types = group.getByRole("radio", { name: "Neurodata types" });
+  await expect(types).toBeFocused();
+  await expect(types).toHaveAttribute("aria-checked", "true");
+  await page.keyboard.press("ArrowRight");
+  await expect(group.getByRole("radio", { name: "Basic" })).toBeFocused();
+  await page.keyboard.press("End");
+  await expect(types).toBeFocused();
+  await expect(group.locator("[tabindex='0']")).toHaveCount(1);
+});
+
+test("accordions: Enter and Space open and close a section; a disclosure says whether it's open", async ({
+  page,
+}) => {
+  await page.goto("components/accordions/");
+  const header = page.locator("summary", { hasText: "Controls" });
+  await header.scrollIntoViewIfNeeded();
+  await expect(
+    header.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  const details = header.locator("xpath=..");
+  await expect(details).not.toHaveAttribute("open");
+  await header.focus();
+  await page.keyboard.press("Enter");
+  await expect(details).toHaveAttribute("open");
+  await expect(page.getByLabel("Window start")).toBeVisible();
+  await header.focus();
+  await page.keyboard.press(" ");
+  await expect(details).not.toHaveAttribute("open");
+
+  const more = page.getByRole("button", { name: "Show full description" });
+  await more.scrollIntoViewIfNeeded();
+  await expect(
+    more.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  await more.focus();
+  await page.keyboard.press("Enter");
+  const less = page.getByRole("button", { name: "Show less" });
+  await expect(less).toHaveAttribute("aria-expanded", "true");
+  await expect(
+    page.getByText("Neural activity from two neuron populations"),
+  ).toBeVisible();
+  await expect(less).toBeFocused();
+});
+
+test("code blocks: Copy copies the code without the $ prompt or line numbers, and says Copied", async ({
+  page,
+  browserName,
+  context,
+}) => {
+  test.skip(
+    browserName !== "chromium",
+    "Only Chromium lets tests grant clipboard access.",
+  );
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("components/code/");
+  const copyShell = page.getByRole("button", { name: "Copy Shell code" });
+  await copyShell.scrollIntoViewIfNeeded();
+  await expect(
+    copyShell.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  await copyShell.focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("button", { name: "Copied" })).toBeVisible();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+    "pip install --upgrade lindi",
+  );
+  const copyPython = page.getByRole("button", { name: "Copy Python code" });
+  await expect(
+    copyPython.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  await copyPython.click();
+  const copied = await page.evaluate(() => navigator.clipboard.readText());
+  expect(copied.startsWith("import lindi\n\nurl = ")).toBe(true);
+  expect(copied).not.toMatch(/^\d/m);
 });
