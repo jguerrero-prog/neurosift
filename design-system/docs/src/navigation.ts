@@ -19,9 +19,47 @@ export const navigation: NavSection[] = [
     heading: "Foundations",
     items: [
       {
+        label: "Typography",
+        href: "/foundations/typography/",
+        summary:
+          "IBM Plex Sans JP and Plex Mono, the scale, and scientific text.",
+      },
+      {
+        label: "Color palette",
+        href: "/foundations/color/",
+        summary:
+          "The colors people know, the scales around them, and colors for data.",
+      },
+      {
         label: "Iconography",
         href: "/foundations/iconography/",
         summary: "IBM Carbon icons, their sizes and what they replace.",
+      },
+      {
+        label: "Spacing and layout grid",
+        href: "/foundations/spacing/",
+        summary:
+          "One 4px scale, the workspace's regions, breakpoints and targets.",
+      },
+      {
+        label: "Corner radius",
+        href: "/foundations/radius/",
+        summary: "3px for controls, square for data.",
+      },
+      {
+        label: "Elevation and borders",
+        href: "/foundations/elevation/",
+        summary: "Rules and edges first; shadows only for what floats.",
+      },
+      {
+        label: "Motion",
+        href: "/foundations/motion/",
+        summary: "Short, cued motion around the data, and none in it.",
+      },
+      {
+        label: "Accessibility",
+        href: "/foundations/accessibility/",
+        summary: "WCAG 2.2 AA as the floor; every plot has words and numbers.",
       },
     ],
   },
@@ -31,7 +69,8 @@ export const navigation: NavSection[] = [
       {
         label: "Color",
         href: "/tokens/color/",
-        summary: "Primitive, semantic and data colors, each a CSS custom property.",
+        summary:
+          "Primitive, semantic and data colors, each a CSS custom property.",
       },
       {
         label: "Typography",
@@ -86,7 +125,8 @@ export const navigation: NavSection[] = [
       {
         label: "Tooltips",
         href: "/components/tooltips/",
-        summary: "Tooltip, Toggletip and Info button: names and help on request.",
+        summary:
+          "Tooltip, Toggletip and Info button: names and help on request.",
       },
       {
         label: "Pages and sections",
