@@ -120,4 +120,30 @@ describe("Tree", () => {
     expect(document.activeElement).toBe(item("sub-491604967"));
     expect((document.activeElement as HTMLElement).tabIndex).toBe(0);
   });
+
+  it("gives a folder known to be empty no chevron and nothing to open", () => {
+    const onExpandedChange = vi.fn();
+    render(
+      <Tree
+        label="Groups"
+        nodes={[
+          {
+            id: "scratch",
+            name: "scratch",
+            kind: "folder",
+            size: "Empty",
+            children: [],
+          },
+        ]}
+        expanded={[]}
+        onExpandedChange={onExpandedChange}
+        onSelect={() => {}}
+      />,
+    );
+    const item = screen.getByRole("treeitem", { name: /scratch/ });
+    expect(item.getAttribute("aria-expanded")).toBeNull();
+    fireEvent.click(item);
+    fireEvent.keyDown(item, { key: "ArrowRight" });
+    expect(onExpandedChange).not.toHaveBeenCalled();
+  });
 });
