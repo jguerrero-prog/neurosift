@@ -34,7 +34,7 @@ const PROPOSED = [
   ["Context line", "Inline message, info", "“Looking at Dandiset 000673, version 0.250122.0110” when Neurosift sends context; hidden when it doesn’t."],
   ["New chat", "Empty state", "Title “Ask about DANDI, EMBER and OpenNeuro datasets”, one sentence on what the assistant can do, and up to four suggested prompts as Secondary buttons."],
   ["Question", "Section content, type/body", "Right-aligned, on surface/subtle, with “You” as a visually hidden label."],
-  ["Tool call", "Button, Ghost, Small, then Code block", "A row “Ran a script · getOpenNeuroDatasets” that opens to the script (Code block, Script) and its output (Code block, wrapped)."],
+  ["Tool call", "Disclosure, then Code block", "A row “Running a script · getOpenNeuroDatasets” with a Spinner while it runs, then “Ran a script · …”. Opened, it shows the script (Code block, Script) and its output (Code block, wrapped)."],
   ["Answer", "Section content, type/body", "Markdown in the system’s type; tables use the Table component, code uses Code block."],
   ["Message input", "Text input, multi-line", "Label “Ask Neurosift Chat” (visually hidden), helper “Enter to send, Shift+Enter for a new line”, and Send as a Primary button. The Text input is single-line today; a multi-line form is a gap to confirm."],
   ["Download", "Toast", "“Transcript downloaded” after the file is saved."],
@@ -107,7 +107,7 @@ const QUESTIONS = [
 <DocsLayout title="Neurosift Chat" description="The assistant for searching and asking about datasets, today and as proposed.">
   <Intro
     lead="Neurosift Chat is an assistant at chat.neurosift.app that answers questions about DANDI, OpenNeuro and EBRAINS datasets by writing and running scripts against the archives. It is built from magland/qp, not this repo, so it still has its own look, and it doesn’t say what it’s looking at. This page records the chat as it is and specifies a rebuild from @ui. Nothing is built yet; where the code goes is still open."
-    status="Updated November 10, 2026 · UI library · Captured at 1440 × 900 from chat.neurosift.app and dandiset-explorer.vercel.app · Proposed from Page and Section, Button, Text input, Inline message, Code block, Badge, Toast, Empty state, Alert and Dialog · Not built"
+    status="Updated November 10, 2026 · UI library · Captured at 1440 × 900 from chat.neurosift.app and dandiset-explorer.vercel.app · Proposed from Page and Section, Button, Text input, Inline message, Disclosure, Code block, Badge, Toast, Empty state, Alert and Dialog · Not built"
     rules={[
       { title: "Say what it’s looking at", text: "Inside Neurosift, the chat names the dataset or file it has as context." },
       { title: "Show the work", text: "Each tool call names the tool and opens to the script and its output." },
@@ -136,7 +136,7 @@ const QUESTIONS = [
     <DocTable caption="The proposed chat" columns={["Region", "Component", "What it shows"]}>
       <DocRows rows={PROPOSED} />
     </DocTable>
-    <p class="doc-note">From <a href={withBase("/components/pages/")}>Page and Section</a>, <a href={withBase("/components/buttons/")}>Buttons</a>, <a href={withBase("/components/text-inputs/")}>Text inputs</a>, <a href={withBase("/components/alerts/")}>Alerts, Toast and Inline message</a>, <a href={withBase("/components/code/")}>Code</a>, <a href={withBase("/components/badges/")}>Badges</a>, <a href={withBase("/components/modals/")}>Dialog</a> and <a href={withBase("/guidelines/empty-states/")}>Empty states</a>.</p>
+    <p class="doc-note">From <a href={withBase("/components/pages/")}>Page and Section</a>, <a href={withBase("/components/buttons/")}>Buttons</a>, <a href={withBase("/components/text-inputs/")}>Text inputs</a>, <a href={withBase("/components/alerts/")}>Alerts, Toast and Inline message</a>, <a href={withBase("/components/code/")}>Code</a>, <a href={withBase("/components/accordions/")}>Disclosure</a>, <a href={withBase("/components/badges/")}>Badges</a>, <a href={withBase("/components/modals/")}>Dialog</a> and <a href={withBase("/guidelines/empty-states/")}>Empty states</a>.</p>
   </DocSection>
 
   <DocSection title="States">
