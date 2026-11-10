@@ -23,6 +23,8 @@ const PATHS = {
   OpenNeuro: "openneuro-dataset",
 };
 const base = import.meta.env.BASE_URL;
+// Most visitors come for DANDI; the catalog's Archive filter adds EMBER and OpenNeuro.
+const BROWSE = "/search?archive=dandi&sort=newest";
 
 /** The live number of datasets across the three archives, once all have answered. */
 function useDatasetCount() {
@@ -86,7 +88,7 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
     navigate(
       text.trim()
         ? `/search?${new URLSearchParams({ q: text.trim() })}`
-        : "/search?sort=newest",
+        : BROWSE,
     );
   };
 
@@ -151,7 +153,7 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
           </form>
         ) : (
           <p className="home-links">
-            <a href={`${base}search?sort=newest`}>Browse all datasets</a>
+            <a href={`${base}${BROWSE.slice(1)}`}>Browse DANDI datasets</a>
             <button
               type="button"
               className="home-link-button"
