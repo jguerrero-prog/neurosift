@@ -7,7 +7,7 @@ export const buildDandisetsSearchUrl = (o: {
   embargoed: boolean;
   pageSize?: number;
   page?: number;
-  ordering?: "-modified" | "-created";
+  ordering?: "-modified" | "-id";
 }): string => {
   const params = new URLSearchParams({
     page: String(o.page ?? 1),

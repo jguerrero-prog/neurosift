@@ -74,6 +74,10 @@ export function openNeuroItem(d: OpenNeuroDataset): CatalogItem {
   };
 }
 
+/** DANDI's API ignores ordering=-created; Dandiset IDs rise with creation, so -id is newest first. */
+export const dandiOrdering = (order: Order) =>
+  order === "newest" ? "-id" : "-modified";
+
 /** DANDI or EMBER text search, a page of 25 at a time. */
 export function dandiSearch(
   archive: "DANDI" | "EMBER",
@@ -93,7 +97,7 @@ export function dandiSearch(
           embargoed: apiKeyProvided,
           pageSize: PAGE,
           page,
-          ordering: order === "newest" ? "-created" : "-modified",
+          ordering: dandiOrdering(order),
         }),
         { headers },
       );
