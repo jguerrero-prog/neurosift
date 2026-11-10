@@ -160,4 +160,37 @@ describe("DataTable", () => {
     );
     expect(screen.getByRole("table").className).toContain("ns-table--compact");
   });
+
+  it("opens one row at a time from its first cell's button or a click on the row", () => {
+    const onActivate = vi.fn();
+    const { rerender } = render(
+      <DataTable
+        caption="Units"
+        columns={COLUMNS}
+        rows={UNITS}
+        rowKey={(u) => String(u.id)}
+        onActivate={onActivate}
+      />,
+    );
+    expect(screen.queryByRole("checkbox")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "1" }));
+    expect(onActivate).toHaveBeenLastCalledWith("1");
+    fireEvent.click(screen.getByText("1,914"));
+    expect(onActivate).toHaveBeenLastCalledWith("3");
+    rerender(
+      <DataTable
+        caption="Units"
+        columns={COLUMNS}
+        rows={UNITS}
+        rowKey={(u) => String(u.id)}
+        active="3"
+        onActivate={onActivate}
+      />,
+    );
+    const three = screen.getByRole("button", { name: "3" });
+    expect(three.getAttribute("aria-current")).toBe("true");
+    expect(three.closest("tr")?.classList.contains("ns-row--selected")).toBe(
+      true,
+    );
+  });
 });
