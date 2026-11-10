@@ -209,6 +209,12 @@ export const navigation: NavSection[] = [
         summary:
           "DataTable and Tree: rules, not fills, and the whole row as the target.",
       },
+      {
+        label: "Sliders",
+        href: "/components/sliders/",
+        summary:
+          "Slider and Range slider: feel by eye, exact numbers in a field.",
+      },
     ],
   },
 ];

@@ -681,6 +681,12 @@ main {
   max-inline-size: var(--layout-text-max);
 }
 
+.slider-demos {
+  display: grid;
+  gap: var(--space-6);
+  max-inline-size: calc(var(--layout-panel-max) - var(--space-10));
+}
+
 .table-demo {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

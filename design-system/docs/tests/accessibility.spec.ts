@@ -589,6 +589,39 @@ test("toasts: wait while hovered or focused, and return focus when they close", 
   await expect(button("Close tab")).toBeFocused();
 });
 
+test("sliders: arrows, Page Up, Home and End move the value; the field takes an exact one", async ({
+  page,
+}) => {
+  await page.goto("components/sliders/");
+  const slider = page.getByRole("slider", { name: "Plane" });
+  await slider.scrollIntoViewIfNeeded();
+  await expect(
+    slider.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  await slider.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(slider).toHaveAttribute("aria-valuetext", "6");
+  await page.keyboard.press("Home");
+  await expect(slider).toHaveAttribute("aria-valuetext", "0");
+  await page.keyboard.press("PageUp");
+  await expect(slider).toHaveAttribute("aria-valuetext", "10");
+  await page.keyboard.press("End");
+  await expect(slider).toHaveAttribute("aria-valuetext", "11");
+  const field = page.getByRole("textbox", { name: "Plane value" });
+  await field.fill("3");
+  await field.press("Enter");
+  await expect(slider).toHaveAttribute("aria-valuetext", "3");
+
+  const low = page.getByRole("slider", { name: "Display range, low" });
+  await low.scrollIntoViewIfNeeded();
+  await expect(
+    low.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+  await low.focus();
+  await page.keyboard.press("End");
+  await expect(low).toHaveAttribute("aria-valuetext", "3,400");
+});
+
 test("tables and trees: a header sorts and says so; the tree opens and climbs with the arrow keys", async ({
   page,
 }) => {
