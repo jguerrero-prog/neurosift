@@ -249,6 +249,17 @@ export const navigation: NavSection[] = [
     ],
   },
   {
+    heading: "UI library",
+    items: [
+      {
+        label: "What exists today",
+        href: "/ui-library/what-exists-today/",
+        summary:
+          "Every part of Neurosift: what it does, and what a redesign must keep.",
+      },
+    ],
+  },
+  {
     heading: "Resources",
     items: [
       {
