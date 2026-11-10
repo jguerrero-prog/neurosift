@@ -12,7 +12,7 @@ import { neurodataTypeInheritsFrom } from "./neurodataTypeInheritance";
 import ErrorBoundary from "@components/ErrorBoundary";
 import ScrollY from "@components/ScrollY";
 import NwbHierarchyView from "./NwbHierarchyView";
-import Hdf5View from "./Hdf5View";
+import Hdf5View from "./Hdf5View/Hdf5View";
 import TimeseriesAlignmentView from "./TimeseriesAlignmentView";
 import NwbUsageScript from "./components/NwbUsageScript";
 import MultiVideoTabView from "./MultiVideoTabView";
@@ -211,6 +211,13 @@ const MainWorkspace: React.FC<MainWorkspaceProps> = ({
     setActiveFixedTab(id);
     // Switch the reducer to a non-dynamic-tab id so the dynamic tab row deselects
     handleSwitchTab(id);
+  };
+
+  // A path picked in the schema opens in the HDF5 tab.
+  const [hdf5Focus, setHdf5Focus] = useState<{ path: string; at: number }>();
+  const openInHdf5 = (path: string) => {
+    setHdf5Focus({ path, at: Date.now() });
+    handleFixedTabSwitch("hdf5");
   };
 
   const handleDynamicTabSwitch = (id: string) => {

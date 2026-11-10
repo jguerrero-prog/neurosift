@@ -80,7 +80,7 @@ const code = `import { DataTable, Tree } from "@ui";
 <DocsLayout title="Tables" description="DataTable and Tree: where people read the data itself.">
   <Intro
     lead="Tables show NWB dynamic tables, such as units, trials and electrodes, and the selection lists in plot panels. Trees show the folders and files of a Dandiset and the groups inside an HDF5 file. Both are where people read the data itself, so they stay quiet: black rules, plain rows, numbers in the code face."
-    status="Updated November 9, 2026 · Components · Every example on this page is the component the app imports from @ui"
+    status="Updated November 10, 2026 · Components · Every example on this page is the component the app imports from @ui"
     rules={[
       { title: "Rules, not fills", text: "Headers sit on a 1px black rule and rows on light rules. No filled header bar, no zebra stripes." },
       { title: "Data in the code face", text: "Numbers, IDs, paths and neurodata types use Plex Mono. Numbers align right so digits line up." },
@@ -123,6 +123,8 @@ const code = `import { DataTable, Tree } from "@ui";
     <ul class="rule-list">
       <li><strong>Sort from the header.</strong> Click a header to sort ascending, again for descending. The arrow and aria-sort show the direction. One column at a time.</li>
       <li><strong>Select with checkboxes.</strong> When rows can be picked for a plot, a checkbox column comes first and the toolbar says how many are selected.</li>
+      <li><strong>Open one row’s details.</strong> When a row opens its details beside the table, as in Schema, there are no checkboxes: the first cell is the row’s button, the whole row takes the click, and the open row inverts. Pass <code>active</code> and <code>onActivate</code>.</li>
+      <li><strong>Empty folders don’t open.</strong> A folder whose children are known to be none, such as an empty HDF5 group, has no chevron and says Empty.</li>
       <li><strong>Long values wrap or open.</strong> Descriptions wrap to three lines with a Disclosure; IDs and paths truncate in the middle with the full value in a tooltip.</li>
     </ul>
   </DocSection>
