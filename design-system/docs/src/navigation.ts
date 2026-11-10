@@ -336,6 +336,12 @@ export const navigation: NavSection[] = [
         href: "/ui-library/imaging-views/",
         summary: "Two-photon frames, ROI masks and image collections.",
       },
+      {
+        label: "Dataset page",
+        href: "/ui-library/dataset-page/",
+        summary:
+          "What a dataset is and its files, for DANDI, EMBER and OpenNeuro.",
+      },
     ],
   },
   {
