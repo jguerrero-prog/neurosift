@@ -1479,6 +1479,37 @@ main {
   background: var(--surface-page);
 }
 
+.catalog-demo {
+  display: grid;
+  gap: var(--space-6);
+  min-inline-size: 0;
+}
+
+.catalog-demo-body {
+  display: grid;
+  grid-template-columns: minmax(0, 16rem) minmax(0, 1fr);
+  gap: var(--space-8);
+}
+
+.catalog-demo-results {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  min-inline-size: 0;
+}
+
+.catalog-demo-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (width <= 768px) {
+  .catalog-demo-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .object-tree-demo {
   max-inline-size: var(--layout-text-max);
   border: 1px solid var(--border-subtle);

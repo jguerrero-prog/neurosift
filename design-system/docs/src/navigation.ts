@@ -342,6 +342,11 @@ export const navigation: NavSection[] = [
         summary:
           "What a dataset is and its files, for DANDI, EMBER and OpenNeuro.",
       },
+      {
+        label: "Archive search",
+        href: "/ui-library/archive-search/",
+        summary: "One search across DANDI, OpenNeuro and EMBER.",
+      },
     ],
   },
   {
