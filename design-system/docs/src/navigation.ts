@@ -300,6 +300,11 @@ export const navigation: NavSection[] = [
         href: "/ui-library/spectrogram/",
         summary: "Power by frequency over recording time, and its settings.",
       },
+      {
+        label: "Video and pose",
+        href: "/ui-library/video-and-pose/",
+        summary: "Behavioral video, pose markers over it, and linked videos.",
+      },
     ],
   },
   {
