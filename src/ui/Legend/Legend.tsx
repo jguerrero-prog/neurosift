@@ -1,16 +1,8 @@
 import "../base.css";
 import "./Legend.css";
+import { swatchClass, type LegendItem } from "./swatch";
 
-export interface LegendItem {
-  name: string;
-  /** The data/series step, 1 to 6, so a group keeps its color in every view. Defaults to its position. */
-  series?: number;
-}
-
-const swatch = (item: LegendItem, index: number) => {
-  const step = item.series ?? index + 1;
-  return step >= 1 && step <= 6 ? String(step) : "other";
-};
+export type { LegendItem } from "./swatch";
 
 /** Names each series beside its color, to the side of the plot it explains. */
 export function Legend({
@@ -24,10 +16,7 @@ export function Legend({
     <ul className="ns-legend" aria-label={label}>
       {items.map((item, index) => (
         <li className="ns-legend-item" key={item.name}>
-          <span
-            className={`ns-legend-swatch ns-legend-swatch--${swatch(item, index)}`}
-            aria-hidden="true"
-          />
+          <span className={swatchClass(item, index)} aria-hidden="true" />
           {item.name}
         </li>
       ))}
