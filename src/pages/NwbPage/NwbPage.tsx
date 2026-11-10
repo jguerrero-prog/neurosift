@@ -12,7 +12,7 @@ import ResponsiveLayout from "@components/ResponsiveLayout";
 import ScrollY from "@components/ScrollY";
 import { useDandisetVersionInfo } from "../DandisetPage/useDandisetVersionInfo";
 import useQueryDandiset from "../DandisetPage/useQueryDandiset";
-import { addRecentDandiset } from "../util/recentDandisets";
+import { addRecentDataset } from "../util/recentDatasets";
 import MainWorkspace from "./MainWorkspace";
 import NwbOverview from "./NwbOverview";
 import "@css/NwbPage.css";
@@ -122,7 +122,7 @@ const NwbPage: FunctionComponent<NwbPageProps> = ({
 
   useEffect(() => {
     if (dandisetId) {
-      addRecentDandiset(dandisetId);
+      addRecentDataset("DANDI", dandisetId);
     }
   }, [dandisetId]);
 

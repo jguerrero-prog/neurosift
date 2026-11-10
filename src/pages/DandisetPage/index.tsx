@@ -13,7 +13,7 @@ import {
   AssetsResponseItem,
   DandisetVersionInfo,
 } from "../DandiPage/dandi-types";
-import { addRecentDandiset } from "../util/recentDandisets";
+import { addRecentDataset } from "../util/recentDatasets";
 import DandisetOverview from "./DandisetOverview";
 import { useDandisetVersionInfo } from "./useDandisetVersionInfo";
 import useQueryAssets from "./useQueryAssets";
@@ -79,7 +79,7 @@ const DandisetPage: FunctionComponent<DandisetPageProps> = ({
 
   useEffect(() => {
     if (effectiveDandisetId) {
-      addRecentDandiset(effectiveDandisetId);
+      addRecentDataset("DANDI", effectiveDandisetId);
     }
   }, [effectiveDandisetId, staging]);
 
