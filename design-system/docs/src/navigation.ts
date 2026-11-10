@@ -356,6 +356,12 @@ export const navigation: NavSection[] = [
         href: "/ui-library/video-and-pose/",
         summary: "Behavioral video, pose markers over it, and linked videos.",
       },
+      {
+        label: "Neurosift Chat",
+        href: "/ui-library/neurosift-chat/",
+        summary:
+          "The assistant for datasets: today’s chat and a rebuild from @ui.",
+      },
     ],
   },
   {
