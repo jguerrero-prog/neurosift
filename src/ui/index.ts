@@ -77,3 +77,11 @@ export { StatusBar } from "./StatusBar/StatusBar";
 export { OverviewPanel } from "./OverviewPanel/OverviewPanel";
 export { MultiSelect, RemovableTag } from "./MultiSelect/MultiSelect";
 export type { MultiSelectOption } from "./MultiSelect/MultiSelect";
+export {
+  ObjectRow,
+  SelectionBar,
+  SelectionList,
+  ViewChip,
+} from "./ObjectTree/ObjectTree";
+export type { ObjectView } from "./ObjectTree/ObjectTree";
+export { neurodataIcon } from "./ObjectTree/neurodataIcon";
