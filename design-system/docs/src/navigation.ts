@@ -314,6 +314,12 @@ export const navigation: NavSection[] = [
         summary:
           "The Main tab: every object, its type, its views and its description.",
       },
+      {
+        label: "HDF5 and schema",
+        href: "/ui-library/hdf5-schema/",
+        summary:
+          "The file as stored and the NWB specifications, each with details beside.",
+      },
     ],
   },
   {
