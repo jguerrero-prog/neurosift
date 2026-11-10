@@ -152,6 +152,9 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
         ) : (
           <p className="home-links">
             <a href={`${base}search?sort=newest`}>Browse all datasets</a>
+            <a href={`${base}search?archive=dandi&sort=newest`}>
+              Browse DANDI datasets
+            </a>
             <button
               type="button"
               className="home-link-button"
