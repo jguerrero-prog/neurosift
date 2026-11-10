@@ -263,6 +263,11 @@ export const navigation: NavSection[] = [
         summary:
           "Session and Dandiset details beside the viewer, resizable and collapsible.",
       },
+      {
+        label: "View panel",
+        href: "/components/view-panel/",
+        summary: "The frame every view shares, around Neurosift’s own charts.",
+      },
     ],
   },
   {

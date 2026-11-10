@@ -70,6 +70,8 @@ export { EmptyState } from "./EmptyState/EmptyState";
 
 export { DescriptionList } from "./DescriptionList/DescriptionList";
 export type { Description } from "./DescriptionList/DescriptionList";
+export { SettingPair, TooMuchData, ViewPanel } from "./ViewPanel/ViewPanel";
+
 export { ColorBar, Legend } from "./Legend/Legend";
 export type { LegendItem } from "./Legend/Legend";
 export { DataTooltip } from "./DataTooltip/DataTooltip";

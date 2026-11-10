@@ -1460,3 +1460,25 @@ main {
   gap: var(--space-2);
   font: var(--type-code-sm);
 }
+
+.view-panel-demo,
+.view-states > * {
+  min-inline-size: 0;
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-page);
+}
+
+.view-states {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.view-panel-demo-chart {
+  display: grid;
+  place-items: center;
+  block-size: 100%;
+  min-block-size: 12rem;
+  padding: var(--space-4);
+  color: var(--text-muted);
+  text-align: center;
+}
