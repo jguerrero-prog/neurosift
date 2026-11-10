@@ -117,9 +117,13 @@ const NwbTimeIntervalsView: FunctionComponent<Props> = ({
       controls={
         <>
           {availableColumns.length > 0 && (
-            <div className="intervals-label">
+            <div className="ns-time-group intervals-label">
+              <span className="ns-time-label" aria-hidden="true">
+                Label by
+              </span>
               <Select
                 label="Label by"
+                hideLabel
                 size="sm"
                 value={selectedColumn || autoSelectedColumn || ""}
                 onChange={(value) => setSelectedColumn(value || undefined)}
