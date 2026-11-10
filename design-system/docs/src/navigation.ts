@@ -192,6 +192,11 @@ export const navigation: NavSection[] = [
         summary:
           "Code block and Inline code: Python people can copy, read and run.",
       },
+      {
+        label: "Navigation and breadcrumbs",
+        href: "/components/navigation/",
+        summary: "App bar, Breadcrumbs and Object path: where people are.",
+      },
     ],
   },
 ];

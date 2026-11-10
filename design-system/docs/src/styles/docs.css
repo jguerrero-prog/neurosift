@@ -681,6 +681,22 @@ main {
   max-inline-size: var(--layout-text-max);
 }
 
+.app-bar-demo {
+  overflow: hidden;
+  border: var(--border-width-1) solid var(--border-subtle);
+}
+
+.breadcrumbs-narrow-demo {
+  max-inline-size: calc(var(--layout-panel-min) + var(--space-16));
+  margin-block-start: var(--space-4);
+  padding: var(--space-2);
+  border: var(--border-width-1) dashed var(--border-subtle);
+}
+
+.object-path-demo {
+  max-inline-size: var(--layout-text-max);
+}
+
 .code-demo {
   display: grid;
   gap: var(--space-4);
