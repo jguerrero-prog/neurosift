@@ -285,16 +285,17 @@ export const navigation: NavSection[] = [
         summary:
           "Every part of Neurosift: what it does, and what a redesign must keep.",
       },
-    ],
-  },
-  {
-    heading: "UI library",
-    items: [
       {
         label: "Settings",
         href: "/ui-library/settings/",
         summary:
           "The API keys Neurosift sends to DANDI, the sandbox and EMBER.",
+      },
+      {
+        label: "File viewer layout",
+        href: "/ui-library/file-viewer/",
+        summary:
+          "Where an NWB file opens: the overview, the objects and their views.",
       },
     ],
   },

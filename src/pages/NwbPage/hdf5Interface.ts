@@ -145,9 +145,10 @@ const globalStats: GlobalStats = {
 
 const globalStatsUpdated = () => {
   setStatusItem("hdf5Stats", {
-    type: "text",
-    text: `${globalStats.numGroups} / ${globalStats.numDatasets} / ${globalStats.numDatasetDatas}`,
-    tooltip: "Number of groups / datasets / dataset data accesses",
+    type: "stats",
+    groups: globalStats.numGroups,
+    datasets: globalStats.numDatasets,
+    reads: globalStats.numDatasetDatas,
   });
   if (
     globalStats.numGroups === 0 &&
@@ -261,9 +262,9 @@ export const getHdf5Group = async (
   const f = (await getRemoteH5FileForUrl(url)).remoteH5File;
   const itemName = `getHdf5Group-${url}-${path}`;
   setStatusItem(itemName, {
-    type: "text",
-    text: "g",
-    tooltip: `Loading HDF5 group: ${path}`,
+    type: "reading",
+    what: "group",
+    path,
   });
   let group;
   try {
@@ -295,9 +296,9 @@ export const getHdf5Dataset = async (
   let dataset;
   const itemName = `getHdf5Dataset-${url}-${path}`;
   setStatusItem(itemName, {
-    type: "text",
-    text: "d",
-    tooltip: `Loading HDF5 dataset: ${path}`,
+    type: "reading",
+    what: "dataset",
+    path,
   });
   try {
     dataset = await f.getDataset(path);
@@ -334,9 +335,9 @@ export const getHdf5DatasetData = async (
     url.endsWith(".lindi.json") || url.endsWith(".lindi.tar");
   const itemName = `getHdf5DatasetData-${url}-${path}-${JSON.stringify(o.slice)}`;
   setStatusItem(itemName, {
-    type: "text",
-    text: "◯",
-    tooltip: `Loading HDF5 dataset data: ${path}`,
+    type: "reading",
+    what: "data",
+    path,
   });
   try {
     const ds = await f.getDataset(path);
