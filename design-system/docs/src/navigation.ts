@@ -274,6 +274,12 @@ export const navigation: NavSection[] = [
         summary:
           "Where an NWB file opens: the overview, the objects and their views.",
       },
+      {
+        label: "Neurodata object tree",
+        href: "/ui-library/object-tree/",
+        summary:
+          "The Main tab: every object, its type, its views and its description.",
+      },
     ],
   },
   {

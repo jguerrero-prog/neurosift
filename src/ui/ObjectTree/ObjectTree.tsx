@@ -56,6 +56,10 @@ interface ObjectRowProps {
   onCheck: (checked: boolean) => void;
   onOpen: () => void;
   views: ObjectView[];
+  /** After the type, such as the default units badge. */
+  badge?: ReactNode;
+  /** Whether the type shows in link blue; by default, when the row has views. */
+  hasView?: boolean;
   /** The rows inside an expanded group. */
   children?: ReactNode;
 }
@@ -73,6 +77,8 @@ export function ObjectRow({
   onCheck,
   onOpen,
   views,
+  badge,
+  hasView = views.length > 0,
   children,
 }: ObjectRowProps) {
   return (
@@ -108,7 +114,7 @@ export function ObjectRow({
             {type && (
               <span
                 className={
-                  views.length > 0
+                  hasView
                     ? "ns-object-type ns-object-type--view"
                     : "ns-object-type"
                 }
@@ -116,6 +122,7 @@ export function ObjectRow({
                 {type}
               </span>
             )}
+            {badge}
           </span>
           {views.length > 0 && (
             <span className="ns-object-views">
