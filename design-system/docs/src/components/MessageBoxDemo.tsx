@@ -1,9 +1,10 @@
 import { Button, TextArea } from "@ui";
-import { useState, type FormEvent, type KeyboardEvent } from "react";
+import { useId, useState, type FormEvent, type KeyboardEvent } from "react";
 
 /** A chat message box, Large beside a Large Send: Enter sends, Shift+Enter adds a line, and the sent messages list above it. */
 export default function MessageBoxDemo() {
   const [text, setText] = useState("");
+  const helperId = useId();
   const [sent, setSent] = useState<string[]>([]);
   const send = () => {
     if (!text.trim()) return;
@@ -40,7 +41,7 @@ export default function MessageBoxDemo() {
           label="Message"
           hideLabel
           placeholder="Ask about this Dandiset"
-          helper="Enter to send, Shift+Enter for a new line"
+          aria-describedby={helperId}
           value={text}
           onChange={setText}
           onKeyDown={sendOnEnter}
@@ -52,6 +53,9 @@ export default function MessageBoxDemo() {
           Send
         </Button>
       </div>
+      <p id={helperId} className="message-box-helper">
+        Enter to send, Shift+Enter for a new line
+      </p>
     </form>
   );
 }

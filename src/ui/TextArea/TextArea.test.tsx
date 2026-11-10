@@ -97,6 +97,40 @@ describe("TextArea", () => {
     expect(helper?.textContent).toBe("Enter sends. Shift+Enter adds a line.");
   });
 
+  it("keeps a description the caller links, beside its own message", () => {
+    const { rerender } = render(
+      <>
+        <TextArea
+          label="Message"
+          value=""
+          onChange={noop}
+          aria-describedby="hint"
+        />
+        <p id="hint">Enter to send</p>
+      </>,
+    );
+    const area = screen.getByLabelText("Message");
+    expect(area.getAttribute("aria-describedby")).toBe("hint");
+    rerender(
+      <>
+        <TextArea
+          label="Message"
+          value=""
+          onChange={noop}
+          aria-describedby="hint"
+          error="Write a message first."
+        />
+        <p id="hint">Enter to send</p>
+      </>,
+    );
+    const ids = screen
+      .getByLabelText("Message")
+      .getAttribute("aria-describedby")
+      ?.split(" ");
+    expect(ids).toHaveLength(2);
+    expect(ids).toContain("hint");
+  });
+
   it("shows an error in words with an icon, marks the field invalid and links the message", () => {
     render(
       <TextArea

@@ -55,7 +55,7 @@ export function TextArea({
         className="ns-field-input ns-text-area"
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        {...fieldAria(id, helper, error)}
+        {...fieldAria(id, helper, error, native["aria-describedby"])}
       />
     </Field>
   );
