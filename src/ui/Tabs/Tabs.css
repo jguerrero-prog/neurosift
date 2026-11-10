@@ -18,6 +18,7 @@
 
 .ns-tab {
   display: inline-grid;
+  align-content: center;
   align-items: center;
   block-size: var(--layout-sectionbar-height);
   padding: 0 var(--space-4);
