@@ -253,10 +253,21 @@ export const navigation: NavSection[] = [
         summary: "Page and Section: a page's title, column and titled panels.",
       },
       {
+        label: "Status bar",
+        href: "/components/status-bar/",
+        summary: "The build version and what the file has loaded, in words.",
+      },
+      {},
+      {
         label: "Overview panel",
         href: "/components/overview-panel/",
         summary:
           "Session and Dandiset details beside the viewer, resizable and collapsible.",
+      },
+      {
+        label: "View panel",
+        href: "/components/view-panel/",
+        summary: "The frame every view shares, around Neurosift’s own charts.",
       },
       {
         label: "Status bar",
