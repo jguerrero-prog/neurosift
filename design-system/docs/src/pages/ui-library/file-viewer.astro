@@ -4,6 +4,7 @@ import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
 import Intro from "../../components/Intro.astro";
 import Screen from "../../components/Screen.astro";
+import LiveScreen from "../../components/LiveScreen.astro";
 import DocsLayout from "../../layouts/DocsLayout.astro";
 import { withBase } from "../../navigation";
 
@@ -95,6 +96,10 @@ const DIFFERS = [
       <Screen file="viewer-proposed-lfps" alt="The rebuilt file viewer with LFPs open: object tabs, an object path reading ElectricalSeries /acquisition/LFPs with copy buttons, and the view." caption="An open object: object tabs, then the type and path with Copy path and Copy link. The status bar counts in words." />
     </div>
     <p class="doc-note">Built from <a href={withBase("/components/navigation/")}>Navigation and breadcrumbs</a>, the <a href={withBase("/components/overview-panel/")}>Overview panel</a>, <a href={withBase("/components/tabs/")}>Tabs</a> and the <a href={withBase("/components/status-bar/")}>Status bar</a>.</p>
+  </DocSection>
+
+  <DocSection title="Try it" lead="Resize or hide the overview, switch sections and open objects.">
+    <LiveScreen path="nwb?url=https://api.dandiarchive.org/api/assets/65a7e913-45c7-48db-bf19-b9f5e910110a/download/&dandisetId=000673&dandisetVersion=0.250122.0110" title="File viewer, Dandiset 000673 sub-1" size="tall" />
   </DocSection>
 
   <DocSection title="States">

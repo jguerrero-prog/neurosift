@@ -4,6 +4,7 @@ import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
 import Intro from "../../components/Intro.astro";
 import Screen from "../../components/Screen.astro";
+import LiveScreen from "../../components/LiveScreen.astro";
 import DocsLayout from "../../layouts/DocsLayout.astro";
 import { withBase } from "../../navigation";
 
@@ -83,6 +84,10 @@ const SPECS = [
       <Screen file="spectrogram-proposed" alt="The rebuilt spectrogram: a summary, the shared Time window and overview, the chart titled Channel 0 · Hann window, 1,024 samples · power in dB, and settings beside it with Channels open and the other sections closed with their summaries." caption="The shared time frame, a chart title that says what’s drawn, and settings that summarize themselves." />
     </div>
     <p class="doc-note">Built from the <a href={withBase("/components/view-panel/")}>View panel</a>, <a href={withBase("/components/time-controls/")}>Time controls</a> and <a href={withBase("/components/accordions/")}>Accordion</a>.</p>
+  </DocSection>
+
+  <DocSection title="Try it" lead="Open the settings, change the estimator and press D to compare with Hann.">
+    <LiveScreen path="nwb?url=https://api.dandiarchive.org/api/assets/65a7e913-45c7-48db-bf19-b9f5e910110a/download/&dandisetId=000673&dandisetVersion=0.250122.0110&tab=view:LfpSpectrogram|/acquisition/LFPs" title="Spectrogram of LFPs, Dandiset 000673 sub-1" size="tall" />
   </DocSection>
 
   <DocSection title="States">
