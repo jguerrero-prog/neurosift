@@ -65,3 +65,11 @@ export { EmptyState } from "./EmptyState/EmptyState";
 
 export { DescriptionList } from "./DescriptionList/DescriptionList";
 export type { Description } from "./DescriptionList/DescriptionList";
+export {
+  ObjectRow,
+  SelectionBar,
+  SelectionList,
+  ViewChip,
+} from "./ObjectTree/ObjectTree";
+export type { ObjectView } from "./ObjectTree/ObjectTree";
+export { neurodataIcon } from "./ObjectTree/neurodataIcon";
