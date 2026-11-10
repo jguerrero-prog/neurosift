@@ -285,11 +285,6 @@ export const navigation: NavSection[] = [
         summary:
           "Every part of Neurosift: what it does, and what a redesign must keep.",
       },
-    ],
-  },
-  {
-    heading: "UI library",
-    items: [
       {
         label: "Settings",
         href: "/ui-library/settings/",
