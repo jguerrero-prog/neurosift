@@ -246,6 +246,12 @@ export const navigation: NavSection[] = [
         href: "/components/pages/",
         summary: "Page and Section: a page's title, column and titled panels.",
       },
+      {
+        label: "Overview panel",
+        href: "/components/overview-panel/",
+        summary:
+          "Session and Dandiset details beside the viewer, resizable and collapsible.",
+      },
     ],
   },
   {

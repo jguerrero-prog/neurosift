@@ -1422,3 +1422,21 @@ main {
   min-block-size: var(--layout-target-min);
   min-inline-size: var(--layout-target-min);
 }
+
+.overview-demo {
+  display: flex;
+  min-inline-size: 0;
+  block-size: 24rem;
+  max-inline-size: 100%;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+}
+
+.overview-demo-workspace {
+  display: grid;
+  flex: 1;
+  place-items: center;
+  min-inline-size: 0;
+  color: var(--text-muted);
+  background: var(--surface-page);
+}
