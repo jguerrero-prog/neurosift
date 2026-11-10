@@ -155,9 +155,15 @@ const NEURODATA_ICONS = [
 
   <DocSection title="Neurodata type icons" lead="One icon per kind of data, beside each object in the file tree and on its tab, so people can scan a file by what it holds. All from Carbon.">
     <DocTable caption="Neurodata type icons" columns={["Icon","Neurodata types","What it shows"]}>
-      <DocRows rows={NEURODATA_ICONS} />
+      {NEURODATA_ICONS.map(([icon, types, shows]) => (
+        <tr>
+          <th scope="row"><span class="icon-name"><Icon name={icon as IconName} /> {icon}</span></th>
+          <td>{types}</td>
+          <td>{shows}</td>
+        </tr>
+      ))}
     </DocTable>
-    <p class="doc-note">These are proposed. They come into the code with the object tree components, #72.</p>
+    <p class="doc-note">The object tree draws them beside each object; see the Object tree on <a href={withBase("/components/tables/")}>Tables</a>.</p>
   </DocSection>
 
   <DocSection title="What they replace" lead="The Material icons the app imports today and the Carbon icon that takes each one’s place, from the Figma replacement map.">

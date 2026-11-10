@@ -253,10 +253,26 @@ export const navigation: NavSection[] = [
         summary: "Page and Section: a page's title, column and titled panels.",
       },
       {
+        label: "Status bar",
+        href: "/components/status-bar/",
+        summary: "The build version and what the file has loaded, in words.",
+      },
+      {
         label: "Overview panel",
         href: "/components/overview-panel/",
         summary:
           "Session and Dandiset details beside the viewer, resizable and collapsible.",
+      },
+      {
+        label: "View panel",
+        href: "/components/view-panel/",
+        summary: "The frame every view shares, around Neurosift’s own charts.",
+      },
+      {
+        label: "Catalog",
+        href: "/components/catalog/",
+        summary:
+          "Search, filters and result rows across DANDI, EMBER and OpenNeuro.",
       },
       {
         label: "Status bar",
@@ -269,10 +285,34 @@ export const navigation: NavSection[] = [
     heading: "UI library",
     items: [
       {
+        label: "What exists today",
+        href: "/ui-library/what-exists-today/",
+        summary:
+          "Every part of Neurosift: what it does, and what a redesign must keep.",
+      },
+      {
+        label: "Settings",
+        href: "/ui-library/settings/",
+        summary:
+          "The API keys Neurosift sends to DANDI, the sandbox and EMBER.",
+      },
+      {
         label: "File viewer layout",
         href: "/ui-library/file-viewer/",
         summary:
           "Where an NWB file opens: the overview, the objects and their views.",
+      },
+      {
+        label: "File viewer layout",
+        href: "/ui-library/file-viewer/",
+        summary:
+          "Where an NWB file opens: the overview, the objects and their views.",
+      },
+      {
+        label: "Neurodata object tree",
+        href: "/ui-library/object-tree/",
+        summary:
+          "The Main tab: every object, its type, its views and its description.",
       },
       {
         label: "HDF5 and schema",
