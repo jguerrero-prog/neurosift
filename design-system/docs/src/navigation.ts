@@ -202,6 +202,12 @@ export const navigation: NavSection[] = [
           "DataTable and Tree: rules, not fills, and the whole row as the target.",
       },
       {
+        label: "Description list",
+        href: "/components/description-list/",
+        summary:
+          "Keys and values: panel fields, dataset facts and HDF5 attributes.",
+      },
+      {
         label: "Alerts and toasts",
         href: "/components/alerts/",
         summary: "Alert, Toast and Inline message: what happened, what to do.",
