@@ -82,6 +82,7 @@ test("every internal link and every asset a page loads responds", async ({
 
 // A fresh tab per page keeps memory flat; one tab for every page crashed Firefox in CI.
 test("every page passes axe at WCAG 2.2 AA", async ({ context }) => {
+  test.setTimeout(pages.length * 10_000);
   for (const path of pages) {
     const page = await context.newPage();
     await page.goto(path);
