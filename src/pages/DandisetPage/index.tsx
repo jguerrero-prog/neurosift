@@ -11,14 +11,14 @@ import DatasetWorkspace from "../common/DatasetWorkspace/DatasetWorkspace";
 import { DatasetFile } from "../common/DatasetWorkspace/plugins/pluginInterface";
 import {
   AssetsResponseItem,
-  DandisetSearchResultItem,
   DandisetVersionInfo,
 } from "../DandiPage/dandi-types";
 import { addRecentDandiset } from "../util/recentDandisets";
 import DandisetOverview from "./DandisetOverview";
 import { useDandisetVersionInfo } from "./useDandisetVersionInfo";
 import useQueryAssets from "./useQueryAssets";
-import useQueryDandiset from "./useQueryDandiset";
+import DandisetError from "./DandisetError";
+import { useDandisetResult } from "./useQueryDandiset";
 import useRegisterAIComponent from "./useRegisterAIComponent";
 
 type DandisetPageProps = {
@@ -37,8 +37,11 @@ const DandisetPage: FunctionComponent<DandisetPageProps> = ({
   const [searchParams] = useSearchParams();
   const effectiveDandisetId = propDandisetId || urlDandisetId;
   const staging = false;
-  const dandisetResponse: DandisetSearchResultItem | undefined | null =
-    useQueryDandiset(effectiveDandisetId, staging, false);
+  const { dandiset: dandisetResponse, failure } = useDandisetResult(
+    effectiveDandisetId,
+    staging,
+    false,
+  );
 
   const dandisetVersion = searchParams.get("dandisetVersion") || "";
 
@@ -294,6 +297,9 @@ const DandisetPage: FunctionComponent<DandisetPageProps> = ({
     [navigate, searchParams],
   );
 
+  if (failure && effectiveDandisetId) {
+    return <DandisetError dandisetId={effectiveDandisetId} failure={failure} />;
+  }
   if (!dandisetResponse || !dandisetVersionInfo) {
     return <div>Loading...</div>;
   }

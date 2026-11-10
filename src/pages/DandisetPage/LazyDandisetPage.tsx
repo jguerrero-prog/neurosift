@@ -5,7 +5,8 @@ import DatasetWorkspace from "../common/DatasetWorkspace/DatasetWorkspace";
 import { DatasetFile } from "../common/DatasetWorkspace/plugins/pluginInterface";
 import DandisetOverview from "./DandisetOverview";
 import { useDandisetVersionInfo } from "./useDandisetVersionInfo";
-import useQueryDandiset from "./useQueryDandiset";
+import DandisetError from "./DandisetError";
+import { useDandisetResult } from "./useQueryDandiset";
 import useLazyDandisetPaths from "./hooks/useLazyDandisetPaths";
 import useRegisterAIComponent from "./useRegisterAIComponent";
 
@@ -27,7 +28,7 @@ const LazyDandisetPage: FunctionComponent<LazyDandisetPageProps> = ({
   const staging = false;
 
   // Query the dandiset info
-  const dandisetResponse = useQueryDandiset(
+  const { dandiset: dandisetResponse, failure } = useDandisetResult(
     effectiveDandisetId,
     staging,
     false,
@@ -120,6 +121,9 @@ const LazyDandisetPage: FunctionComponent<LazyDandisetPageProps> = ({
     [navigate, searchParams],
   );
 
+  if (failure && effectiveDandisetId) {
+    return <DandisetError dandisetId={effectiveDandisetId} failure={failure} />;
+  }
   if (loading || !dandisetResponse || !dandisetVersionInfo) {
     return <div>Loading...</div>;
   }
