@@ -180,7 +180,7 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
       <footer className="home-footer">
         <a href={`${base}guide`}>NWB viewer guide</a>
         <a
-          href="https://chat.neurosift.app"
+          href="https://jguerrero-prog.github.io/qp/"
           target="_blank"
           rel="noopener noreferrer"
         >
