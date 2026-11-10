@@ -153,6 +153,11 @@ export const navigation: NavSection[] = [
         summary: "Select and Menu: one value or one action from a list.",
       },
       {
+        label: "Tabs and segmented controls",
+        href: "/components/tabs/",
+        summary: "Tabs between views of a file; segments for two to four settings.",
+      },
+      {
         label: "Alerts and toasts",
         href: "/components/alerts/",
         summary: "Alert, Toast and Inline message: what happened, what to do.",

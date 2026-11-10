@@ -586,3 +586,59 @@ test("toasts: wait while hovered or focused, and return focus when they close", 
   await expect(polite).toHaveText("");
   await expect(button("Close tab")).toBeFocused();
 });
+
+// Waits for the island that holds this element; islands below the fold load when scrolled to.
+const hydrated = async (locator: Locator) => {
+  await locator.scrollIntoViewIfNeeded();
+  await expect(
+    locator.locator("xpath=ancestor::astro-island[1]"),
+  ).not.toHaveAttribute("ssr");
+};
+
+test("tabs: arrows move and open tabs, Home and End reach the ends, and Delete closes an object tab", async ({
+  page,
+}) => {
+  await page.goto("components/tabs/");
+  const sections = page.getByRole("tablist", { name: "File views" });
+  await hydrated(sections);
+  await sections.getByRole("tab", { name: "Widgets" }).focus();
+  await page.keyboard.press("ArrowRight");
+  const alignment = sections.getByRole("tab", { name: "Timeseries alignment" });
+  await expect(alignment).toBeFocused();
+  await expect(alignment).toHaveAttribute("aria-selected", "true");
+  await expect(
+    page.getByRole("tabpanel", { name: "Timeseries alignment" }),
+  ).toBeVisible();
+  await page.keyboard.press("End");
+  await expect(sections.getByRole("tab", { name: "HDF5" })).toBeFocused();
+  await page.keyboard.press("Home");
+  await expect(sections.getByRole("tab", { name: "Widgets" })).toBeFocused();
+
+  const objects = page.getByRole("tablist", { name: "Open objects" });
+  await hydrated(objects);
+  await objects.getByRole("tab", { name: "LFPs" }).focus();
+  await page.keyboard.press("Delete");
+  await expect(objects.getByRole("tab", { name: "LFPs" })).toHaveCount(0);
+  await expect(objects.getByRole("tab", { name: "units" })).toBeFocused();
+  await objects.getByRole("tab", { name: "Main" }).focus();
+  await page.keyboard.press("Delete");
+  await expect(objects.getByRole("tab", { name: "Main" })).toHaveCount(1);
+});
+
+test("segmented controls: one stop in the tab order, arrows move the selection and skip disabled options", async ({
+  page,
+}) => {
+  await page.goto("components/tabs/");
+  const group = page.getByRole("radiogroup", { name: "Search by" });
+  await hydrated(group);
+  await group.getByRole("radio", { name: "Basic" }).focus();
+  await page.keyboard.press("ArrowRight");
+  const types = group.getByRole("radio", { name: "Neurodata types" });
+  await expect(types).toBeFocused();
+  await expect(types).toHaveAttribute("aria-checked", "true");
+  await page.keyboard.press("ArrowRight");
+  await expect(group.getByRole("radio", { name: "Basic" })).toBeFocused();
+  await page.keyboard.press("End");
+  await expect(types).toBeFocused();
+  await expect(group.locator("[tabindex='0']")).toHaveCount(1);
+});
