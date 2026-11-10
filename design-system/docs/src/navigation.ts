@@ -274,6 +274,11 @@ export const navigation: NavSection[] = [
         summary:
           "Search, filters and result rows across DANDI, EMBER and OpenNeuro.",
       },
+      {
+        label: "Status bar",
+        href: "/components/status-bar/",
+        summary: "The build version and what the file has loaded, in words.",
+      },
     ],
   },
   {
@@ -290,6 +295,52 @@ export const navigation: NavSection[] = [
         href: "/ui-library/settings/",
         summary:
           "The API keys Neurosift sends to DANDI, the sandbox and EMBER.",
+      },
+      {
+        label: "File viewer layout",
+        href: "/ui-library/file-viewer/",
+        summary:
+          "Where an NWB file opens: the overview, the objects and their views.",
+      },
+      {
+        label: "File viewer layout",
+        href: "/ui-library/file-viewer/",
+        summary:
+          "Where an NWB file opens: the overview, the objects and their views.",
+      },
+      {
+        label: "Neurodata object tree",
+        href: "/ui-library/object-tree/",
+        summary:
+          "The Main tab: every object, its type, its views and its description.",
+      },
+      {
+        label: "HDF5 and schema",
+        href: "/ui-library/hdf5-schema/",
+        summary:
+          "The file as stored and the NWB specifications, each with details beside.",
+      },
+      {
+        label: "Time series views",
+        href: "/ui-library/time-series/",
+        summary:
+          "Traces, events and intervals on recording time, and signals aligned to trials.",
+      },
+      {
+        label: "Spike views",
+        href: "/ui-library/spike-views/",
+        summary: "The raster of spike times, and the PSTH around each trial.",
+      },
+      {
+        label: "Imaging views",
+        href: "/ui-library/imaging-views/",
+        summary: "Two-photon frames, ROI masks and image collections.",
+      },
+      {
+        label: "Dataset page",
+        href: "/ui-library/dataset-page/",
+        summary:
+          "What a dataset is and its files, for DANDI, EMBER and OpenNeuro.",
       },
       {
         label: "Archive search",

@@ -150,7 +150,7 @@ const EventsWidget: FunctionComponent<Props> = ({ width, height, times }) => {
       gridlineOpts={gridlineOpts}
       yAxisInfo={yAxisInfo}
       hideToolbar={hideToolbar}
-      showTimeSelectionBar={true}
+      showTimeSelectionBar={false}
     />
   );
 };

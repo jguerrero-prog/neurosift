@@ -73,24 +73,11 @@ const LazyDandisetPage: FunctionComponent<LazyDandisetPageProps> = ({
 
   // Controls for the main tab
   const mainTabAdditionalControls = (
-    <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-      <label
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "5px",
-          fontSize: "14px",
-          cursor: "pointer",
-        }}
-      >
-        <input
-          type="checkbox"
-          checked={nwbFilesOnly}
-          onChange={(e) => setNwbFilesOnly(e.target.checked)}
-        />
-        Show NWB files only
-      </label>
-    </div>
+    <Checkbox
+      label="Show NWB files only"
+      checked={nwbFilesOnly}
+      onChange={setNwbFilesOnly}
+    />
   );
 
   const [searchParams] = useSearchParams();
@@ -107,7 +94,7 @@ const LazyDandisetPage: FunctionComponent<LazyDandisetPageProps> = ({
     return <DandisetError dandisetId={effectiveDandisetId} failure={failure} />;
   }
   if (loading || !dandisetResponse || !dandisetVersionInfo) {
-    return <div>Loading...</div>;
+    return <LoadingState label="Loading the Dandiset" phase="loading" />;
   }
 
   const initialSplitterPosition = Math.max(500, Math.min(650, (width * 2) / 5));

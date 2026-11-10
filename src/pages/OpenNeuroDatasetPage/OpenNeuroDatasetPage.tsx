@@ -9,6 +9,7 @@ import useRegisterOpenNeuroAIComponent from "./useRegisterOpenNeuroAIComponent";
 import { OpenNeuroDatasetInfo } from "./types";
 import { fetchDatasetInfo, fetchDirectoryFiles } from "./openNeuroApi";
 import ViewError from "@components/ViewError/ViewError";
+import { EmptyState, LoadingState } from "@ui";
 
 type OpenNeuroDatasetPageProps = {
   width: number;
@@ -94,9 +95,15 @@ const OpenNeuroDatasetPage: FunctionComponent<OpenNeuroDatasetPageProps> = ({
     loading,
   });
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return <LoadingState label="Loading the dataset" phase="loading" />;
   if (error) return <ViewError what="this dataset" error={error} />;
-  if (!datasetInfo) return <div>No dataset found</div>;
+  if (!datasetInfo)
+    return (
+      <EmptyState title="No dataset found">
+        {`OpenNeuro has no dataset called ${datasetId}.`}
+      </EmptyState>
+    );
 
   const initialSplitterPosition = Math.max(300, Math.min(450, width / 3));
   const tabFilePath = searchParams.get("tab");

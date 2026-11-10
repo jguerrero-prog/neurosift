@@ -2,16 +2,8 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import StatusBar from "@components/StatusBar";
 import "@css/App.css";
 import { useWindowDimensions } from "@fi-sci/misc";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import SettingsIcon from "@mui/icons-material/Settings";
-import {
-  AppBar,
-  CircularProgress,
-  IconButton,
-  Toolbar,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { CircularProgress } from "@mui/material";
+import { AppBar } from "@ui";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { lazy, Suspense, useEffect } from "react";
 import {
@@ -26,6 +18,7 @@ import {
 import { AIComponentRegistryProvider } from "./ai-integration/AIComponentRegistry";
 import { sendUrlUpdate } from "./ai-integration/messaging/windowMessaging";
 import { logPageLoad } from "./util/sendLog";
+import { v1Url } from "./util/v1Url";
 
 // Each page is its own chunk, so a visit downloads only the page it lands on.
 const DandisetPageContainer = lazy(
@@ -203,7 +196,6 @@ const PageLoading = () => (
 );
 
 const AppContent = () => {
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   // useRegisterAIComponent({ navigate });
@@ -235,7 +227,7 @@ const AppContent = () => {
 
   const { width, height } = useWindowDimensions();
   const hideAppBar = searchParams.get("embedded") === "1";
-  const appBarHeight = hideAppBar ? 0 : 50; // hard-coded to match the height of the AppBar
+  const appBarHeight = hideAppBar ? 0 : 48; // layout/appbar-height
   const statusBarHeight = 20;
   const mainHeight = height - appBarHeight - statusBarHeight;
   return (
@@ -253,106 +245,41 @@ const AppContent = () => {
             overflow: "hidden",
           }}
         >
-          <AppBar position="static">
-            <Toolbar>
+          <AppBar
+            homeHref={import.meta.env.BASE_URL}
+            logo={
               <img
-                // Base-relative: under a preview deployed at a sub-path, a
-                // root-absolute "/neurosift-logo.png" is a 404.
                 src={`${import.meta.env.BASE_URL}neurosift-logo.png`}
-                alt="Neurosift Logo"
-                style={{
-                  height: "32px",
-                  marginRight: "10px",
-                  cursor: "pointer",
-                  // filter: "brightness(1.35) contrast(1.15) saturate(1.1)",
-                }}
-                onClick={() => navigate("/")}
+                alt=""
+                className="app-bar-logo"
               />
-              <Typography
-                variant="h6"
-                component="div"
-                sx={{
-                  flexGrow: 1,
-                  cursor: "pointer",
-                  "&:hover": {
-                    opacity: 0.8,
-                  },
-                }}
-                onClick={() => navigate("/")}
-              >
-                Neurosift (v2)
-              </Typography>
-              <Tooltip title="Report issues on GitHub">
-                <IconButton
-                  color="inherit"
-                  onClick={() => {
-                    window.open(
-                      "https://github.com/flatironinstitute/neurosift/issues",
-                      "_blank",
-                    );
-                  }}
-                  sx={{ ml: 2 }}
-                >
-                  <GitHubIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Settings">
-                <IconButton
-                  color="inherit"
-                  onClick={() => navigate("/settings")}
-                  sx={{ ml: 2 }}
-                >
-                  <SettingsIcon />
-                </IconButton>
-              </Tooltip>
-              {/* <Button
-                color="inherit"
-                onClick={() => {
-                  window.open(
-                    "https://github.com/flatironinstitute/neurosift/blob/main/doc/neurosift_v2_migration.md",
-                    "_blank",
-                  );
-                }}
-                sx={{
-                  ml: 2,
-                  textTransform: "none",
-                  border: "1px solid rgba(255, 255, 255, 0.3)",
-                  "&:hover": {
-                    border: "1px solid rgba(255, 255, 255, 0.6)",
-                  },
-                }}
-              >
-                Neurosift was updated
-              </Button> */}
-              <Tooltip title="View this in Neurosift v1">
-                <IconButton
-                  color="inherit"
-                  onClick={() => {
-                    const loc = window.location;
-                    const path = loc.pathname;
-                    const search = loc.search;
-
-                    let v1Url = "https://v1.neurosift.app";
-
-                    if (path === "/dandi") {
-                      v1Url += "?p=/dandi";
-                    } else if (path.startsWith("/dandiset/")) {
-                      const dandisetId = path.split("/").pop();
-                      v1Url += `?p=/dandiset&dandisetId=${dandisetId}`;
-                    } else if (path === "/nwb") {
-                      // Convert search params to append to ?p=/nwb
-                      v1Url += `?p=/nwb${search.replace("?", "&")}`;
-                    }
-
-                    window.location.href = v1Url;
-                  }}
-                  sx={{ ml: 2, fontSize: "0.75rem", padding: "4px" }}
-                >
-                  1
-                </IconButton>
-              </Tooltip>
-            </Toolbar>
-          </AppBar>
+            }
+            actions={[
+              {
+                label: "Guide",
+                href: `${import.meta.env.BASE_URL}guide`,
+                icon: "help",
+              },
+              {
+                label: "Report a problem on GitHub",
+                href: "https://github.com/flatironinstitute/neurosift/issues",
+                icon: "logo--github",
+                iconOnly: true,
+                external: true,
+              },
+              {
+                label: "Settings",
+                href: `${import.meta.env.BASE_URL}settings`,
+                icon: "settings",
+                iconOnly: true,
+              },
+              {
+                label: "Open in Neurosift v1",
+                href: v1Url(location.pathname, location.search),
+                icon: "launch",
+              },
+            ]}
+          />
         </div>
       )}
 

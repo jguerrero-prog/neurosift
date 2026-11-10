@@ -1,6 +1,7 @@
 import { canStepFrame, steppedFrameIndex } from "./frameStepping";
-import { SmallIconButton } from "@fi-sci/misc";
-import { ArrowLeft, ArrowRight } from "@mui/icons-material";
+import { IconButton, LoadingState, RangeSlider, Slider, ViewPanel } from "@ui";
+import { TIME_VIEW_CHROME, TIME_VIEW_INSET } from "../../common/TimeView";
+import "./TwoPhotonSeriesItemView.css";
 import { getHdf5DatasetData, useHdf5Dataset } from "@hdf5Interface";
 import { Canceler, DatasetDataType } from "@remote-h5-file";
 import { useTimeseriesSelection } from "@shared/context-timeseries-selection-2";
@@ -13,7 +14,6 @@ import PlaneTransformSelector, {
   defaultPlaneTransform,
   PlaneTransform,
 } from "../../ImageSegmentation/ImageSegmentationItemView/PlaneTransformSelector";
-import MultiRangeSlider from "./MultiRangeSlider/MultiRangeSlider";
 
 // const queryParams = parseQuery(window.location.href)
 
@@ -177,8 +177,6 @@ export const TwoPhotonSeriesItemView: FunctionComponent<Props> = ({
     setMaxDataValue((v) => Math.max(v || 0, max));
   }, [currentImage]);
 
-  const bottomBarHeight = 30;
-
   const numFrames = dataDataset?.shape[0];
 
   const incrementFrame = useMemo(
@@ -209,98 +207,114 @@ export const TwoPhotonSeriesItemView: FunctionComponent<Props> = ({
     setCurrentMaxValue(maxDataValue / (initialBrightnessFactor || 1));
   }, [currentMaxValue, maxDataValue, initialBrightnessFactor]);
 
+  const frameCount = numFrames ?? dataDataset?.shape[0];
+  const [, frameH, frameW] = dataDataset?.shape ?? [];
+  const numPlanes = dataDataset?.shape[3] || 1;
+  const n = (x: number) => x.toLocaleString("en-US");
+  const summary = [
+    frameCount !== undefined && `${n(frameCount)} frames`,
+    frameW !== undefined &&
+      frameH !== undefined &&
+      `${n(frameW)} × ${n(frameH)} px`,
+    dataDataset?.dtype,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  const plotHeight = height - timeSelectionBarHeight - TIME_VIEW_CHROME;
+  const imageSize = Math.max(Math.min(plotHeight, width / 2), 200);
+
   return (
-    <div style={{ position: "relative", width, height }}>
-      <div
-        style={{ position: "absolute", width, height: timeSelectionBarHeight }}
-      >
-        <TimeseriesSelectionBar
-          width={width}
-          height={timeSelectionBarHeight - 5}
-          hideVisibleTimeRange={true}
-        />
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          top: timeSelectionBarHeight,
-          width,
-          height: height - timeSelectionBarHeight - bottomBarHeight,
-        }}
-      >
-        {currentImage && (
+    <ViewPanel
+      label={path.split("/").pop() || path}
+      summary={summary}
+      busy={loading}
+      controls={
+        <>
+          <div className="ns-time-group" role="group" aria-label="Frame">
+            <IconButton
+              icon="chevron--left"
+              label="Previous frame"
+              size="sm"
+              disabled={!canStepFrame(frameIndex, -1, numFrames)}
+              onClick={() => incrementFrame(-1)}
+            />
+            <IconButton
+              icon="chevron--right"
+              label="Next frame"
+              size="sm"
+              disabled={!canStepFrame(frameIndex, 1, numFrames)}
+              onClick={() => incrementFrame(1)}
+            />
+            <span className="ns-time-text">
+              {frameIndex !== undefined && frameCount !== undefined
+                ? `Frame ${n(frameIndex + 1)} of ${n(frameCount)}`
+                : "Frame —"}
+            </span>
+          </div>
+          {!rgb && numPlanes > 1 && (
+            <div className="imaging-slider">
+              <Slider
+                label="Plane"
+                min={0}
+                max={numPlanes - 1}
+                step={1}
+                showValue
+                value={currentPlane}
+                onChange={setCurrentPlane}
+              />
+            </div>
+          )}
+          <div className="imaging-slider">
+            <RangeSlider
+              label="Display range"
+              min={0}
+              max={maxDataValue || 1}
+              step={1}
+              showValue
+              showField={false}
+              value={[currentMinValue || 0, currentMaxValue || 0]}
+              onChange={([lo, hi]) => {
+                setCurrentMinValue(lo);
+                setCurrentMaxValue(hi);
+              }}
+            />
+          </div>
+        </>
+      }
+      overview={
+        <div className="imaging-overview">
+          <TimeseriesSelectionBar
+            width={width - TIME_VIEW_INSET}
+            height={timeSelectionBarHeight - 5}
+            hideVisibleTimeRange={true}
+          />
+        </div>
+      }
+    >
+      <div className="imaging-frame">
+        {currentImage ? (
           <ImageDataView
-            width={width}
-            height={height - timeSelectionBarHeight - bottomBarHeight}
+            width={imageSize}
+            height={imageSize}
             imageData={currentImage}
             currentPlane={currentPlane}
             minValue={currentMinValue || 0}
             maxValue={currentMaxValue || 1}
           />
-        )}
-      </div>
-
-      <div
-        style={{
-          position: "absolute",
-          top: height - bottomBarHeight,
-          width,
-          height: bottomBarHeight,
-          display: "flex",
-          overflow: "hidden",
-        }}
-      >
-        <div style={{ position: "relative", top: 3 }}>
-          <SmallIconButton
-            disabled={!canStepFrame(frameIndex, -1, numFrames)}
-            title="Previous frame"
-            onClick={() => incrementFrame(-1)}
-            icon={<ArrowLeft />}
-          />
-          <SmallIconButton
-            disabled={!canStepFrame(frameIndex, 1, numFrames)}
-            title="Next frame"
-            onClick={() => incrementFrame(1)}
-            icon={<ArrowRight />}
-          />
-        </div>
-        &nbsp;&nbsp;
-        {!rgb && (
-          <PlaneSelector
-            currentPlane={currentPlane}
-            setCurrentPlane={setCurrentPlane}
-            numPlanes={dataDataset?.shape[3] || 1}
+        ) : (
+          <LoadingState
+            label={`Loading frame ${n((frameIndex ?? 0) + 1)}`}
+            phase="loading"
           />
         )}
-        &nbsp;&nbsp;
-        <div style={{ position: "relative", top: 5 }}>
-          <ValueRangeSelector
-            min={0}
-            max={maxDataValue || 1}
-            currentMinValue={currentMinValue}
-            currentMaxValue={currentMaxValue}
-            setCurrentMinValue={setCurrentMinValue}
-            setCurrentMaxValue={setCurrentMaxValue}
-          />
-        </div>
         {showOrientationControls !== false && (
-          <>
-            &nbsp;&nbsp;
-            <PlaneTransformSelector
-              planeTransform={planeTransform}
-              setPlaneTransform={setPlaneTransform}
-            />
-          </>
+          <PlaneTransformSelector
+            planeTransform={planeTransform}
+            setPlaneTransform={setPlaneTransform}
+          />
         )}
-        &nbsp;&nbsp;
-        {loading && (
-          <div style={{ position: "relative", top: 7 }}>
-            <span>&nbsp;&nbsp;loading...</span>
-          </div>
-        )}
-        &nbsp;&nbsp;
       </div>
-    </div>
+    </ViewPanel>
   );
 };
 
@@ -405,130 +419,7 @@ const ImageDataView: FunctionComponent<ImageDataViewProps> = ({
       ref={(elmt) => elmt && setCanvasElement(elmt)}
       width={width}
       height={height}
-      style={{ width, height }}
     />
-  );
-};
-
-type PlaneSelectorProps = {
-  currentPlane: number;
-  setCurrentPlane: (plane: number) => void;
-  numPlanes: number;
-};
-
-const PlaneSelector: FunctionComponent<PlaneSelectorProps> = ({
-  currentPlane,
-  setCurrentPlane,
-  numPlanes,
-}) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentPlane(Number(e.target.value));
-  };
-  if (numPlanes <= 1) return <span />;
-  return (
-    <RangeInput
-      label="Plane"
-      min={0}
-      max={numPlanes - 1}
-      value={currentPlane}
-      showValue={true}
-      onChange={handleChange}
-    />
-  );
-};
-
-type ValueRangeSelectorProps = {
-  min: number;
-  max: number;
-  currentMinValue?: number;
-  currentMaxValue?: number;
-  setCurrentMinValue: (minValue: number) => void;
-  setCurrentMaxValue: (maxValue: number) => void;
-};
-
-const ValueRangeSelector: FunctionComponent<ValueRangeSelectorProps> = ({
-  currentMinValue,
-  currentMaxValue,
-  setCurrentMinValue,
-  setCurrentMaxValue,
-  min,
-  max,
-}) => {
-  const handleChange = (newMinValue: number, newMaxValue: number) => {
-    setCurrentMinValue(newMinValue);
-    setCurrentMaxValue(newMaxValue);
-  };
-  return (
-    <DualRangeInput
-      // label="range:"
-      label=""
-      title="Brightness/contrast"
-      min={min}
-      max={max}
-      value1={currentMinValue || 0}
-      value2={currentMaxValue || 0}
-      onChange={handleChange}
-      showValues={false}
-    />
-  );
-};
-
-const RangeInput: FunctionComponent<{
-  label: string;
-  min: number;
-  max: number;
-  value: number;
-  showValue: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}> = ({ label, min, max, value, showValue, onChange }) => {
-  return (
-    <span style={{ fontSize: 12 }}>
-      {label}
-      {showValue && ` ${value}`}:{" "}
-      <input
-        style={{ width: 70, position: "relative", top: 4 }}
-        type="range"
-        min={min}
-        max={max}
-        value={value}
-        onChange={onChange}
-      />
-    </span>
-  );
-};
-
-const DualRangeInput: FunctionComponent<{
-  label: string;
-  title?: string;
-  min: number;
-  max: number;
-  value1: number;
-  value2: number;
-  onChange: (minValue: number, maxValue: number) => void;
-  showValues?: boolean;
-}> = ({ label, min, max, value1, value2, onChange, showValues, title }) => {
-  return (
-    <div style={{ display: "flex" }} title={title}>
-      <div style={{ position: "relative", top: 5 }}>{label}&nbsp;</div>
-      <div style={{ position: "relative", top: 11 }}>
-        <MultiRangeSlider
-          min={min}
-          max={max}
-          value1={value1}
-          value2={value2}
-          setValue1={(x) => onChange(x, value2)}
-          setValue2={(x) => onChange(value1, x)}
-        />
-      </div>
-      {showValues !== false && (
-        <>
-          &nbsp;
-          <div style={{ position: "relative", top: 5 }}>
-            {value1}-{value2}
-          </div>
-        </>
-      )}
-    </div>
   );
 };
 
