@@ -26,9 +26,11 @@ export function statusWords(items: Record<string, StatusBarItem>): string[] {
   for (const item of all)
     if (item.type === "stats")
       words.push(
-        count(item.groups, "group", "groups"),
-        count(item.datasets, "dataset", "datasets"),
-        count(item.reads, "data read", "data reads"),
+        `Read ${[
+          count(item.groups, "group", "groups"),
+          count(item.datasets, "dataset", "datasets"),
+          count(item.reads, "data request", "data requests"),
+        ].join(" · ")}`,
       );
   return words;
 }

@@ -266,6 +266,17 @@ export const navigation: NavSection[] = [
     ],
   },
   {
+    heading: "UI library",
+    items: [
+      {
+        label: "File viewer layout",
+        href: "/ui-library/file-viewer/",
+        summary:
+          "Where an NWB file opens: the overview, the objects and their views.",
+      },
+    ],
+  },
+  {
     heading: "Resources",
     items: [
       {

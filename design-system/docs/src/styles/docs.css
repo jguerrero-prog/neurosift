@@ -1422,3 +1422,7 @@ main {
 .example-plot-body > .ns-legend {
   align-self: start;
 }
+
+.screen {
+  max-inline-size: 100%;
+}

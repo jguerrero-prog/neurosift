@@ -2,12 +2,12 @@ import { describe, expect, it } from "vitest";
 import { statusWords } from "./statusWords";
 
 describe("statusWords", () => {
-  it("says what has been read, in words", () => {
+  it("says what has been read, in words, on one line", () => {
     expect(
       statusWords({
         hdf5Stats: { type: "stats", groups: 19484, datasets: 1267, reads: 97 },
       }),
-    ).toEqual(["19,484 groups", "1,267 datasets", "97 data reads"]);
+    ).toEqual(["Read 19,484 groups · 1,267 datasets · 97 data requests"]);
   });
 
   it("puts what is being read first, counted by kind", () => {
@@ -20,9 +20,7 @@ describe("statusWords", () => {
       }),
     ).toEqual([
       "Reading 2 groups and 1 data block",
-      "1 group",
-      "0 datasets",
-      "1 data read",
+      "Read 1 group · 0 datasets · 1 data request",
     ]);
   });
 
