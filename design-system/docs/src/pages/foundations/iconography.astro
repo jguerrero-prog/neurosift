@@ -1,4 +1,11 @@
 ---
+import { withBase } from "../../navigation";
+import treeToday from "../../assets/existing/icons-tree.png";
+import toolbarToday from "../../assets/existing/icons-toolbar.png";
+import { Image } from "astro:assets";
+import DocRows from "../../components/DocRows.astro";
+import Existing from "../../components/Existing.astro";
+import { Button, IconButton } from "@ui";
 import { Icon, type IconName, type IconSize } from "@ui";
 import { ICONS } from "@ui/Icon/icons";
 import CodeSample from "../../components/CodeSample.astro";
@@ -41,6 +48,83 @@ const code = `import { Icon, IconButton } from "@ui";
 <Icon name="download" />                     // 16px, hidden from screen readers
 <Icon name="settings" size="lg" label="Settings" />   // standalone, announced
 <IconButton icon="search" label="Search" />  // the button carries the name`;
+const NEURODATA_ICONS = [
+  [
+    "chart--line",
+    "TimeSeries",
+    "A single signal over time"
+  ],
+  [
+    "chart--multi-line",
+    "ElectricalSeries, RoiResponseSeries",
+    "Many channels over time"
+  ],
+  [
+    "chart--point",
+    "Units",
+    "Spike times, shown as a raster"
+  ],
+  [
+    "chart--histogram",
+    "PSTH view",
+    "Firing rate aligned to trial events"
+  ],
+  [
+    "time-plot",
+    "TimeIntervals",
+    "Trials, epochs and other intervals"
+  ],
+  [
+    "microscope",
+    "TwoPhotonSeries, OnePhotonSeries",
+    "Imaging movies"
+  ],
+  [
+    "layers",
+    "ImageSegmentation, PlaneSegmentation",
+    "Cell masks over an imaging plane"
+  ],
+  [
+    "image",
+    "Images, ImageSeries",
+    "Still images and frames"
+  ],
+  [
+    "video",
+    "External video files",
+    "Behavior video"
+  ],
+  [
+    "data-table",
+    "DynamicTable, electrodes",
+    "Tables"
+  ],
+  [
+    "direction--curve",
+    "SpatialSeries, Position",
+    "Movement and position"
+  ],
+  [
+    "heat-map",
+    "Spectrogram view",
+    "Power across frequency and time"
+  ],
+  [
+    "chip",
+    "Device",
+    "Recording hardware"
+  ],
+  [
+    "tree-view",
+    "HDF5 view",
+    "The raw file structure"
+  ],
+  [
+    "data--structured",
+    "Schema view",
+    "NWB specifications"
+  ]
+];
 ---
 
 <DocsLayout title="Iconography" description="IBM Carbon icons in the Neurosift design system: the set, sizes and what they replace.">
@@ -54,6 +138,8 @@ const code = `import { Icon, IconButton } from "@ui";
     ]}
   />
 
+  <Existing page="iconography" />
+
   <DocSection title="The icons in code" lead="The Carbon icons the app can use today, drawn by the Icon component at 24px. The full set of 62 is on the Figma Iconography page; each joins the code when a page needs it.">
     <ul class="icon-grid">
       {
@@ -64,6 +150,50 @@ const code = `import { Icon, IconButton } from "@ui";
           </li>
         ))
       }
+    </ul>
+  </DocSection>
+
+  <DocSection title="Neurodata type icons" lead="One icon per kind of data, beside each object in the file tree and on its tab, so people can scan a file by what it holds. All from Carbon.">
+    <DocTable caption="Neurodata type icons" columns={["Icon","Neurodata types","What it shows"]}>
+      <DocRows rows={NEURODATA_ICONS} />
+    </DocTable>
+    <p class="doc-note">These are proposed. They come into the code with the object tree components, #72.</p>
+  </DocSection>
+
+  <DocSection title="What they replace" lead="The Material icons the app imports today and the Carbon icon that takes each one’s place, from the Figma replacement map.">
+    <DocTable caption="Material to Carbon" columns={["Material", "Carbon", "Icon"]}>
+      {
+        REPLACEMENTS.map(([material, carbon]) => (
+          <tr>
+            <th scope="row">{material}</th>
+            <td><code>{carbon}</code></td>
+            <td><Icon name={carbon} size="md" /></td>
+          </tr>
+        ))
+      }
+    </DocTable>
+    <p class="doc-note">The Font Awesome icons and the typed characters in the Figma map (▶, ⧉, ← →, 🔍) are replaced with the pages that use them.</p>
+  </DocSection>
+
+  <DocSection title="Icons in buttons" lead="A button can carry one Carbon icon before its label. The icon takes the label's color, so it follows the button style.">
+    <div class="demo-row">
+      <Button variant="primary" icon="folder--open">Open file</Button>
+      <Button variant="secondary" icon="share">Share view</Button>
+      <Button variant="secondary" icon="download">Download</Button>
+      <Button variant="secondary" icon="copy">Copy path</Button>
+    </div>
+    <div class="demo-row" role="group" aria-label="Toolbar">
+      <IconButton icon="zoom--in" label="Zoom in" />
+      <IconButton icon="zoom--out" label="Zoom out" />
+      <IconButton icon="chevron--left" label="Earlier" />
+      <IconButton icon="chevron--right" label="Later" />
+    </div>
+    <ul class="rule-list">
+      <li><strong>With a label:</strong> a 16px icon, 8px before the label.</li>
+      <li><strong>Icon only, in toolbars:</strong> a 20px icon in a 32px button, with an aria-label and a tooltip in the same words.</li>
+      <li><strong>Loading:</strong> the spinner replaces the icon and the label stays, so the button keeps its width.</li>
+      <li>Use an icon only when it makes the action faster to recognize. Most buttons don't need one.</li>
+      <li>The same action always gets the same icon, and never an icon after the label, except chevron--down on a button that opens a menu.</li>
     </ul>
   </DocSection>
 
@@ -82,25 +212,23 @@ const code = `import { Icon, IconButton } from "@ui";
     </DocTable>
   </DocSection>
 
-  <DocSection title="What they replace" lead="The Material icons the app imports today and the Carbon icon that takes each one’s place, from the Figma replacement map.">
-    <DocTable caption="Material to Carbon" columns={["Material", "Carbon", "Icon"]}>
-      {
-        REPLACEMENTS.map(([material, carbon]) => (
-          <tr>
-            <th scope="row">{material}</th>
-            <td><code>{carbon}</code></td>
-            <td><Icon name={carbon} size="md" /></td>
-          </tr>
-        ))
-      }
-    </DocTable>
-    <p class="doc-note">The Font Awesome icons and the typed characters in the Figma map (▶, ⧉, ← →, 🔍) are replaced with the pages that use them.</p>
-  </DocSection>
-
   <DocSection title="Color" lead="Icons take the color of the text beside them, through currentColor. Alone, they need 3:1 contrast with what is behind them. Status icons always come with words.">
     <div class="demo-row">
       <span class="icon-beside"><Icon name="search" /> Search dandisets</span>
       <a class="icon-beside" href="https://dandiarchive.org"><Icon name="launch" /> View on DANDI</a>
+    </div>
+  </DocSection>
+
+  <DocSection title="Before and after" lead="The time toolbar and the object tree today, as Chromium draws them, and where to see them with Carbon.">
+    <div class="captures">
+      <figure class="capture">
+        <Image src={toolbarToday} alt="Today's time toolbar: magnifier emoji zoom buttons and typed arrows for the time window, then minus, plus and arrows for channel paging." />
+        <figcaption class="type-body-sm">Today: zoom is a magnifier emoji with a full-width + or −, and panning and paging are typed arrows. Proposed: the toolbar on <a href={withBase("/components/time-controls/")}>Time controls</a>.</figcaption>
+      </figure>
+      <figure class="capture">
+        <Image src={treeToday} alt="Today's object tree: typed triangles beside checkboxes, a two-squares copy symbol after each path, and neurodata types in a second column." />
+        <figcaption class="type-body-sm">Today: typed triangles open rows, and a two-squares character copies each path. Proposed: the whole row opens it, as on <a href={withBase("/components/tables/")}>Tables</a>, with type icons from #72.</figcaption>
+      </figure>
     </div>
   </DocSection>
 

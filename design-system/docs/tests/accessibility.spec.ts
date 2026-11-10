@@ -177,7 +177,7 @@ test("links and controls are at least 24 by 24 pixels", async ({ page }) => {
           (el) =>
             el.checkVisibility() &&
             !el.matches(".skip-link") &&
-            !(getComputedStyle(el).display === "inline" && el.closest("p, li")),
+            !(getComputedStyle(el).display === "inline" && el.closest("p, li, figcaption")),
         )
         .map((el) => ({
           el: el.textContent?.trim(),

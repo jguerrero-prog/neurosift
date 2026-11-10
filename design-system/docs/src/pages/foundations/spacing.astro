@@ -1,4 +1,5 @@
 ---
+import DocRows from "../../components/DocRows.astro";
 import DoDont from "../../components/DoDont.astro";
 import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
@@ -36,6 +37,74 @@ const TARGETS = [
   ["32 × 32px in toolbars", "Time controls, zoom and channel paging."],
   ["The whole row", "In the file tree, clicking anywhere on a folder’s row opens it. Today only the small ► arrow does."],
 ];
+const TODAY = [
+  [
+    "1px",
+    "31",
+    "A border, not spacing",
+    "A 1px gap is a rule. Draw it as a border"
+  ],
+  [
+    "2px",
+    "48",
+    "space/0-5 (2px)",
+    "Kept for fine offsets only"
+  ],
+  [
+    "3px",
+    "17",
+    "space/1 (4px)",
+    "Off the scale; a 1px difference isn't visible"
+  ],
+  [
+    "4px",
+    "97",
+    "space/1 (4px)",
+    "Already on the scale. The most used value"
+  ],
+  [
+    "5px",
+    "26",
+    "space/1 (4px)",
+    "Off the scale"
+  ],
+  [
+    "6px",
+    "61",
+    "space/1 or space/2",
+    "4px inside dense controls, 8px between them"
+  ],
+  [
+    "8px",
+    "72",
+    "space/2 (8px)",
+    "Already on the scale"
+  ],
+  [
+    "10px",
+    "26",
+    "space/2 or space/3",
+    "8px for gaps, 12px for padding"
+  ],
+  [
+    "12px",
+    "41",
+    "space/3 (12px)",
+    "Already on the scale"
+  ],
+  [
+    "15px",
+    "14",
+    "space/4 (16px)",
+    "Off the scale"
+  ],
+  [
+    "Material UI units",
+    "Many",
+    "space/2 × n",
+    "Material UI already counts in 8px, so mt: 2 becomes space/4"
+  ]
+];
 ---
 
 <DocsLayout title="Spacing and layout grid" description="One 4px scale, the workspace's regions, breakpoints, density and targets.">
@@ -49,14 +118,29 @@ const TARGETS = [
     ]}
   />
 
+  <DocSection title="Spacing scale" lead="Eleven steps on a 4px base, from 2px to 64px. Token names count in 4px units, so space/4 is 16px. The scale is denser at the small end than a reading site needs, because Neurosift packs controls around plots.">
+    <p class="doc-note">Every step is drawn to size on <a href={withBase("/tokens/spacing/")}>Spacing tokens</a>.</p>
+    <p class="type-body">Moving today's values onto the scale: every inline padding, margin and gap of 16px or less in Neurosift's src/, and the step each one becomes.</p>
+    <DocTable caption="Today's spacing values" columns={["Today","Uses","Becomes","Why"]}>
+      <DocRows rows={TODAY} />
+    </DocTable>
+  </DocSection>
+
   <DocSection title="Spacing in use" lead="A view panel from the file viewer: each gap is a step from the scale. Every step is drawn to size on Spacing tokens.">
     <DocTable caption="Spacing in a view panel" columns={["Step", "Where"]}>
       {IN_USE.map(([step, where]) => <tr><th scope="row">{step}</th><td>{where}</td></tr>)}
     </DocTable>
-    <p class="doc-note">The full scale, from 2px to 64px, is on <a href={withBase("/tokens/spacing/")}>Spacing tokens</a>.</p>
   </DocSection>
 
   <DocSection title="Workspace layout" lead="The file viewer: five regions with fixed heights frame one view area that takes everything left.">
+    <div class="workspace-diagram" role="img" aria-label="The file viewer's regions: a 48px app bar across the top; a 320px overview panel on the left; on the right, a 44px section bar, 36px object tabs and the view area, which takes everything left; a 20px status bar across the bottom.">
+      <div class="workspace-appbar">App bar · 48px</div>
+      <div class="workspace-panel">Overview panel · 320px</div>
+      <div class="workspace-sectionbar">Section bar · 44px</div>
+      <div class="workspace-tabs">Object tabs · 36px</div>
+      <div class="workspace-view">View area</div>
+      <div class="workspace-status">Status bar · 20px</div>
+    </div>
     <DocTable caption="Workspace regions" columns={["Region", "Size", "What it holds"]}>
       {REGIONS.map(([region, size, holds]) => <tr><th scope="row">{region}</th><td>{size}</td><td>{holds}</td></tr>)}
     </DocTable>
@@ -87,5 +171,9 @@ const TARGETS = [
       dos={["Give the view area every pixel the bars don’t need.", "Keep the same gap between controls of the same kind in every view.", "Let plots resize with the window, and keep the page itself from scrolling in the viewer.", "Remember the overview panel’s width between visits."]}
       donts={["Don’t use values off the scale, such as 5px, 6px or 15px.", "Don’t put more space inside a control group than between groups.", "Don’t stretch paragraphs across a wide monitor; stop them at 720px.", "Don’t shrink targets below 24 × 24px to fit more controls."]}
     />
+  </DocSection>
+
+  <DocSection title="Layout tokens" lead="Region heights, panel widths and limits, row heights, the smallest target and the breakpoints.">
+    <p class="doc-note">Every layout token, with its value, is on <a href={withBase("/tokens/spacing/")}>Spacing tokens</a>.</p>
   </DocSection>
 </DocsLayout>

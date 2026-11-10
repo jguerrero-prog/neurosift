@@ -1,4 +1,7 @@
 ---
+import { withBase } from "../../navigation";
+import DocTable from "../../components/DocTable.astro";
+import { Button, Checkbox, TextInput } from "@ui";
 import DocSection from "../../components/DocSection.astro";
 import Intro from "../../components/Intro.astro";
 import TokenTable from "../../components/TokenTable.astro";
@@ -22,6 +25,7 @@ const rows = [
   ["Error", "border.error", "Input with an error"],
   ["Error", "status.error.text", "Error message under a field"],
 ].map(([lead, path, use]) => ({ lead, view: TokenView.of(path), use }));
+const noop = () => {};
 ---
 
 <DocsLayout title="State tokens" description="The tokens that carry hover, pressed, focus, selected, disabled and error states.">
@@ -38,5 +42,15 @@ const rows = [
   <DocSection title="State tokens" lead="The semantic tokens that carry a state.">
     <TokenTable caption="State tokens" rows={rows} sample="swatch" leadColumn="State" />
     <p class="doc-note">The matrix of states across components arrives with the components, so each cell can be a real component in that state.</p>
+  </DocSection>
+
+  <DocSection title="States across components" lead="The same states side by side, as the real components draw them. Hover, press or Tab to the ones in the Default column to see the rest; a dash means the state doesn't apply.">
+    <DocTable caption="States across components" columns={["Component", "Default", "Selected", "Disabled", "Error"]}>
+      <tr><th scope="row">Primary button</th><td><Button variant="primary">Open file</Button></td><td>—</td><td><Button variant="primary" disabled>Open file</Button></td><td>—</td></tr>
+      <tr><th scope="row">Secondary button</th><td><Button variant="secondary">Share view</Button></td><td>—</td><td><Button variant="secondary" disabled>Share view</Button></td><td>—</td></tr>
+      <tr><th scope="row">Text input</th><td><TextInput label="Dandiset ID" value="000673" onChange={noop} /></td><td>—</td><td><TextInput label="Dandiset ID" value="000673" disabled onChange={noop} /></td><td><TextInput label="Dandiset ID" value="0006" error="Dandiset IDs have six digits." onChange={noop} /></td></tr>
+      <tr><th scope="row">Checkbox</th><td><Checkbox label="Show NWB files only" checked={false} onChange={noop} /></td><td><Checkbox label="Show NWB files only" checked onChange={noop} /></td><td><Checkbox label="Show NWB files only" checked={false} disabled onChange={noop} /></td><td>—</td></tr>
+    </DocTable>
+    <p class="doc-note">Tabs and tree rows have their own states on <a href={withBase("/components/tabs/")}>Tabs and segmented controls</a> and <a href={withBase("/components/tables/")}>Tables</a>.</p>
   </DocSection>
 </DocsLayout>

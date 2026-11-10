@@ -1,4 +1,5 @@
 ---
+import ExamplePlot from "../../components/ExamplePlot.astro";
 import DoDont from "../../components/DoDont.astro";
 import DocRows from "../../components/DocRows.astro";
 import DocSection from "../../components/DocSection.astro";
@@ -52,6 +53,7 @@ const AXES = [
   </DocSection>
 
   <DocSection title="Time series" lead="LFPs, ElectricalSeries and other signals over time.">
+    <ExamplePlot kind="traces" />
     <ul class="rule-list">
       <li>One color per channel, from data/series in order. With more than six channels, draw all traces in ink and label them on the left.</li>
       <li>Channel labels sit at the left edge, beside their trace, in type/axis.</li>
@@ -62,6 +64,7 @@ const AXES = [
   </DocSection>
 
   <DocSection title="Rasters and PSTH" lead="Spike times, alone or aligned to trial events.">
+    <ExamplePlot kind="raster" />
     <ul class="rule-list">
       <li>Spike ticks are 2px wide and as tall as the row. Ungrouped rasters are ink.</li>
       <li>Grouped trials take series colors, and the legend names each group’s value, such as “Load 3”, never “?”.</li>
@@ -72,6 +75,7 @@ const AXES = [
   </DocSection>
 
   <DocSection title="Spectrograms and heat maps" lead="Amounts across two dimensions, in viridis.">
+    <ExamplePlot kind="spectrogram" />
     <ul class="rule-list">
       <li>Viridis for every continuous scale. It reads in grayscale and with color blindness.</li>
       <li>The color bar sits beside the plot, prints its end values and unit (dB), and keeps the same height as the plot.</li>
