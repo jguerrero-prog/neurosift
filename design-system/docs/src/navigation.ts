@@ -331,6 +331,11 @@ export const navigation: NavSection[] = [
         href: "/ui-library/spike-views/",
         summary: "The raster of spike times, and the PSTH around each trial.",
       },
+      {
+        label: "Imaging views",
+        href: "/ui-library/imaging-views/",
+        summary: "Two-photon frames, ROI masks and image collections.",
+      },
     ],
   },
   {

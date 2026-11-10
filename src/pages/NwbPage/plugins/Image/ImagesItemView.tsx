@@ -1,4 +1,13 @@
-import { FunctionComponent, useEffect, useMemo, useState } from "react";
+import { LoadingState, Slider, ViewPanel } from "@ui";
+import { useCssVars } from "@components/useCssVars";
+import {
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import "./ImagesItemView.css";
 import IfHasBeenVisible from "../PSTH/PSTHItemView/IfHasBeenVisible";
 import {
   Hdf5Dataset,
@@ -19,12 +28,7 @@ type Props = {
   condensed?: boolean;
 };
 
-const ImagesItemView: FunctionComponent<Props> = ({
-  width,
-  height,
-  nwbUrl,
-  path,
-}) => {
+const ImagesItemView: FunctionComponent<Props> = ({ nwbUrl, path }) => {
   const group = useHdf5Group(nwbUrl, path);
   const { imageWidth, imageHeight } = useMemo(() => {
     if (!group) return { imageWidth: 0, imageHeight: 0 };
@@ -37,34 +41,44 @@ const ImagesItemView: FunctionComponent<Props> = ({
     });
     return { imageWidth, imageHeight };
   }, [group]);
-  if (!group) return <div>Loading group...</div>;
+  if (!group)
+    return <LoadingState label="Reading the images" phase="loading" />;
+  const n = group.datasets.length;
   return (
-    <div style={{ position: "relative", width, height, overflowY: "auto" }}>
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "20px",
-          padding: "10px",
-        }}
-      >
+    <ViewPanel
+      label={path.split("/").pop() || path}
+      summary={`${n.toLocaleString("en-US")} image${n === 1 ? "" : "s"}, up to ${imageWidth.toLocaleString("en-US")} × ${imageHeight.toLocaleString("en-US")} px`}
+      controls={null}
+    >
+      <Gallery minWidth={imageWidth}>
         {group.datasets.map((ds) => (
-          <div key={ds.path} style={{ minWidth: imageWidth }}>
-            <IfHasBeenVisible
-              key={ds.path}
-              width={imageWidth}
-              height={imageHeight + 60}
-            >
-              <h3>{ds.name}</h3>
+          <figure key={ds.path} className="images-item">
+            <IfHasBeenVisible width={imageWidth} height={imageHeight + 60}>
               <ImageItem
                 nwbUrl={nwbUrl}
                 path={ds.path}
                 neurodataType={ds.attrs["neurodata_type"]}
               />
             </IfHasBeenVisible>
-          </div>
+            <figcaption className="images-name">{ds.name}</figcaption>
+          </figure>
         ))}
-      </div>
+      </Gallery>
+    </ViewPanel>
+  );
+};
+
+/** Images side by side, each at least as wide as the widest. */
+const Gallery: FunctionComponent<{ minWidth: number; children: ReactNode }> = ({
+  minWidth,
+  children,
+}) => {
+  const ref = useCssVars<HTMLDivElement>({
+    "--image-min": Math.min(minWidth, 640),
+  });
+  return (
+    <div ref={ref} className="images-gallery">
+      {children}
     </div>
   );
 };
@@ -95,8 +109,8 @@ export const ImageItem: FunctionComponent<ImageItemProps> = ({
   if (errorMessage) {
     return <ViewError what="the images" error={errorMessage} />;
   }
-  if (!dataset) return <div>Loading dataset...</div>;
-  if (!data) return <div>Loading data (ImageItem)...</div>;
+  if (!dataset || !data)
+    return <LoadingState label="Reading the image" phase="loading" />;
 
   if (resolvedType === "GrayscaleImage") {
     return <GrayscaleImageItem dataset={dataset} data={data} />;
@@ -174,10 +188,27 @@ const GrayscaleImageItem: FunctionComponent<GrayscaleImageItemProps> = ({
   return (
     <div>
       <canvas ref={(elmt) => setCanvasElement(elmt)} width={W} height={H} />
-      <div>
-        <BrightnessSelector value={brightness} onChange={setBrightness} />
-        &nbsp;
-        <ContrastSelector value={contrast} onChange={setContrast} />
+      <div className="images-controls">
+        <Slider
+          label="Brightness"
+          min={0}
+          max={100}
+          step={1}
+          showValue
+          showField={false}
+          value={brightness}
+          onChange={setBrightness}
+        />
+        <Slider
+          label="Contrast"
+          min={0}
+          max={100}
+          step={1}
+          showValue
+          showField={false}
+          value={contrast}
+          onChange={setContrast}
+        />
       </div>
     </div>
   );
@@ -309,50 +340,6 @@ const RGBAImageItem: FunctionComponent<RGBAImageItemProps> = ({
   }, [canvasElement, W, H, dataset, data]);
 
   return <canvas ref={(elmt) => setCanvasElement(elmt)} width={W} height={H} />;
-};
-
-type BrightnessSelectorProps = {
-  value: number;
-  onChange: (value: number) => void;
-};
-
-export const BrightnessSelector: FunctionComponent<BrightnessSelectorProps> = ({
-  value,
-  onChange,
-}) => {
-  // slider
-  return (
-    <input
-      type="range"
-      title="Brightness"
-      min={0}
-      max={100}
-      value={value}
-      onChange={(e) => onChange(Number(e.target.value))}
-    />
-  );
-};
-
-type ContrastSelectorProps = {
-  value: number;
-  onChange: (value: number) => void;
-};
-
-export const ContrastSelector: FunctionComponent<ContrastSelectorProps> = ({
-  value,
-  onChange,
-}) => {
-  // slider
-  return (
-    <input
-      type="range"
-      title="Contrast"
-      min={0}
-      max={100}
-      value={value}
-      onChange={(e) => onChange(Number(e.target.value))}
-    />
-  );
 };
 
 export default ImagesItemView;
