@@ -268,16 +268,57 @@ export const navigation: NavSection[] = [
         href: "/components/view-panel/",
         summary: "The frame every view shares, around Neurosift’s own charts.",
       },
+      {
+        label: "Catalog",
+        href: "/components/catalog/",
+        summary:
+          "Search, filters and result rows across DANDI, EMBER and OpenNeuro.",
+      },
+      {
+        label: "Status bar",
+        href: "/components/status-bar/",
+        summary: "The build version and what the file has loaded, in words.",
+      },
     ],
   },
   {
     heading: "UI library",
     items: [
       {
+        label: "What exists today",
+        href: "/ui-library/what-exists-today/",
+        summary:
+          "Every part of Neurosift: what it does, and what a redesign must keep.",
+      },
+      {
+        label: "Settings",
+        href: "/ui-library/settings/",
+        summary:
+          "The API keys Neurosift sends to DANDI, the sandbox and EMBER.",
+      },
+      {
         label: "File viewer layout",
         href: "/ui-library/file-viewer/",
         summary:
           "Where an NWB file opens: the overview, the objects and their views.",
+      },
+      {
+        label: "File viewer layout",
+        href: "/ui-library/file-viewer/",
+        summary:
+          "Where an NWB file opens: the overview, the objects and their views.",
+      },
+      {
+        label: "Neurodata object tree",
+        href: "/ui-library/object-tree/",
+        summary:
+          "The Main tab: every object, its type, its views and its description.",
+      },
+      {
+        label: "HDF5 and schema",
+        href: "/ui-library/hdf5-schema/",
+        summary:
+          "The file as stored and the NWB specifications, each with details beside.",
       },
       {
         label: "Time series views",
@@ -294,6 +335,22 @@ export const navigation: NavSection[] = [
         label: "Imaging views",
         href: "/ui-library/imaging-views/",
         summary: "Two-photon frames, ROI masks and image collections.",
+      },
+      {
+        label: "Dataset page",
+        href: "/ui-library/dataset-page/",
+        summary:
+          "What a dataset is and its files, for DANDI, EMBER and OpenNeuro.",
+      },
+      {
+        label: "Archive search",
+        href: "/ui-library/archive-search/",
+        summary: "One search across DANDI, OpenNeuro and EMBER.",
+      },
+      {
+        label: "Home",
+        href: "/ui-library/home/",
+        summary: "One search, open a file by link, and what was opened last.",
       },
       {
         label: "Spectrogram",
