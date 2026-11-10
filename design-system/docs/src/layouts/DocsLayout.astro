@@ -6,6 +6,8 @@ import "../styles/docs.css";
 import logo from "../../../../public/neurosift-logo.png";
 import { Image } from "astro:assets";
 import SideMenu from "../components/SideMenu.astro";
+import { Button } from "@ui";
+import { appHref } from "../appUrl";
 import { withBase } from "../navigation";
 
 interface Props {
@@ -33,10 +35,15 @@ const pageTitle = title === SITE ? SITE : `${title} · ${SITE}`;
       <SideMenu />
       <div class="docs-page">
         <header class="hero">
-          <a class="hero-brand" href={withBase("/")}>
-            <Image src={logo} alt="" width={28} height={28} />
-            <span>neurosift</span>
-          </a>
+          <div class="hero-bar">
+            <a class="hero-brand" href={withBase("/")}>
+              <Image src={logo} alt="" width={28} height={28} />
+              <span>neurosift</span>
+            </a>
+            <Button variant="secondary" icon="launch" href={appHref()} target="_blank" rel="noopener noreferrer">
+              View website
+            </Button>
+          </div>
           <h1>{title}</h1>
         </header>
         <main id="content">

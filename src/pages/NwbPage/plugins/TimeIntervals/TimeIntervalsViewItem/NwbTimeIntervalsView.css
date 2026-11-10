@@ -1,3 +1,3 @@
-.intervals-label {
-  inline-size: 16rem;
+.intervals-label > .ns-field {
+  inline-size: 14rem;
 }

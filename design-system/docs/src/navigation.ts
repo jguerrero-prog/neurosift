@@ -337,6 +337,12 @@ export const navigation: NavSection[] = [
           "What a dataset is and its files, for DANDI, EMBER and OpenNeuro.",
       },
       {
+        label: "Dataset file viewers",
+        href: "/ui-library/dataset-file-viewers/",
+        summary:
+          "Tables, text, JSON, NIfTI volumes, audio and file information in a dataset.",
+      },
+      {
         label: "Archive search",
         href: "/ui-library/archive-search/",
         summary: "One search across DANDI, OpenNeuro and EMBER.",
