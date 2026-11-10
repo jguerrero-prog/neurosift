@@ -208,6 +208,12 @@ export const navigation: NavSection[] = [
           "Keys and values: panel fields, dataset facts and HDF5 attributes.",
       },
       {
+        label: "Legend and color bar",
+        href: "/components/legend/",
+        summary:
+          "What each color in a plot means, beside the plot it explains.",
+      },
+      {
         label: "Alerts and toasts",
         href: "/components/alerts/",
         summary: "Alert, Toast and Inline message: what happened, what to do.",
@@ -245,6 +251,39 @@ export const navigation: NavSection[] = [
         label: "Pages and sections",
         href: "/components/pages/",
         summary: "Page and Section: a page's title, column and titled panels.",
+      },
+      {
+        label: "Status bar",
+        href: "/components/status-bar/",
+        summary: "The build version and what the file has loaded, in words.",
+      },
+      {
+        label: "Overview panel",
+        href: "/components/overview-panel/",
+        summary:
+          "Session and Dandiset details beside the viewer, resizable and collapsible.",
+      },
+      {
+        label: "View panel",
+        href: "/components/view-panel/",
+        summary: "The frame every view shares, around Neurosift’s own charts.",
+      },
+      {
+        label: "Catalog",
+        href: "/components/catalog/",
+        summary:
+          "Search, filters and result rows across DANDI, EMBER and OpenNeuro.",
+      },
+    ],
+  },
+  {
+    heading: "UI library",
+    items: [
+      {
+        label: "What exists today",
+        href: "/ui-library/what-exists-today/",
+        summary:
+          "Every part of Neurosift: what it does, and what a redesign must keep.",
       },
     ],
   },
