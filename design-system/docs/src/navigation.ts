@@ -264,10 +264,37 @@ export const navigation: NavSection[] = [
           "Session and Dandiset details beside the viewer, resizable and collapsible.",
       },
       {
+        label: "View panel",
+        href: "/components/view-panel/",
+        summary: "The frame every view shares, around Neurosift’s own charts.",
+      },
+      {
         label: "Catalog",
         href: "/components/catalog/",
         summary:
           "Search, filters and result rows across DANDI, EMBER and OpenNeuro.",
+      },
+    ],
+  },
+  {
+    heading: "UI library",
+    items: [
+      {
+        label: "What exists today",
+        href: "/ui-library/what-exists-today/",
+        summary:
+          "Every part of Neurosift: what it does, and what a redesign must keep.",
+      },
+      {
+        label: "Settings",
+        href: "/ui-library/settings/",
+        summary:
+          "The API keys Neurosift sends to DANDI, the sandbox and EMBER.",
+      },
+      {
+        label: "Archive search",
+        href: "/ui-library/archive-search/",
+        summary: "One search across DANDI, OpenNeuro and EMBER.",
       },
     ],
   },
