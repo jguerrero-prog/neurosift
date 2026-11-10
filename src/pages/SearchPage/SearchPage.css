@@ -1,5 +1,6 @@
 /* Full width with 32px margins; filters 260px, then 40px to the results. */
 .catalog-page {
+  box-sizing: border-box;
   display: grid;
   align-content: start;
   gap: var(--space-5);
