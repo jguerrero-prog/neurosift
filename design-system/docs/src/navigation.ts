@@ -257,7 +257,6 @@ export const navigation: NavSection[] = [
         href: "/components/status-bar/",
         summary: "The build version and what the file has loaded, in words.",
       },
-      {},
       {
         label: "Overview panel",
         href: "/components/overview-panel/",
