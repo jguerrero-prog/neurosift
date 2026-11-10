@@ -4,6 +4,7 @@ import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
 import Intro from "../../components/Intro.astro";
 import Screen from "../../components/Screen.astro";
+import LiveScreen from "../../components/LiveScreen.astro";
 import DocsLayout from "../../layouts/DocsLayout.astro";
 
 const STATES = [
@@ -67,6 +68,10 @@ const SPECS = [
       <Screen file="home-proposed-recent" alt="The rebuilt home for a returning visitor: the same search, then Recently opened with Dandisets 000673 and 000728 and OpenNeuro ds000001, each with its title and archive." caption="Returning: Recently opened from any archive, with titles." />
       <Screen file="home-proposed-narrow" alt="The rebuilt home at 390 pixels wide: the title, search, links, Recently opened and footer in one column." caption="At 390px everything stacks in one column." />
     </div>
+  </DocSection>
+
+  <DocSection title="Try it" lead="Search, open a file by link, and see what was opened last.">
+    <LiveScreen path="" title="Home" size="default" />
   </DocSection>
 
   <DocSection title="States">

@@ -1582,3 +1582,24 @@ main {
 .screen {
   max-inline-size: 100%;
 }
+
+.live-screen {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.live-screen-frame {
+  inline-size: 100%;
+  block-size: 40rem;
+  border: var(--border-width-1) solid var(--border-strong);
+  background: var(--surface-page);
+}
+
+.live-screen--tall .live-screen-frame {
+  block-size: 52rem;
+}
+
+.live-screen-caption {
+  color: var(--text-secondary);
+}

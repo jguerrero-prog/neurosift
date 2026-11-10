@@ -303,12 +303,6 @@ export const navigation: NavSection[] = [
           "Where an NWB file opens: the overview, the objects and their views.",
       },
       {
-        label: "File viewer layout",
-        href: "/ui-library/file-viewer/",
-        summary:
-          "Where an NWB file opens: the overview, the objects and their views.",
-      },
-      {
         label: "Neurodata object tree",
         href: "/ui-library/object-tree/",
         summary:
