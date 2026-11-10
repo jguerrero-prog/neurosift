@@ -11,6 +11,8 @@ export interface TabItem {
   closable?: boolean;
   /** Shown on hover and focus, such as an object's full path. */
   tooltip?: string;
+  /** Pushes this tab and the ones after it to the end of the bar, such as Schema and HDF5. */
+  end?: boolean;
 }
 
 interface TabsProps {
@@ -100,7 +102,15 @@ export function Tabs({
           </button>
         );
         return (
-          <span key={tab.id} className="ns-tab-item" role="presentation">
+          <span
+            key={tab.id}
+            className={
+              tab.end && !tabs[index - 1]?.end
+                ? "ns-tab-item ns-tab-item--end"
+                : "ns-tab-item"
+            }
+            role="presentation"
+          >
             {tab.tooltip ? (
               <Tooltip label={tab.tooltip} placement="bottom">
                 {button}
