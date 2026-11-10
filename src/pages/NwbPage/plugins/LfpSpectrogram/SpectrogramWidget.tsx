@@ -365,8 +365,16 @@ const SpectrogramWidget: FunctionComponent<Props> = ({
     ctx.font = "11px sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
-    for (let i = 0; i <= 6; i++) {
-      const frac = i / 6;
+    const widest = Math.max(
+      ctx.measureText(visibleStartTimeSec.toFixed(2)).width,
+      ctx.measureText(visibleEndTimeSec.toFixed(2)).width,
+    );
+    const xDivisions = Math.max(
+      1,
+      Math.min(6, Math.floor(plotW / (widest + 12))),
+    );
+    for (let i = 0; i <= xDivisions; i++) {
+      const frac = i / xDivisions;
       const x = margins.left + frac * plotW;
       const t = visibleStartTimeSec + frac * visSpan;
       ctx.strokeStyle = "#999";

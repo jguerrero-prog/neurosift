@@ -1,0 +1,131 @@
+---
+import DocRows from "../../components/DocRows.astro";
+import DocSection from "../../components/DocSection.astro";
+import DocTable from "../../components/DocTable.astro";
+import Intro from "../../components/Intro.astro";
+import Screen from "../../components/Screen.astro";
+import LiveScreen from "../../components/LiveScreen.astro";
+import DocsLayout from "../../layouts/DocsLayout.astro";
+import { withBase } from "../../navigation";
+
+const FILE =
+  "nwb?url=https://api.dandiarchive.org/api/assets/f02db27e-82eb-41dd-865a-a08bb41491da/download/&dandisetId=000728&dandisetVersion=draft";
+
+const TODAY = [
+  ["Default object view", "The object’s attributes as “key: value” lines, then its groups and datasets as blue links with ▶/▼ triangles; a click opens one in place, with its own attributes", "plugins/default/DefaultView.tsx", "14 inline styles; a small ↗ beside each typed group opens it in a tab"],
+  ["Scalar datasets", "The value after the name, “age: P90D”", "plugins/default/DefaultView.tsx", "Kept"],
+  ["Large datasets", "A ↗ button that prints the values to the browser console", "plugins/default/DefaultView.tsx", "Up to 100 values show in place"],
+  ["Load in Python", "“+ Load in Python”, a plain button with a #ccc border, then the pip line and the script as Markdown code with “See lindi”", "plugins/PythonScript/", "No Copy"],
+  ["Python usage", "“Copy Script”, a gray button, above the whole script", "components/NwbUsageScript.tsx", "The button’s text changes to “Copied!” by DOM edit"],
+  ["Timeseries alignment", "Hide all, a count, then each item: checkbox, eye button, path, type and range in the type’s color, and a bar", "TimeseriesAlignmentView.tsx", "17 named colors, among them yellow, lime and pink; gray for others"],
+];
+
+const STATES = [
+  ["Reading", "“Reading the group” or “Reading the dataset” in place of the view."],
+  ["Nothing selected", "“Select a group or dataset to see its attributes and values.” beside the tree."],
+  ["Empty group", "“This group has no groups or datasets.” in place of the tree."],
+  ["Small dataset", "Up to 100 values show as Value; “Reading…” while they load."],
+  ["Large dataset", "Type and Shape, then Print the values to the browser console."],
+  ["Load in Python collapsed", "Only the Load in Python button."],
+  ["Copied", "The code block’s button reads Copied for 2 seconds; a failed copy says to select the code."],
+  ["Finding items", "The alignment shows “Finding the time series” until the first item arrives."],
+  ["Hidden item", "Its path and range turn text/disabled and its bar goes; the rest rescale."],
+  ["No items", "“This file has no time series, intervals or events with times.”"],
+];
+
+const BEHAVIOR = [
+  ["Tree", "A click anywhere on a group opens it and selects it; arrow keys, Home and End follow the tree view pattern."],
+  ["Details", "The selected group or dataset shows its type, shape, value and attributes beside the tree, below it when the view is narrower than 760px."],
+  ["Open in a new tab", "On a selected group with a neurodata type, as before."],
+  ["Load in Python", "Opens and closes the code; aria-expanded says which."],
+  ["Copy", "Each code block copies its own code; the shell’s $ is not copied."],
+  ["Alignment checkbox", "Shows or hides one item’s bar; Hide all and Show all do every item."],
+  ["Alignment open", "The eye button opens the item in a tab, as before."],
+];
+
+const DIFFERS = [
+  ["Children", "Blue links with triangles", "The Tree, the whole row opens", "Built"],
+  ["Attributes", "“key: value” lines", "A description list in the code face", "Built"],
+  ["Nested attributes", "Inline under each opened child", "Beside the tree, for the selected item", "Built; confirm"],
+  ["Open in a new tab", "A ↗ icon beside every typed group", "An icon button on the selected group", "Built"],
+  ["Load in Python", "A plain button and Markdown code", "Button and Code blocks with Copy, shared with Python usage", "Built"],
+  ["Alignment colors", "17 named colors by type", "The six data/series steps by type in name order, past six data/series/other, with a legend", "Built"],
+  ["Alignment frame", "Bare rows", "The view panel: summary, controls, plot", "Built"],
+];
+
+const SPECS = [
+  ["Attributes", "Description list, code layout · term type/code-sm text/muted"],
+  ["Tree", "Tree · row layout/row/default · meta in text/secondary · a scalar’s value cut at 60 characters"],
+  ["Split", "Tree, then 24px, then details up to 400px · stacked below 760px of view width"],
+  ["Details header", "Name in type/label · path in type/code-sm text/muted · Icon button, Small, Ghost, launch"],
+  ["Load in Python", "Button, Small, Secondary, chevron · Code block, Shell titled Install · Code block, Python · note in type/caption"],
+  ["Alignment row", "Checkbox, label hidden · Icon button, Small, Ghost, view · path in type/code-sm · type and range in type/caption text/secondary"],
+  ["Alignment bar", "8px (space/2) on surface/page · color data/series/1–6, then data/series/other · at least 2px wide"],
+  ["Legend", "Legend, beside the bars, top aligned"],
+];
+---
+
+<DocsLayout title="Default object view and Python" description="The view for objects with no view of their own, Load in Python, Python usage and the Timeseries alignment tab.">
+  <Intro
+    lead="Neurosift shows the default object view when an object has no view of its own, such as a ProcessingModule or a DfOverF container. Under every object sits Load in Python, and the file has a Python usage tab and a Timeseries alignment tab. These were the last views with the original look. The rebuild keeps what they read and how: the same groups, datasets, values, scripts and time ranges."
+    status="Updated November 10, 2026 · UI library · Captured at 1440 × 900 with Dandiset 000728 · Built from Tree, Description list, Icon button, Button, Code block, Checkbox, Legend, View panel and Loading state"
+    rules={[
+      { title: "Same data", text: "Every attribute, value, script line and time range is the one read today." },
+      { title: "One Python component", text: "Load in Python and Python usage share one component with Copy." },
+      { title: "Color is never alone", text: "Each bar’s type is printed beside it; the legend names the colors." },
+    ]}
+  />
+
+  <DocSection title="Today" lead="neurosift.app, captured with Playwright.">
+    <div class="captures">
+      <Screen file="nwb-default-today" alt="Today’s default view of /processing/ophys: key: value attribute lines and blue links with triangles, DfOverF opened in place with its own attributes." caption="Default object view: triangles, blue links and key: value lines." />
+      <Screen file="nwb-python-today" alt="Today’s Load in Python opened: a minus Load in Python button, a Prerequisites block, the script in Markdown code and See lindi." caption="Load in Python: Markdown code without Copy." />
+      <Screen file="nwb-alignment-today" alt="Today’s Timeseries alignment: rows of checkbox, eye icon and colored path text, with bars in teal, black, purple and gray." caption="Timeseries alignment: named colors by type." />
+    </div>
+  </DocSection>
+
+  <DocSection title="What the views do today" lead="Read from the source and checked on the live site.">
+    <DocTable caption="What the views do today" columns={["Part", "Today", "Code", "Notes"]}>
+      <DocRows rows={TODAY} />
+    </DocTable>
+  </DocSection>
+
+  <DocSection title="The rebuilt views" lead="This fork with the same file, with live data.">
+    <div class="captures">
+      <Screen file="nwb-default-proposed" alt="The rebuilt default view of /processing/ophys: attributes in a code description list, then a tree of ContaminationRatios, DfOverF and its RoiResponseSeries, Fluorescence, ImageSegmentation and SummaryImages, with the selected DfOverF’s attributes and Open in a new tab beside." caption="Default object view: attributes, the tree, and the selected item beside it." />
+      <Screen file="nwb-python-proposed" alt="The rebuilt Load in Python opened: the Load in Python button, an Install code block with pip install --upgrade lindi, and the Python code block with line numbers and Copy." caption="Load in Python: Install and Python code blocks, each with Copy." />
+      <Screen file="nwb-usage-proposed" alt="The rebuilt Python usage tab: one Python code block with line numbers and Copy, holding the PyNWB and LINDI script." caption="Python usage: the same component, open." />
+      <Screen file="nwb-alignment-proposed" alt="The rebuilt Timeseries alignment: a summary of 10 items from 38.2 to 3824.3 s, Hide all, then rows of checkbox, eye button, path, type and range, with bars in blue, orange, green and brown and a legend of IndexSeries, RoiResponseSeries, TimeIntervals and TimeSeries." caption="Timeseries alignment: the view panel, stepped colors and a legend." />
+    </div>
+    <p class="doc-note">Built from the <a href={withBase("/components/tables/")}>Tree</a>, the <a href={withBase("/components/description-list/")}>Description list</a>, <a href={withBase("/components/buttons/")}>Buttons</a>, <a href={withBase("/components/code/")}>Code</a>, <a href={withBase("/components/checkboxes/")}>Checkboxes</a>, the <a href={withBase("/components/legend/")}>Legend</a> and the <a href={withBase("/components/view-panel/")}>View panel</a>.</p>
+  </DocSection>
+
+  <DocSection title="Try it" lead="Open groups, select one, open it in a new tab, and load it in Python.">
+    <LiveScreen path={`${FILE}&tab=/processing/ophys`} title="Default object view, Dandiset 000728" size="tall" />
+    <LiveScreen path={`${FILE}&tab=timeseries-alignment`} title="Timeseries alignment, Dandiset 000728" size="tall" />
+  </DocSection>
+
+  <DocSection title="States">
+    <DocTable caption="States" columns={["When", "What changes"]}>
+      <DocRows rows={STATES} />
+    </DocTable>
+  </DocSection>
+
+  <DocSection title="Behavior">
+    <DocTable caption="Behavior" columns={["Part", "Behavior"]}>
+      <DocRows rows={BEHAVIOR} />
+    </DocTable>
+  </DocSection>
+
+  <DocSection title="What differs" lead="Built is in this fork now.">
+    <DocTable caption="What differs" columns={["Area", "Existing", "Proposed", "Status"]}>
+      <DocRows rows={DIFFERS} />
+    </DocTable>
+  </DocSection>
+
+  <DocSection title="Specs" lead="Values for developers. Every value is a token.">
+    <DocTable caption="Specs" columns={["Property", "Value"]}>
+      <DocRows rows={SPECS} />
+    </DocTable>
+  </DocSection>
+</DocsLayout>

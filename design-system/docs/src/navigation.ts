@@ -362,6 +362,12 @@ export const navigation: NavSection[] = [
         summary:
           "The assistant for datasets: today’s chat and a rebuild from @ui.",
       },
+      {
+        label: "Default object view and Python",
+        href: "/ui-library/nwb-object-views/",
+        summary:
+          "Objects with no view of their own, Load in Python and Timeseries alignment.",
+      },
     ],
   },
   {
