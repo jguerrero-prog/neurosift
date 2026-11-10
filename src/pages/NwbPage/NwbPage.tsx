@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { EmptyState, LoadingState } from "@ui";
+import { Breadcrumbs, EmptyState, LoadingState } from "@ui";
 import useRegisterNwbAIComponent from "./useRegisterNwbAIComponent";
 import { useDandisetVersionInfo } from "../DandisetPage/useDandisetVersionInfo";
 import useQueryDandiset from "../DandisetPage/useQueryDandiset";
@@ -16,6 +16,8 @@ import FileOverview from "./FileOverview";
 import "./FileViewer.css";
 import { useElementSize } from "./useElementSize";
 import { useStoredState } from "./useStoredState";
+import { useAssetPath } from "./useAssetPath";
+import { fileCrumbs } from "./fileCrumbs";
 import FileError from "./components/FileError";
 import { NwbFileOverview } from "./Types";
 import { useNwbFileOverview } from "./useNwbFileOverview";
@@ -210,42 +212,56 @@ const FileViewer: FunctionComponent<FileViewerProps> = ({
 
   useRegisterNwbAIComponent({ nwbUrl, dandisetId, dandisetVersion });
 
+  const assetPath = useAssetPath(nwbUrl);
+  const crumbs = fileCrumbs({
+    base: import.meta.env.BASE_URL,
+    archive: dandisetId ? (useEmber ? "EMBER" : "DANDI") : undefined,
+    dandisetId,
+    assetPath,
+    nwbUrl,
+  });
+
   const panelOpen = narrow ? narrowOpen : !collapsed;
   return (
-    <div
-      className={
-        narrow && panelOpen
-          ? "file-viewer file-viewer--panel-only"
-          : "file-viewer"
-      }
-    >
-      <FileOverview
-        nwbUrl={nwbUrl}
-        nwbFileOverview={nwbFileOverview}
-        dandisetInfo={dandisetVersionInfo}
-        dandisetPath={
-          dandisetId
-            ? `/${useEmber ? "ember-dandiset" : "dandiset"}/${dandisetId}`
-            : "/"
+    <div className="file-viewer-frame">
+      <div className="file-viewer-crumbs">
+        <Breadcrumbs items={crumbs} />
+      </div>
+      <div
+        className={
+          narrow && panelOpen
+            ? "file-viewer file-viewer--panel-only"
+            : "file-viewer"
         }
-        availableVersions={availableVersions}
-        onVersionChange={handleVersionChange}
-        width={width}
-        onWidthChange={setWidth}
-        collapsed={!panelOpen}
-        onCollapsedChange={(c) =>
-          narrow ? setNarrowOpen(!c) : setCollapsed(c)
-        }
-      />
-      <div ref={workspace} className="file-viewer-workspace">
-        {size.width > 0 && (
-          <MainWorkspace
-            nwbUrl={nwbUrl}
-            width={size.width}
-            height={size.height}
-            initialTabId={initialTabId}
-          />
-        )}
+      >
+        <FileOverview
+          nwbUrl={nwbUrl}
+          nwbFileOverview={nwbFileOverview}
+          dandisetInfo={dandisetVersionInfo}
+          dandisetPath={
+            dandisetId
+              ? `/${useEmber ? "ember-dandiset" : "dandiset"}/${dandisetId}`
+              : "/"
+          }
+          availableVersions={availableVersions}
+          onVersionChange={handleVersionChange}
+          width={width}
+          onWidthChange={setWidth}
+          collapsed={!panelOpen}
+          onCollapsedChange={(c) =>
+            narrow ? setNarrowOpen(!c) : setCollapsed(c)
+          }
+        />
+        <div ref={workspace} className="file-viewer-workspace">
+          {size.width > 0 && (
+            <MainWorkspace
+              nwbUrl={nwbUrl}
+              width={size.width}
+              height={size.height}
+              initialTabId={initialTabId}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

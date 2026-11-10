@@ -99,3 +99,25 @@
   overflow-wrap: anywhere;
   border-block-end: var(--border-width-1) solid var(--border-subtle);
 }
+
+.file-viewer-frame {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.file-viewer-crumbs {
+  display: flex;
+  flex: none;
+  align-items: center;
+  min-block-size: 2rem;
+  padding-inline: var(--space-4);
+  background: var(--surface-panel);
+  border-block-end: var(--border-width-1) solid var(--border-subtle);
+}
+
+.file-viewer-frame > .file-viewer {
+  flex: 1;
+  min-block-size: 0;
+}
