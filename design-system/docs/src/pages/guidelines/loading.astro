@@ -1,5 +1,6 @@
 ---
-import { Alert, Button, Spinner } from "@ui";
+import { Alert, Button, LoadingState, SkeletonRows } from "@ui";
+import CodeSample from "../../components/CodeSample.astro";
 import DocRows from "../../components/DocRows.astro";
 import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
@@ -45,6 +46,7 @@ const A11Y = [
   ["Announce start and end once", "“Loading LFPs.” Then “LFPs loaded”, or what failed. Never repeated while it spins."],
   ["Progress has words", "A progress bar always has a text equivalent, such as “12 of 40 chunks”."],
 ];
+const code = `import { LoadingState, useLoadingPhase } from "@ui";\n\nconst phase = useLoadingPhase(loading);\n\n<LoadingState\n  label="Loading LFPs"\n  phase={phase}\n  progress={{ value: chunks, max: total, unit: "chunks" }}\n/>`;
 ---
 
 <DocsLayout title="Loading and large data" description="Say what is loading and how far along it is, and what very large data is doing.">
@@ -80,12 +82,24 @@ const A11Y = [
     <div class="loading-demo">
       <p class="type-h4">LFPs</p>
       <p class="type-code-sm">/acquisition/LFPs · 70 channels at 400 Hz · 1,375.28 s</p>
-      <p class="loading-demo-status type-body-sm"><Spinner /> Loading LFPs, 12 of 40 chunks</p>
+      <LoadingState label="Loading LFPs" phase="loading" progress={{ value: 12, max: 40, unit: "chunks" }} />
       <div class="demo-row">
         <Button variant="secondary" icon="copy" loading>Copy link</Button>
       </div>
     </div>
     <p class="doc-note">Chunks that have arrived draw at once; the rest of the window waits. A button keeps its label while it works; see <a href={withBase("/components/buttons/")}>Buttons</a>.</p>
+  </DocSection>
+
+  <DocSection title="When it’s slow" lead="After 15 seconds the spinner stops, and the view says what is slow and offers a way out.">
+    <div class="loading-demo">
+      <LoadingState label="Loading LFPs" phase="slow" slow={{ message: "DANDI is answering slowly. This is taking longer than usual.", actions: [{ label: "Try again", onClick: noop }, { label: "Try a 1 s window", onClick: noop }] }} />
+    </div>
+  </DocSection>
+
+  <DocSection title="Lists while they load" lead="Still skeleton rows hold the space of a list, such as the DANDI archive list, until it arrives. They never shimmer, and screen readers skip them.">
+    <div class="loading-demo">
+      <SkeletonRows rows={4} />
+    </div>
   </DocSection>
 
   <DocSection title="Too much to draw" lead="Some windows hold more samples than a browser can draw quickly. Neurosift says so, and lets people choose.">
@@ -113,5 +127,8 @@ const A11Y = [
       <DocRows rows={A11Y} />
     </DocTable>
     <p class="doc-note">Chunk counts depend on how each file is chunked; where Neurosift can’t know the total, it shows a spinner and words instead of a progress bar.</p>
+  </DocSection>
+  <DocSection title="In code" lead="Import from @ui. useLoadingPhase turns “is it loading?” into the guideline’s timing; LoadingState, ProgressBar and SkeletonRows render only from props.">
+    <CodeSample label="Loading state" code={code} />
   </DocSection>
 </DocsLayout>
