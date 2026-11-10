@@ -4,6 +4,7 @@ import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
 import Intro from "../../components/Intro.astro";
 import Screen from "../../components/Screen.astro";
+import LiveScreen from "../../components/LiveScreen.astro";
 import DocsLayout from "../../layouts/DocsLayout.astro";
 import { withBase } from "../../navigation";
 
@@ -61,6 +62,10 @@ const DIFFERS = [
       <Screen file="tree-proposed-checked" alt="The rebuilt tree with LFPs and units checked: a selection bar reads acquisition/LFPs and units, with Clear and View together." caption="Two objects checked: the selection bar names them, with Clear and View together." />
     </div>
     <p class="doc-note">The rows are the <a href={withBase("/components/tables/")}>Object tree components on Tables</a>.</p>
+  </DocSection>
+
+  <DocSection title="Try it" lead="Open groups, check objects for a combined view, and open a view.">
+    <LiveScreen path="nwb?url=https://api.dandiarchive.org/api/assets/65a7e913-45c7-48db-bf19-b9f5e910110a/download/&dandisetId=000673&dandisetVersion=0.250122.0110" title="Object tree, Dandiset 000673 sub-1" size="tall" />
   </DocSection>
 
   <DocSection title="States">

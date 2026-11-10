@@ -4,6 +4,7 @@ import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
 import Intro from "../../components/Intro.astro";
 import Screen from "../../components/Screen.astro";
+import LiveScreen from "../../components/LiveScreen.astro";
 import DocsLayout from "../../layouts/DocsLayout.astro";
 import { withBase } from "../../navigation";
 
@@ -92,6 +93,10 @@ const SPECS = [
       <Screen file="reference-proposed-schema" alt="The rebuilt Schema tab: Find a type with All types and Used in this file, tables of namespaces and types, and details for ElectricalSeries: description, inheritance and its own datasets." caption="Schema: namespaces and types; ElectricalSeries’s description, inheritance and own datasets beside them." />
     </div>
     <p class="doc-note">Built from the <a href={withBase("/components/tables/")}>Data table and Tree</a>, the <a href={withBase("/components/accordions/")}>Accordion</a> and the <a href={withBase("/components/description-list/")}>Description list</a>.</p>
+  </DocSection>
+
+  <DocSection title="Try it" lead="Find a group or dataset, open it, and switch to Schema.">
+    <LiveScreen path="nwb?url=https://api.dandiarchive.org/api/assets/65a7e913-45c7-48db-bf19-b9f5e910110a/download/&dandisetId=000673&dandisetVersion=0.250122.0110&tab=hdf5" title="HDF5 tab, Dandiset 000673 sub-1" size="tall" />
   </DocSection>
 
   <DocSection title="States">

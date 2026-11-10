@@ -4,6 +4,7 @@ import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
 import Intro from "../../components/Intro.astro";
 import Screen from "../../components/Screen.astro";
+import LiveScreen from "../../components/LiveScreen.astro";
 import DocsLayout from "../../layouts/DocsLayout.astro";
 import { withBase } from "../../navigation";
 
@@ -81,6 +82,10 @@ const SPECS = [
       <Screen file="imaging-proposed-seg" alt="The rebuilt segmentation: a summary of 171 ROIs, the colored masks and Orientation checkboxes beside them." caption="Image segmentation: the masks, with Orientation beside them." />
     </div>
     <p class="doc-note">Built from the <a href={withBase("/components/view-panel/")}>View panel</a> and <a href={withBase("/components/sliders/")}>Sliders</a>.</p>
+  </DocSection>
+
+  <DocSection title="Try it" lead="Swap and flip the masks.">
+    <LiveScreen path="nwb?url=https://api.dandiarchive.org/api/assets/f02db27e-82eb-41dd-865a-a08bb41491da/download/&dandisetId=000728&dandisetVersion=draft&tab=view:ImageSegmentation|/processing/ophys/ImageSegmentation" title="Image segmentation, Dandiset 000728" size="tall" />
   </DocSection>
 
   <DocSection title="States">

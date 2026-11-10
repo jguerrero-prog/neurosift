@@ -4,6 +4,7 @@ import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
 import Intro from "../../components/Intro.astro";
 import Screen from "../../components/Screen.astro";
+import LiveScreen from "../../components/LiveScreen.astro";
 import DocsLayout from "../../layouts/DocsLayout.astro";
 import { withBase } from "../../navigation";
 
@@ -87,6 +88,10 @@ const SPECS = [
       <Screen file="videos-proposed" alt="The rebuilt Videos section: a summary, Playback, the behavioral video titled A · behavioral video, and the video list with its path and no frame times." caption="Videos: each video with its path, played on one clock." />
     </div>
     <p class="doc-note">Built from the <a href={withBase("/components/view-panel/")}>View panel</a> and <a href={withBase("/components/time-controls/")}>Time controls</a>.</p>
+  </DocSection>
+
+  <DocSection title="Try it" lead="Play, show trails, hide markers and switch to Pose only.">
+    <LiveScreen path="nwb?url=https://api.dandiarchive.org/api/assets/70af470b-7cbe-4b9d-8490-9cdf584fd9e6/download/&dandisetId=000231&dandisetVersion=draft&tab=view:PoseEstimation|/processing/behavior/raw_position_whisker_C0" title="Pose overlay, Dandiset 000231 sub-KM91" size="tall" />
   </DocSection>
 
   <DocSection title="States">

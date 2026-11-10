@@ -4,6 +4,7 @@ import DocSection from "../../components/DocSection.astro";
 import DocTable from "../../components/DocTable.astro";
 import Intro from "../../components/Intro.astro";
 import Screen from "../../components/Screen.astro";
+import LiveScreen from "../../components/LiveScreen.astro";
 import DocsLayout from "../../layouts/DocsLayout.astro";
 import { withBase } from "../../navigation";
 
@@ -57,4 +58,8 @@ const SPECS = [
       <DocRows rows={SPECS} />
     </DocTable>
   </DocSection>
+  <DocSection title="Try it" lead="Show and hide a key; nothing is saved until you type one.">
+    <LiveScreen path="settings" title="Settings" size="default" />
+  </DocSection>
+
 </DocsLayout>
