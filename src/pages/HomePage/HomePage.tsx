@@ -1,5 +1,5 @@
 import { Button, RecentlyOpened, SearchField, TextInput } from "@ui";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AIRegisteredComponent, useAIComponentRegistry } from "../../AIContext";
 import buildInfo from "../../build-info.json";
@@ -62,6 +62,16 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
   const recent = useRecent();
   const [query, setQuery] = useState("");
   const [linkOpen, setLinkOpen] = useState(false);
+  const linkToggle = useRef<HTMLButtonElement>(null);
+  const linkForm = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    if (linkOpen) linkForm.current?.querySelector("input")?.focus();
+  }, [linkOpen]);
+  const closeLink = () => {
+    setLinkOpen(false);
+    setLinkError(undefined);
+    linkToggle.current?.focus();
+  };
   const [link, setLink] = useState("");
   const [linkError, setLinkError] = useState<string>();
   useRegisterAIComponent();
@@ -120,18 +130,33 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
             onSearch={search}
           />
         </div>
-        {linkOpen ? (
+        <p className="home-links">
+          <a href={`${base}search?sort=newest`}>Browse all datasets</a>
+          <a href={`${base}search?archive=dandi&sort=newest`}>
+            Browse DANDI datasets
+          </a>
+          <button
+            ref={linkToggle}
+            type="button"
+            className="home-link-button"
+            aria-expanded={linkOpen}
+            aria-controls="home-link-form"
+            onClick={() => setLinkOpen(true)}
+          >
+            Open a file by link
+          </button>
+        </p>
+        {linkOpen && (
           <form
+            id="home-link-form"
+            ref={linkForm}
             className="home-link"
             onSubmit={(event) => {
               event.preventDefault();
               open(link);
             }}
             onKeyDown={(event) => {
-              if (event.key === "Escape") {
-                setLinkOpen(false);
-                setLinkError(undefined);
-              }
+              if (event.key === "Escape") closeLink();
             }}
           >
             <TextInput
@@ -148,21 +173,10 @@ const HomePage: FunctionComponent<HomePageProps> = () => {
             <Button variant="primary" type="submit">
               Open file
             </Button>
+            <Button variant="secondary" type="button" onClick={closeLink}>
+              Cancel
+            </Button>
           </form>
-        ) : (
-          <p className="home-links">
-            <a href={`${base}search?sort=newest`}>Browse all datasets</a>
-            <a href={`${base}search?archive=dandi&sort=newest`}>
-              Browse DANDI datasets
-            </a>
-            <button
-              type="button"
-              className="home-link-button"
-              onClick={() => setLinkOpen(true)}
-            >
-              Open a file by link
-            </button>
-          </p>
         )}
         {recent.length > 0 && (
           <section className="home-recent" aria-labelledby="home-recent-title">
