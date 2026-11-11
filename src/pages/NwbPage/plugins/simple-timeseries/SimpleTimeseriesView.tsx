@@ -10,6 +10,7 @@ import ViewError from "@components/ViewError/ViewError";
 import { useCssVars } from "@components/useCssVars";
 import { FunctionComponent, ReactNode, useMemo, useState } from "react";
 import TimeView, { TIME_VIEW_INSET } from "../common/TimeView";
+import { covers } from "../common/playback";
 import { useWindowPlayback } from "../common/usePlayback";
 import { useTimeWindow } from "../common/useTimeWindow";
 import { useTimeseriesData } from "./hooks";
@@ -88,9 +89,7 @@ export const SimpleTimeseriesView: FunctionComponent<
   const channels = info.totalNumChannels;
   const holding =
     !zoomInRequired &&
-    (!loadedRange ||
-      loadedRange.start > visibleStart ||
-      loadedRange.end < Math.min(visibleEnd, timeseriesClient.endTime));
+    !covers(loadedRange, visibleStart, visibleEnd, timeseriesClient.endTime);
   const plural = (n: number, word: string) =>
     `${n.toLocaleString("en-US")} ${word}${n === 1 ? "" : "s"}`;
 
