@@ -4,13 +4,18 @@ import {
   useTimeRange,
   useTimeseriesSelection,
 } from "@shared/context-timeseries-selection-2";
-import TimeseriesSelectionBarWithControls from "@shared/TimeseriesSelectionBar/TimeseriesSelectionBarWithControls";
 import { useTimeseriesTimestampsClient } from "@shared/TimeseriesTimestampsClient/TimeseriesTimestampsClient";
+import { LoadingState, TooMuchData } from "@ui";
 import { FunctionComponent, useEffect, useState } from "react";
+import TimeView, {
+  TIME_VIEW_CHROME,
+  TIME_VIEW_INSET,
+} from "../../common/TimeView";
+import { useTimeWindow } from "../../common/useTimeWindow";
+import { timeseriesSummary } from "../../simple-timeseries/timeseriesSummary";
 import PlotlyComponent from "./PlotlyComponent";
 import TimeseriesDatasetChunkingClient from "./TimeseriesDatasetChunkingClient";
-
-const timeSelectionBarHeight = 24;
+import { tooMuchToDraw } from "./tooMuchToDraw";
 
 type Props = {
   width: number;
@@ -66,32 +71,6 @@ const SpatialSeriesXYView: FunctionComponent<Props> = ({
   // Set chunkSize
   const chunkSize = dataset ? Math.floor(1e4 / (dataset.shape[1] || 1)) : 0;
 
-  // // set visible time range
-  // useEffect(() => {
-  //   if (!chunkSize) return;
-  //   if (!dataClient) return;
-  //   if (startTime === undefined) return;
-  //   if (endTime === undefined) return;
-  //   if (visibleStartTimeSec !== undefined) return;
-  //   if (visibleEndTimeSec !== undefined) return;
-  //   setVisibleTimeRange(
-  //     startTime,
-  //     startTime +
-  //       Math.min(
-  //         (chunkSize / dataClient.estimatedSamplingFrequency!) * 3,
-  //         endTime,
-  //       ),
-  //   );
-  // }, [
-  //   chunkSize,
-  //   dataClient,
-  //   setVisibleTimeRange,
-  //   startTime,
-  //   endTime,
-  //   visibleStartTimeSec,
-  //   visibleEndTimeSec,
-  // ]);
-
   // Set the datasetChunkingClient
   useEffect(() => {
     if (!nwbUrl) return;
@@ -115,6 +94,7 @@ const SpatialSeriesXYView: FunctionComponent<Props> = ({
     undefined,
   );
   const [zoomInRequired, setZoomInRequired] = useState<boolean>(false);
+  const [acceptedDuration, setAcceptedDuration] = useState(0);
   useEffect(() => {
     if (
       !dataset ||
@@ -129,10 +109,12 @@ const SpatialSeriesXYView: FunctionComponent<Props> = ({
     }
     let canceled = false;
     const load = async () => {
-      const maxVisibleDuration =
-        1e6 / (dataset.shape[1] || 1) / dataClient.estimatedSamplingFrequency!;
-      const zoomInRequired =
-        visibleEndTimeSec - visibleStartTimeSec > maxVisibleDuration;
+      const zoomInRequired = tooMuchToDraw({
+        duration: visibleEndTimeSec - visibleStartTimeSec,
+        channels: dataset.shape[1],
+        samplingFrequency: dataClient.estimatedSamplingFrequency!,
+        acceptedDuration,
+      });
       if (zoomInRequired) {
         setStartChunkIndex(undefined);
         setEndChunkIndex(undefined);
@@ -153,7 +135,14 @@ const SpatialSeriesXYView: FunctionComponent<Props> = ({
     return () => {
       canceled = true;
     };
-  }, [dataset, visibleStartTimeSec, visibleEndTimeSec, chunkSize, dataClient]);
+  }, [
+    dataset,
+    visibleStartTimeSec,
+    visibleEndTimeSec,
+    chunkSize,
+    dataClient,
+    acceptedDuration,
+  ]);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -238,7 +227,7 @@ const SpatialSeriesXYView: FunctionComponent<Props> = ({
     visibleEndTimeSec,
   ]);
 
-  const plotHeight = height - timeSelectionBarHeight;
+  const plotHeight = Math.max(height - TIME_VIEW_CHROME, 200);
 
   // Set valueRange
   const [valueRange, setValueRange] = useState<
@@ -265,53 +254,65 @@ const SpatialSeriesXYView: FunctionComponent<Props> = ({
     });
   }, [plotData]);
 
+  const time = useTimeWindow();
+  const samplingFrequency = dataClient?.estimatedSamplingFrequency;
+  if (
+    !dataset ||
+    startTime === undefined ||
+    endTime === undefined ||
+    samplingFrequency === undefined
+  )
+    return <LoadingState label="Reading the positions" phase="loading" />;
+
+  const duration = time.value.duration;
+  const seconds = duration.toLocaleString("en-US", {
+    maximumFractionDigits: 2,
+  });
+  const positions = Math.round(duration * samplingFrequency).toLocaleString(
+    "en-US",
+  );
+  let plot;
+  if (zoomInRequired)
+    plot = (
+      <TooMuchData
+        zoomLabel="Zoom in"
+        onZoom={() =>
+          time.onChange({
+            start: time.value.start + duration / 4,
+            duration: duration / 2,
+          })
+        }
+        onDrawAnyway={() => setAcceptedDuration(duration)}
+      >
+        {`This window holds about ${positions} positions over ${seconds} s, more than Neurosift draws at once. Zoom in, drag across the overview above to pick a shorter stretch, or draw it anyway.`}
+      </TooMuchData>
+    );
+  else if (plotData)
+    plot = (
+      <PlotlyComponent
+        data={plotData}
+        width={width - TIME_VIEW_INSET}
+        height={plotHeight}
+        currentTime={currentTime}
+        valueRange={valueRange}
+        unit={unit}
+      />
+    );
+  else plot = <LoadingState label="Reading the positions" phase="loading" />;
+
   return (
-    <div style={{ position: "relative", width, height }}>
-      <div
-        style={{ position: "absolute", width, height: timeSelectionBarHeight }}
-      >
-        <TimeseriesSelectionBarWithControls
-          width={width}
-          height={timeSelectionBarHeight}
-        />
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          top: timeSelectionBarHeight,
-          width,
-          height: plotHeight,
-        }}
-      >
-        {plotData && (
-          <PlotlyComponent
-            data={plotData}
-            width={width}
-            height={plotHeight}
-            // onPointClick={(index) => {
-            //   if (plotData.t[index] !== undefined) {
-            //     setCurrentTime(plotData.t[index]);
-            //   }
-            // }}
-            currentTime={currentTime}
-            valueRange={valueRange}
-            unit={unit}
-          />
-        )}
-      </div>
-      {loading && !zoomInRequired && (
-        <div
-          style={{
-            position: "absolute",
-            top: timeSelectionBarHeight + 20,
-            left: 60,
-            userSelect: "none",
-          }}
-        >
-          <div style={{ fontSize: 20, color: "gray" }}>Loading...</div>
-        </div>
-      )}
-    </div>
+    <TimeView
+      label={path.split("/").pop() || path}
+      summary={timeseriesSummary({
+        timeseriesStartTime: startTime,
+        timeseriesDuration: endTime - startTime,
+        samplingFrequency,
+        totalNumChannels: dataset.shape[1] ?? 1,
+      })}
+      busy={loading && !zoomInRequired}
+    >
+      {plot}
+    </TimeView>
   );
 };
 
