@@ -5,9 +5,6 @@ describe("timeseriesSummary", () => {
   it("gives the span, rate and channels", () => {
     expect(
       timeseriesSummary({
-        visibleDuration: 3.75,
-        startTimestamp: 0,
-        totalNumSamples: 550276,
         totalNumChannels: 70,
         samplingFrequency: 400,
         timeseriesStartTime: 0,
