@@ -1,21 +1,10 @@
 import { Checkbox } from "@ui";
+import type { PlaneTransform } from "./planeTransform";
 import "./PlaneTransformSelector.css";
 
 type Props = {
   planeTransform: PlaneTransform;
   setPlaneTransform: (planeTransform: PlaneTransform) => void;
-};
-
-export type PlaneTransform = {
-  xyswap: boolean;
-  xflip: boolean;
-  yflip: boolean;
-};
-
-export const defaultPlaneTransform: PlaneTransform = {
-  xyswap: false,
-  xflip: false,
-  yflip: false,
 };
 
 /** How the image is turned: swap x and y, flip either axis. */

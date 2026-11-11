@@ -10,10 +10,11 @@ import TimeseriesSelectionBar, {
 } from "@shared/TimeseriesSelectionBar/TimeseriesSelectionBar";
 import { useTimeseriesTimestampsClient } from "@shared/TimeseriesTimestampsClient/TimeseriesTimestampsClient";
 import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
-import PlaneTransformSelector, {
+import PlaneTransformSelector from "../../ImageSegmentation/ImageSegmentationItemView/PlaneTransformSelector";
+import {
   defaultPlaneTransform,
-  PlaneTransform,
-} from "../../ImageSegmentation/ImageSegmentationItemView/PlaneTransformSelector";
+  type PlaneTransform,
+} from "../../ImageSegmentation/ImageSegmentationItemView/planeTransform";
 
 // const queryParams = parseQuery(window.location.href)
 

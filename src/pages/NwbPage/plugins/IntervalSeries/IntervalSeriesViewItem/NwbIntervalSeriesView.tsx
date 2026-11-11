@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FunctionComponent, useEffect, useMemo } from "react";
 import { useHdf5DatasetData } from "@hdf5Interface";
 import NwbTimeIntervalsWidget from "../../TimeIntervals/TimeIntervalsViewItem/NwbTimeIntervalsWidget";
