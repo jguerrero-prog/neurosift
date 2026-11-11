@@ -9,7 +9,7 @@ import {
 } from "react";
 import "./ImagesItemView.css";
 import { galleryImages } from "./imageGallery";
-import { useInView } from "react-intersection-observer";
+import LazyFrame from "@components/LazyFrame";
 import {
   Hdf5Dataset,
   useHdf5Dataset,
@@ -48,7 +48,7 @@ const ImagesItemView: FunctionComponent<Props> = ({ nwbUrl, path }) => {
       <Gallery width={imageWidth} height={imageHeight}>
         {images.map((ds) => (
           <figure key={ds.path} className="images-item">
-            <LazyFrame>
+            <LazyFrame className="images-frame">
               <ImageItem
                 nwbUrl={nwbUrl}
                 path={ds.path}
@@ -76,18 +76,6 @@ const Gallery: FunctionComponent<{
   return (
     <div ref={ref} className="images-gallery">
       {children}
-    </div>
-  );
-};
-
-/** Reads and draws an image only once it scrolls into view. */
-const LazyFrame: FunctionComponent<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const { inView, ref } = useInView({ triggerOnce: true });
-  return (
-    <div ref={ref} className="images-frame">
-      {inView && children}
     </div>
   );
 };
