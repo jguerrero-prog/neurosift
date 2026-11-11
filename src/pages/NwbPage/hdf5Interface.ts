@@ -10,6 +10,7 @@ import {
   RemoteH5FileX,
 } from "@remote-h5-file";
 import { getCachedObject, setCachedObject } from "./hdf5Cache";
+import { MAX_READ_BYTES, datasetBytes, tooLargeMessage } from "./datasetSize";
 import getAuthorizationHeaderForUrl from "../util/getAuthorizationHeaderForUrl";
 import { removeStatusItem, setStatusItem } from "@components/StatusBarContext";
 import {
@@ -344,25 +345,9 @@ export const getHdf5DatasetData = async (
     if (!ds) {
       throw new Error(`Dataset not found: ${path}`);
     }
-    let totalSize = 1;
-    for (let i = 0; i < ds.shape.length; i++) {
-      if (o.slice && o.slice[i]) {
-        totalSize *= o.slice[i][1] - o.slice[i][0];
-      } else {
-        totalSize *= ds.shape[i];
-      }
-    }
-    const maxNumElements = 1e8;
-    if (totalSize > maxNumElements) {
-      // Format sizes in MB for human readability
-      const formatSize = (size: number) => {
-        const sizeInMB = (size / 1e6).toFixed(1);
-        return `${sizeInMB} MB`;
-      };
-      throw new Error(
-        `The dataset "${path}" is too large to load (${formatSize(totalSize)}). Maximum allowed size is ${formatSize(maxNumElements)}.`,
-      );
-    }
+    const bytes = datasetBytes(ds.shape, ds.dtype, o.slice);
+    if (bytes > MAX_READ_BYTES)
+      throw new Error(tooLargeMessage(path, bytes, MAX_READ_BYTES));
     try {
       return await f.getDatasetData(path, o);
     } catch (err) {
