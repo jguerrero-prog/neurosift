@@ -647,6 +647,10 @@
   --token: var(--layout-page-margin);
 }
 
+.token-button-height-lg {
+  --token: var(--button-height-lg);
+}
+
 .token-button-height-md {
   --token: var(--button-height-md);
 }

@@ -51,6 +51,14 @@ export default function TextAreaDemo() {
         rows={2}
       />
       <Sample
+        label="Ask Neurosift Chat, Large"
+        size="lg"
+        rows={1}
+        maxRows={6}
+        placeholder="Ask about a Dandiset"
+        helper="Enter to send, Shift+Enter for a new line"
+      />
+      <Sample
         label="Session notes, grown to 4 rows"
         initial={NOTES}
         rows={2}

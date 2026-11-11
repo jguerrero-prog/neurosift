@@ -155,7 +155,7 @@ export const navigation: NavSection[] = [
       {
         label: "Buttons",
         href: "/components/buttons/",
-        summary: "Button and Icon button: four styles, two sizes, every state.",
+        summary: "Button and Icon button: four styles, three sizes, every state.",
       },
       {
         label: "Text inputs and search",

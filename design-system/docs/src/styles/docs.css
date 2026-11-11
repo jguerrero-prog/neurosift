@@ -481,6 +481,17 @@ main {
   align-items: start;
 }
 
+.prompt-list-demo {
+  display: grid;
+  gap: var(--space-2);
+  max-inline-size: var(--layout-text-max);
+}
+
+.prompt-list-demo-title {
+  font: var(--type-label);
+  color: var(--text-default);
+}
+
 .message-box-demo {
   display: grid;
   max-inline-size: var(--layout-panel-max);
@@ -504,7 +515,14 @@ main {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: var(--space-2);
-  align-items: start;
+  align-items: end;
+}
+
+/* Under the whole row, as in Figma, so Send lines up with the field's bottom edge. */
+.message-box-helper {
+  margin-block: var(--space-2) 0;
+  font: var(--type-caption);
+  color: var(--text-muted);
 }
 
 .field-stack {

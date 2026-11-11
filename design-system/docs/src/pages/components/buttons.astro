@@ -16,6 +16,12 @@ const STYLES: { variant: ButtonVariant; label: string; name: string; use: string
   { variant: "destructive", label: "Remove API key", name: "Destructive", use: "Actions that delete or lose something. Always confirm first.", examples: "Remove API key, Clear recent Dandisets" },
 ];
 
+const SIZES = [
+  { size: "lg", name: "Large, 40px tall", use: "Large · 40px · beside a Large input, such as the chat’s Send" },
+  { size: "md", name: "Medium, 32px tall", use: "Medium · 32px · pages, panels, dialogs, toolbars" },
+  { size: "sm", name: "Small, 24px tall", use: "Small · 24px · table rows, the file tree, side panels" },
+] as const;
+
 const LABELS = [
   ["Browse DANDI", "BROWSE DANDI", "Sentence case is easier to read than all caps"],
   ["Load in Python", "+ Load in Python", "The plus sign isn’t an action; a code icon can carry the meaning"],
@@ -27,6 +33,7 @@ const LABELS = [
 
 const SPECS = [
   ["Height", "32px · button/height/md", "24px · button/height/sm"],
+  ["Large", "40px · button/height/lg, an alias of input/height/lg; padding, gap, type and states as Medium", "—"],
   ["Padding at the sides", "16px · space/4", "12px · space/3"],
   ["Gap to icon or spinner", "8px · space/2", "4px · space/1"],
   ["Label", "type/label, SemiBold 14px", "Same"],
@@ -70,10 +77,10 @@ const ANATOMY = [
 ];
 ---
 
-<DocsLayout title="Buttons" description="Button and Icon button: four styles, two sizes and every state.">
+<DocsLayout title="Buttons" description="Button and Icon button: four styles, three sizes and every state.">
   <Intro
-    lead="Buttons start actions: opening a file, sharing a view, loading data in Python, adding an API key. Neurosift has four styles in two sizes, plus an icon button for toolbars, and every button shows a clear state when people hover, press, focus it with the keyboard, or wait for it."
-    status="Updated November 6, 2026 · Components · Every button on this page is the component the app imports from @ui"
+    lead="Buttons start actions: opening a file, sharing a view, loading data in Python, adding an API key. Neurosift has four styles in three sizes, plus an icon button for toolbars, and every button shows a clear state when people hover, press, focus it with the keyboard, or wait for it."
+    status="Updated November 10, 2026 · Components · Every button on this page is the component the app imports from @ui"
     rules={[
       { title: "One primary per view", text: "Each page, panel or dialog has at most one Primary button: the action most people came to take." },
       { title: "Labels are verbs", text: "Say what will happen: “Open file”, “Share view”. Never “OK” or “Submit” on their own." },
@@ -98,14 +105,14 @@ const ANATOMY = [
     </DocTable>
   </DocSection>
 
-  <DocSection title="Sizes" lead="Medium is the default. Small is for dense places: table rows, the file tree and side panels, where it lines up with 24px compact rows.">
+  <DocSection title="Sizes" lead="Medium is the default. Small is for dense places: table rows, the file tree and side panels, where it lines up with 24px compact rows. Large is only for a button beside a Large input, such as Send next to Neurosift Chat’s message box, so the two line up at 40px.">
     {
-      (["md", "sm"] as const).map((size) => (
-        <div class="demo-row" role="group" aria-label={size === "md" ? "Medium, 32px tall" : "Small, 24px tall"}>
-          <Button variant="primary" size={size}>Open file</Button>
+      SIZES.map(({ size, name, use }) => (
+        <div class="demo-row" role="group" aria-label={name}>
+          <Button variant="primary" size={size}>{size === "lg" ? "Send" : "Open file"}</Button>
           <Button size={size} icon="share">Share view</Button>
           <Button variant="ghost" size={size}>Show all</Button>
-          <span class="type-caption muted">{size === "md" ? "Medium · 32px · pages, panels, dialogs, toolbars" : "Small · 24px · table rows, the file tree, side panels"}</span>
+          <span class="type-caption muted">{use}</span>
         </div>
       ))
     }
