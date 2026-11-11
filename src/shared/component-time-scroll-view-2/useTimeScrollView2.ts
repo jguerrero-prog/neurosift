@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-const DefaultToolbarWidth = 18;
+import { DefaultToolbarWidth } from "./TimeWidgetToolbarEntries";
 
 const defaultMargins = {
   left: 50,
@@ -9,18 +9,16 @@ const defaultMargins = {
   bottom: 40,
 };
 
-export const useTimeScrollView3 = ({
+export const useTimeScrollView2 = ({
   width,
   height,
   hideToolbar,
   leftMargin,
-  hasCustomActions,
 }: {
   width: number;
   height: number;
   hideToolbar?: boolean;
   leftMargin?: number;
-  hasCustomActions?: boolean;
 }) => {
   const margins = useMemo(
     () => ({
@@ -30,10 +28,8 @@ export const useTimeScrollView3 = ({
     [leftMargin],
   );
   const toolbarWidth = hideToolbar ? 0 : DefaultToolbarWidth;
-  // Calculate bottom toolbar height: 40px for main toolbar + 40px for custom actions (if present)
-  const bottomToolbarHeight = hasCustomActions ? 80 : 40;
   const canvasWidth = width - toolbarWidth;
-  const canvasHeight = height - bottomToolbarHeight;
+  const canvasHeight = height;
   return {
     margins,
     canvasWidth,
