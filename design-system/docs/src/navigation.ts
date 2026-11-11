@@ -364,6 +364,12 @@ export const navigation: NavSection[] = [
         summary: "Power by frequency over recording time, and its settings.",
       },
       {
+        label: "Intracellular recordings",
+        href: "/ui-library/icephys/",
+        summary:
+          "Patch-clamp sweeps by protocol, overlaid or in panels, and when each was recorded.",
+      },
+      {
         label: "Video and pose",
         href: "/ui-library/video-and-pose/",
         summary: "Behavioral video, pose markers over it, and linked videos.",
@@ -378,7 +384,7 @@ export const navigation: NavSection[] = [
         label: "Default object view and Python",
         href: "/ui-library/nwb-object-views/",
         summary:
-          "Objects with no view of their own, Load in Python and Timeseries alignment.",
+          "Objects with no view of their own, tables, Load in Python and Timeseries alignment.",
       },
     ],
   },
