@@ -11,13 +11,17 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx}\"",
     "test": "vitest run",
-    "check:bundle": "node devel/check_bundle_size.mjs"
+    "check:bundle": "node devel/check_bundle_size.mjs",
+    "tokens": "node design-system/tokens/build.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fi-sci/misc": "^0.0.10",
     "@fi-sci/splitter": "^0.0.3",
+    "@fontsource/ibm-plex-mono": "5.3.0",
+    "@fontsource/ibm-plex-sans": "5.3.0",
+    "@fontsource/ibm-plex-sans-jp": "5.3.1",
     "@mui/icons-material": "^6.4.2",
     "@mui/material": "^6.4.2",
     "@types/plotly.js": "^2.35.2",
