@@ -9,6 +9,7 @@
 - The Settings page is rebuilt from the design system. The DANDI, DANDI sandbox and EMBER API keys are password fields with Show and Hide, each saved as it is typed, and a notice offers to reload the page so the new key is used.
 - A link to a file, object or Dandiset that cannot be loaded now says what went wrong instead of showing "Loading..." forever: a missing or non-NWB file, a tab for an object the file does not have, and a Dandiset that does not exist each show an error with the cause, Try again and Report this, and an embargoed Dandiset or file (401 or 403) shows the embargo notice with Add API key.
 - Errors in views, the error boundary, the embargo notice, Share and the NIfTI 4D note use the design system's Alert, Toast and Inline message. Views share one error, "… couldn't be shown", with the cause, Report this and Try again. Share copies the link and confirms with a "Link copied" toast; the DANDI and EMBER pages' two Share buttons, and their two neurodata-types panels, are now one each. The unused `NiftiViewerOld.tsx` is removed.
+- The app bar is rebuilt from the design system at 48px: the Neurosift lockup, then Guide, Report a problem on GitHub, Settings, and "Open in Neurosift v1" in words where it used to be a bare "1". The status bar says what it is doing in words on one line, such as "Reading 2 groups" or "Read 19,531 groups · 1,272 datasets · 142 data requests", instead of letters and counts.
 
 ## October 21, 2026
 
