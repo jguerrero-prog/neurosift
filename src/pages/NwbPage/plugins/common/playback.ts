@@ -16,6 +16,21 @@ export const advanceWindow = (
 export const atEnd = (value: TimeWindowValue, session: Session) =>
   value.start + value.duration >= session.end - EPSILON;
 
+/**
+ * The window to show when Play is pressed: back to the start from the end, and no longer
+ * than `maxDuration`, keeping the right edge. Null when it can stay as it is.
+ */
+export const startWindow = (
+  value: TimeWindowValue,
+  session: Session,
+  maxDuration = Infinity,
+): TimeWindowValue | null => {
+  const duration = Math.min(value.duration, maxDuration);
+  if (atEnd(value, session)) return { start: session.start, duration };
+  if (duration === value.duration) return null;
+  return { start: value.start + value.duration - duration, duration };
+};
+
 export const sameWindow = (a: TimeWindowValue, b: TimeWindowValue) =>
   Math.abs(a.start - b.start) < EPSILON &&
   Math.abs(a.duration - b.duration) < EPSILON;

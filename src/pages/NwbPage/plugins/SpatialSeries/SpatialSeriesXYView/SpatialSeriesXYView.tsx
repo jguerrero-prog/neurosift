@@ -18,6 +18,9 @@ import PlotlyComponent from "./PlotlyComponent";
 import TimeseriesDatasetChunkingClient from "./TimeseriesDatasetChunkingClient";
 import { tooMuchToDraw } from "./tooMuchToDraw";
 
+/** Longer windows redraw too many points to play smoothly. */
+const PLAYBACK_WINDOW_SEC = 30;
+
 type Props = {
   width: number;
   height: number;
@@ -275,7 +278,7 @@ const SpatialSeriesXYView: FunctionComponent<Props> = ({
   }, [plotData]);
 
   const time = useTimeWindow();
-  const playback = useWindowPlayback();
+  const playback = useWindowPlayback(PLAYBACK_WINDOW_SEC);
   const samplingFrequency = dataClient?.estimatedSamplingFrequency;
   if (
     !dataset ||

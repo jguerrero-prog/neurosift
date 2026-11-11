@@ -7,6 +7,7 @@ import {
   isPlaybackKey,
   sameWindow,
   settleWindow,
+  startWindow,
 } from "./playback";
 
 const SESSION = { start: 0, end: 100 };
@@ -31,6 +32,31 @@ describe("atEnd", () => {
   it("is true once the right edge reaches the end", () => {
     expect(atEnd({ start: 96, duration: 4 }, SESSION)).toBe(true);
     expect(atEnd({ start: 95.9, duration: 4 }, SESSION)).toBe(false);
+  });
+});
+
+describe("startWindow", () => {
+  it("leaves a window that fits alone", () => {
+    expect(startWindow({ start: 10, duration: 20 }, SESSION, 30)).toBeNull();
+    expect(startWindow({ start: 10, duration: 20 }, SESSION)).toBeNull();
+  });
+
+  it("shortens a long window, keeping its right edge", () => {
+    expect(startWindow({ start: 10, duration: 50 }, SESSION, 30)).toEqual({
+      start: 30,
+      duration: 30,
+    });
+  });
+
+  it("goes back to the start from the end, shortened if needed", () => {
+    expect(startWindow({ start: 96, duration: 4 }, SESSION)).toEqual({
+      start: 0,
+      duration: 4,
+    });
+    expect(startWindow({ start: 50, duration: 50 }, SESSION, 30)).toEqual({
+      start: 0,
+      duration: 30,
+    });
   });
 });
 
