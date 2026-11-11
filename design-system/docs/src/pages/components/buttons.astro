@@ -47,6 +47,7 @@ const SPECS = [
   ["Destructive", "action/destructive, hover and pressed darker", "Same"],
   ["Disabled", "action/disabled with text/disabled; Secondary keeps white with border/disabled", "Same"],
   ["Pressed toggle", "The style’s pressed fill, action/*-pressed; Ghost adds a 1px border/strong edge", "Same"],
+  ["Link", "The surrounding text’s font and size, no padding; text/link underlined, text/link-hover on hover and pressed, a 2px underline while pressed; disabled text/disabled with no underline", "Same; size doesn’t apply"],
 ];
 
 const code = `import { Button, IconButton } from "@ui";
@@ -56,6 +57,8 @@ const code = `import { Button, IconButton } from "@ui";
 <Button size="sm" variant="ghost" pressed={helpful}
   onClick={() => setHelpful(!helpful)}>Helpful</Button>
 <Button href="https://dandiarchive.org" icon="launch">View on DANDI</Button>
+<p>Add an API key in <Button variant="link"
+  onClick={openSettings}>Settings</Button>.</p>
 <IconButton icon="settings" label="Settings" variant="ghost" />`;
 const ANATOMY = [
   [
@@ -83,7 +86,7 @@ const ANATOMY = [
 
 <DocsLayout title="Buttons" description="Button and Icon button: four styles, three sizes and every state.">
   <Intro
-    lead="Buttons start actions: opening a file, sharing a view, loading data in Python, adding an API key. Neurosift has four styles in three sizes, plus an icon button for toolbars, and every button shows a clear state when people hover, press, focus it with the keyboard, or wait for it."
+    lead="Buttons start actions: opening a file, sharing a view, loading data in Python, adding an API key. Neurosift has four styles in three sizes, a link button for actions inside a sentence, plus an icon button for toolbars, and every button shows a clear state when people hover, press, focus it with the keyboard, or wait for it."
     status="Updated November 10, 2026 · Components · Every button on this page is the component the app imports from @ui"
     rules={[
       { title: "One primary per view", text: "Each page, panel or dialog has at most one Primary button: the action most people came to take." },
@@ -165,6 +168,25 @@ const ANATOMY = [
     <p class="doc-note">Use a toggle only for a state that stays, never for an action. The label stays the same when pressed; the button says “pressed” to screen readers through aria-pressed.</p>
   </DocSection>
 
+  <DocSection title="Link button" lead={`variant="link" is a button that reads as a link, for an action inside running text, such as Settings in a notice or Add a comment? after an answer. It takes the size and font of the sentence around it, so size doesn’t apply. Hover, press or Tab to the links here to see their states.`}>
+    <DocTable caption="Link button states" columns={["State", "In a sentence"]}>
+      <tr>
+        <th scope="row">Default</th>
+        <td><p class="type-body-sm">Embargoed Dandisets need a DANDI API key. Add one in <Button variant="link">Settings</Button>.</p></td>
+      </tr>
+      <tr>
+        <th scope="row">Disabled</th>
+        <td><p class="type-body-sm">Thanks for the feedback. <Button variant="link" disabled>Add a comment?</Button></p></td>
+      </tr>
+    </DocTable>
+    <DocTable caption="Link button or link" columns={["Use", "When", "Example"]}>
+      <tr><th scope="row">Link button, variant=&quot;link&quot;</th><td>An action in a sentence that changes something on this page: opens a dialog, a drawer or a field</td><td>Add one in Settings · Add a comment?</td></tr>
+      <tr><th scope="row">A real &lt;a&gt;, or Button with href</th><td>Anything that goes somewhere: another page, another site, a file</td><td>Read the guide · View on DANDI</td></tr>
+      <tr><th scope="row">Button, Ghost or Secondary</th><td>An action that stands on its own, outside running text</td><td>Show all · Share view</td></tr>
+    </DocTable>
+    <p class="doc-note">Text/link with an underline, text/link-hover on hover and while pressed, where the underline thickens to 2px. Focus is the button ring. Disabled turns text/disabled and loses the underline, so it doesn’t read as something to press; say nearby why it isn’t available.</p>
+  </DocSection>
+
   <DocSection title="Anatomy" lead="A Medium Primary button with an icon. Every value comes from the spacing, radius and color tokens.">
     <div class="demo-row"><Button variant="primary" icon="folder--open">Open file</Button></div>
     <DocTable caption="Button anatomy" columns={["Part","Value"]}>
@@ -203,7 +225,7 @@ const ANATOMY = [
 
   <DocSection title="Accessibility" lead="Buttons are native elements, so the keyboard and screen readers work without extra code.">
     <ul class="rule-list">
-      <li><strong>Real buttons.</strong> A &lt;button&gt; for actions, a link for navigation. Button renders an &lt;a&gt; when given href. Enter works on both, Space on buttons.</li>
+      <li><strong>Real buttons.</strong> A &lt;button&gt; for actions, a link for navigation. Button renders an &lt;a&gt; when given href. Enter works on both, Space on buttons. A link button is still a &lt;button&gt;, so screen readers announce it as one and it never navigates.</li>
       <li><strong>Visible focus.</strong> The ring appears for keyboard focus on every style and is never removed. On navy surfaces it turns white.</li>
       <li><strong>Contrast.</strong> White on navy 10.98:1, ink on white 17.40:1, white on red 6.57:1. Secondary edges are black, 21:1.</li>
       <li><strong>Toggles.</strong> pressed sets aria-pressed, so screen readers say “Helpful, toggle button, pressed”. In forced colors a pressed button takes the system’s selected colors.</li>
