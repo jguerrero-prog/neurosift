@@ -41,6 +41,8 @@ export const useTimeseriesClient = (nwbUrl: string, path: string) => {
 export const useTimeseriesData = (
   nwbUrl: string,
   path: string,
+  /** Seconds past the loaded data to load ahead, while playing. */
+  lookahead = 0,
 ): {
   timeseriesClient: ChunkedTimeseriesClient | undefined;
   error: string | undefined;
@@ -48,6 +50,8 @@ export const useTimeseriesData = (
   info: SimpleTimeseriesInfo | undefined;
   loadedTimestamps: number[];
   loadedData: number[][];
+  /** The stretch of time the loaded data covers. */
+  loadedRange: { start: number; end: number } | undefined;
   zoomInRequired: boolean;
   /** Draws the current window though it holds more than the usual limit. */
   drawAnyway: () => void;
@@ -94,6 +98,10 @@ export const useTimeseriesData = (
 
   const [loadedTimestamps, setLoadedTimestamps] = useState<number[]>([]);
   const [loadedData, setLoadedData] = useState<number[][]>([]);
+  const [loadedRange, setLoadedRange] = useState<{
+    start: number;
+    end: number;
+  }>();
 
   useEffect(() => {
     if (!timeseriesClient) return;
@@ -214,6 +222,10 @@ export const useTimeseriesData = (
       if (canceled) return;
       setLoadedTimestamps(timestamps);
       setLoadedData(data);
+      setLoadedRange({
+        start: bufferedVisibleStartTimeSec,
+        end: bufferedVisibleEndTimeSec,
+      });
       setIsLoading(false);
     };
     load().catch((err) => {
@@ -235,6 +247,25 @@ export const useTimeseriesData = (
     zoomInRequired,
   ]);
 
+  useEffect(() => {
+    if (!timeseriesClient || !loadedRange || lookahead <= 0) return;
+    const end = Math.min(loadedRange.end + lookahead, timeseriesClient.endTime);
+    if (end <= loadedRange.end) return;
+    const channelsEnd = Math.min(
+      visibleChannelsStart + numVisibleChannels,
+      timeseriesClient.numChannels,
+    );
+    timeseriesClient
+      .prefetch(loadedRange.end, end, visibleChannelsStart, channelsEnd)
+      .catch(() => {});
+  }, [
+    timeseriesClient,
+    loadedRange,
+    lookahead,
+    visibleChannelsStart,
+    numVisibleChannels,
+  ]);
+
   return {
     timeseriesClient,
     error,
@@ -242,6 +273,7 @@ export const useTimeseriesData = (
     info,
     loadedTimestamps,
     loadedData,
+    loadedRange,
     zoomInRequired,
     drawAnyway: () => setAcceptedPoints(estimatedPoints),
     visibleChannelsStart,

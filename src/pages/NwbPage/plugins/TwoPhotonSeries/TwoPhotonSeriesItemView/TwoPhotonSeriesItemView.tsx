@@ -1,6 +1,22 @@
-import { canStepFrame, steppedFrameIndex } from "./frameStepping";
-import { IconButton, LoadingState, RangeSlider, Slider, ViewPanel } from "@ui";
+import {
+  canStepFrame,
+  clampFrameIndex,
+  framesToRead,
+  steppedFrameIndex,
+} from "./frameStepping";
+import { FrameBlocks } from "./frameBlocks";
+import {
+  IconButton,
+  LoadingState,
+  Playback,
+  RangeSlider,
+  Slider,
+  ViewPanel,
+} from "@ui";
 import { TIME_VIEW_CHROME, TIME_VIEW_INSET } from "../../common/TimeView";
+import { framesDue } from "../../common/playback";
+import { onSpace, usePlaybackClock } from "../../common/usePlayback";
+import "../../common/TimeView.css";
 import "./TwoPhotonSeriesItemView.css";
 import { getHdf5DatasetData, useHdf5Dataset } from "@hdf5Interface";
 import { Canceler, DatasetDataType } from "@remote-h5-file";
@@ -59,7 +75,11 @@ export const TwoPhotonSeriesItemView: FunctionComponent<Props> = ({
 
   const { currentTime: currentTimeSource, setCurrentTime } =
     useTimeseriesSelection();
-  const currentTime = useThrottledState(currentTimeSource, throttleMsec);
+  const playback = usePlaybackClock((seconds) => advanceFrames(seconds));
+  const currentTime = useThrottledState(
+    currentTimeSource,
+    playback.playing ? 0 : throttleMsec,
+  );
 
   const { initializeTimeseriesSelection } = useTimeseriesSelection();
   useEffect(() => {
@@ -98,6 +118,32 @@ export const TwoPhotonSeriesItemView: FunctionComponent<Props> = ({
   }, [rgb]);
 
   const [loading, setLoading] = useState(false);
+  const [shownFrame, setShownFrame] = useState<number>();
+  const readAhead = useRef(1);
+  const rate = timeseriesTimestampsClient?.estimatedSamplingFrequency;
+  useEffect(() => {
+    readAhead.current = framesToRead(
+      playback.playing,
+      rate,
+      Number(playback.speed),
+    );
+  }, [playback.playing, playback.speed, rate]);
+  const frameBlocks = useMemo(() => {
+    if (!dataDataset || dataDataset.shape.length < 3) return undefined;
+    const [frames, h, w, planes = 1] = dataDataset.shape;
+    return new FrameBlocks(
+      async (start, end) => {
+        const block = await getHdf5DatasetData(nwbUrl, dataDataset.path, {
+          slice: [[start, end]],
+        });
+        if (!block)
+          throw Error(`Unable to read data from nwb file: ${dataDataset.path}`);
+        return block;
+      },
+      h * w * planes,
+      frames,
+    );
+  }, [nwbUrl, dataDataset]);
 
   const [frameIndex, setFrameIndex] = useState<number | undefined>(undefined);
   useEffect(() => {
@@ -134,11 +180,13 @@ export const TwoPhotonSeriesItemView: FunctionComponent<Props> = ({
       if (frameIndex === undefined) return;
       // read from nwb file
       // const slice = [[frameIndex, frameIndex + 1], [0, N2], [0, N3]] as [number, number][]
-      const slice = [[frameIndex, frameIndex + 1]] as [number, number][];
-      const x = await getHdf5DatasetData(nwbUrl, dataDataset.path, {
-        slice,
-        canceler,
-      });
+      const x =
+        readAhead.current > 1 && frameBlocks
+          ? await frameBlocks.get(frameIndex, readAhead.current)
+          : await getHdf5DatasetData(nwbUrl, dataDataset.path, {
+              slice: [[frameIndex, frameIndex + 1]],
+              canceler,
+            });
       if (canceled) return;
       if (!x)
         throw Error(`Unable to read data from nwb file: ${dataDataset.path}`);
@@ -154,6 +202,7 @@ export const TwoPhotonSeriesItemView: FunctionComponent<Props> = ({
       );
 
       setCurrentImage(imageData);
+      setShownFrame(frameIndex);
       setLoading(false);
     };
     load();
@@ -167,6 +216,7 @@ export const TwoPhotonSeriesItemView: FunctionComponent<Props> = ({
     frameIndex,
     timeseriesTimestampsClient,
     planeTransform,
+    frameBlocks,
   ]);
 
   const [maxDataValue, setMaxDataValue] = useState<number | undefined>(
@@ -180,12 +230,10 @@ export const TwoPhotonSeriesItemView: FunctionComponent<Props> = ({
 
   const numFrames = dataDataset?.shape[0];
 
-  const incrementFrame = useMemo(
-    () => (inc: number) => {
+  const goToFrame = useMemo(
+    () => (i2: number) => {
       (async () => {
         if (!timeseriesTimestampsClient) return;
-        const i2 = steppedFrameIndex(frameIndex, inc, numFrames);
-        if (i2 === undefined) return;
         const tt = await timeseriesTimestampsClient.getTimestampsForDataIndices(
           i2,
           i2 + 1,
@@ -198,8 +246,49 @@ export const TwoPhotonSeriesItemView: FunctionComponent<Props> = ({
         console.error("Unable to step to the next frame:", err);
       });
     },
-    [timeseriesTimestampsClient, frameIndex, numFrames, setCurrentTime],
+    [timeseriesTimestampsClient, setCurrentTime],
   );
+  const incrementFrame = (inc: number) => {
+    playback.setPlaying(false);
+    const i2 = steppedFrameIndex(frameIndex, inc, numFrames);
+    if (i2 !== undefined) goToFrame(i2);
+  };
+
+  // Playback asks for the frame now due and holds until it is drawn.
+  const requested = useRef<number>();
+  const carry = useRef(0);
+  function advanceFrames(seconds: number) {
+    if (shownFrame === undefined || numFrames === undefined || !rate)
+      return true;
+    const due = framesDue(carry.current, seconds, rate);
+    carry.current = due.carry;
+    if (due.steps === 0) return true;
+    const next = clampFrameIndex(shownFrame + due.steps, numFrames);
+    requested.current = next;
+    playback.hold(true);
+    goToFrame(next);
+    return next < numFrames - 1;
+  }
+  const { playing, setPlaying, hold } = playback;
+  useEffect(() => {
+    if (!playing) {
+      requested.current = undefined;
+      carry.current = 0;
+      hold(false);
+      return;
+    }
+    if (requested.current === undefined) return;
+    if (frameIndex !== undefined && frameIndex !== requested.current) {
+      setPlaying(false);
+      return;
+    }
+    hold(shownFrame !== requested.current);
+  }, [playing, frameIndex, shownFrame, setPlaying, hold]);
+  const play = (next: boolean) => {
+    if (next && numFrames !== undefined && shownFrame === numFrames - 1)
+      goToFrame(0);
+    setPlaying(next);
+  };
 
   useEffect(() => {
     if (currentMaxValue !== undefined) return;
@@ -231,6 +320,19 @@ export const TwoPhotonSeriesItemView: FunctionComponent<Props> = ({
       busy={loading}
       controls={
         <>
+          <Playback
+            playing={playing}
+            onPlayingChange={play}
+            speed={playback.speed}
+            onSpeedChange={playback.setSpeed}
+            time={currentTime ?? 0}
+            readout={
+              frameIndex !== undefined && frameCount !== undefined
+                ? `Frame ${n(frameIndex + 1)} of ${n(frameCount)}`
+                : "Frame —"
+            }
+            waiting={playback.waiting}
+          />
           <div className="ns-time-group" role="group" aria-label="Frame">
             <IconButton
               icon="chevron--left"
@@ -246,11 +348,6 @@ export const TwoPhotonSeriesItemView: FunctionComponent<Props> = ({
               disabled={!canStepFrame(frameIndex, 1, numFrames)}
               onClick={() => incrementFrame(1)}
             />
-            <span className="ns-time-text">
-              {frameIndex !== undefined && frameCount !== undefined
-                ? `Frame ${n(frameIndex + 1)} of ${n(frameCount)}`
-                : "Frame —"}
-            </span>
           </div>
           {!rgb && numPlanes > 1 && (
             <div className="imaging-slider">
@@ -294,14 +391,21 @@ export const TwoPhotonSeriesItemView: FunctionComponent<Props> = ({
     >
       <div className="imaging-frame">
         {currentImage ? (
-          <ImageDataView
-            width={imageSize}
-            height={imageSize}
-            imageData={currentImage}
-            currentPlane={currentPlane}
-            minValue={currentMinValue || 0}
-            maxValue={currentMaxValue || 1}
-          />
+          <div
+            className="time-view-plot"
+            tabIndex={0}
+            aria-label={`${path.split("/").pop() || path}. Space plays and pauses.`}
+            onKeyDown={onSpace(() => play(!playing))}
+          >
+            <ImageDataView
+              width={imageSize}
+              height={imageSize}
+              imageData={currentImage}
+              currentPlane={currentPlane}
+              minValue={currentMinValue || 0}
+              maxValue={currentMaxValue || 1}
+            />
+          </div>
         ) : (
           <LoadingState
             label={`Loading frame ${n((frameIndex ?? 0) + 1)}`}

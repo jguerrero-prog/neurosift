@@ -24,6 +24,8 @@ const STATES = [
   ["Drawn anyway", "The window draws once; zooming out further asks again."],
   ["No times", "A TimeIntervals table with no finite times says so, instead of a bare sentence."],
   ["Nothing picked", "The aligned view says to pick a channel or a column to align to."],
+  ["Playing", "Pause replaces Play; the window, the overview box and the readout move together."],
+  ["Waiting for data", "Playback holds the window, never skipping ahead, and says “Waiting for data” beside the readout until the next stretch arrives."],
 ];
 
 const BEHAVIOR = [
@@ -33,6 +35,9 @@ const BEHAVIOR = [
   ["Renderer", "Canvas or Plotly, a segmented control in place of the unlabeled “.” button."],
   ["Draw anyway", "Draws the whole window once; a wider window asks again."],
   ["Aligned views", "Changes apply at once; Window and Max intervals apply when typing pauses. Update goes away."],
+  ["Playback", "On traces and Spatial X/Y. Play moves the window forward in real time at the chosen speed; the readout is the window’s right edge. Speed changes mid-play. Dragging the overview, editing the window, zooming or stepping pauses it, and so does the end. Space plays and pauses when the plot has focus."],
+  ["Spatial X/Y while playing", "The path draws up to the window’s right edge, with a dot at the current position; earlier samples in the window stay as the trail."],
+  ["Loading ahead", "While playing, traces load the next seconds before the window reaches them."],
 ];
 
 const DIFFERS = [
@@ -42,6 +47,7 @@ const DIFFERS = [
   ["Aligned to trials", "Navy headers, Update button", "Settings beside the plots, applied at once", "Built"],
   ["Group legend", "Inline swatches", "The chart’s own colors beside each group, with counts", "Built"],
   ["Channels + and −", "Double and halve", "The same; stepping by one is to confirm", "To confirm"],
+  ["Playback", "—", "Play, pause and speed on traces and Spatial X/Y, after the Time window", "Built"],
 ];
 
 const SPECS = [
@@ -50,6 +56,7 @@ const SPECS = [
   ["Channels", "Channel window · “of 70” in type/body-sm"],
   ["Separation", "Slider, 0 to 10 σ, value shown"],
   ["Renderer", "Segmented control, Small: Canvas, Plotly"],
+  ["Playback", "Playback, right after the Time window · readout in type/code-sm · “Waiting for data” in type/body-sm"],
   ["Too much data", "Alert, Warning · Zoom in (secondary), Draw anyway (ghost)"],
   ["Aligned settings", "320px settings panel · Accordion items: Series, Channels, Align to, Window, Group by, Display"],
 ];
@@ -58,7 +65,7 @@ const SPECS = [
 <DocsLayout title="Time series views" description="Traces, events and intervals on recording time, and signals aligned to trials.">
   <Intro
     lead="Time series views draw a neurodata object against recording time: voltage traces, event times, intervals, and a signal cut around each trial. Neurosift’s charts stay as they are. What changes is the frame around them: every view on recording time now shares the same Time window and overview, says in one line what it shows, and offers a way forward when a window holds too much to draw."
-    status="Updated November 10, 2026 · UI library · Captured at 1440 × 900 with Dandiset 000673, sub-1 · Built from View panel, Time window, Time overview, Channel window, Slider, Segmented control, Alert and Accordion"
+    status="Updated November 11, 2026 · UI library · Captured at 1440 × 900 with Dandiset 000673, sub-1, and 000871 for Spatial X/Y · Built from View panel, Time window, Time overview, Playback, Channel window, Slider, Segmented control, Alert and Accordion"
     rules={[
       { title: "One clock", text: "Every view on recording time reads and sets the same time window." },
       { title: "Say what’s drawn", text: "A summary line gives the span, rate and channels before the plot." },
@@ -85,6 +92,8 @@ const SPECS = [
       <Screen file="timeseries-too-much" alt="The rebuilt LFPs view at 600 seconds: a warning that the window holds 8 channels at 400 Hz for 600 s, with Zoom in and Draw anyway." caption="Too much data: what the window holds, with Zoom in and Draw anyway." />
       <Screen file="timeseries-aligned" alt="The rebuilt event-related signal: single trials, the mean and a dashed band around trial starts, with Series, Channels, Align to, Window, Group by and Display settings beside it." caption="Aligned to trials: settings beside the plots, applied at once." />
       <Screen file="timeseries-intervals" alt="The rebuilt trials view: a summary of 140 intervals, the Time window, a Label by select, Canvas and Plotly, and the intervals." caption="Intervals: the same frame, with Label by and the renderer." />
+      <Screen file="timeseries-playing" alt="The rebuilt LFPs view playing at 1×: Pause and the speed after the Time window, the readout at 5.87 s, the window from 2.12 s and the traces." caption="Traces playing: the window, overview box and readout move together." />
+      <Screen file="spatial-xy-playing" alt="Pupil tracking from Dandiset 000871 playing: a 30 s window, the readout at its right edge, and the path with a dot at the current position." caption="Spatial X/Y playing: the path up to the current time, with a dot where it is now." />
     </div>
     <p class="doc-note">Built from the <a href={withBase("/components/view-panel/")}>View panel</a> and <a href={withBase("/components/time-controls/")}>Time controls</a>.</p>
   </DocSection>

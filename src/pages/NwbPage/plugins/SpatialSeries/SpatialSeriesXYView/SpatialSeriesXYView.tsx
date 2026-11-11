@@ -6,11 +6,12 @@ import {
 } from "@shared/context-timeseries-selection-2";
 import { useTimeseriesTimestampsClient } from "@shared/TimeseriesTimestampsClient/TimeseriesTimestampsClient";
 import { LoadingState, TooMuchData } from "@ui";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useMemo, useState } from "react";
 import TimeView, {
   TIME_VIEW_CHROME,
   TIME_VIEW_INSET,
 } from "../../common/TimeView";
+import { useWindowPlayback } from "../../common/usePlayback";
 import { useTimeWindow } from "../../common/useTimeWindow";
 import { timeseriesSummary } from "../../simple-timeseries/timeseriesSummary";
 import PlotlyComponent from "./PlotlyComponent";
@@ -28,6 +29,13 @@ interface PlotData {
   x: number[];
   y: number[];
   t: number[];
+}
+
+/** Whole chunks around the window, so moving it within them needs no reload. */
+interface LoadedChunks extends PlotData {
+  startChunk: number;
+  endChunk: number;
+  complete: boolean;
 }
 
 const SpatialSeriesXYView: FunctionComponent<Props> = ({
@@ -146,8 +154,7 @@ const SpatialSeriesXYView: FunctionComponent<Props> = ({
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Set plotData
-  const [plotData, setPlotData] = useState<PlotData | undefined>(undefined);
+  const [loaded, setLoaded] = useState<LoadedChunks | undefined>(undefined);
   useEffect(() => {
     if (!datasetChunkingClient) return;
     if (dataset === undefined) return;
@@ -159,8 +166,6 @@ const SpatialSeriesXYView: FunctionComponent<Props> = ({
     let canceler: Canceler | undefined = undefined;
     let canceled = false;
     const load = async () => {
-      if (visibleStartTimeSec === undefined) return;
-      if (visibleEndTimeSec === undefined) return;
       let finished = false;
       const tt = await dataClient.getTimestampsForDataIndices(
         startChunkIndex * chunkSize,
@@ -183,25 +188,14 @@ const SpatialSeriesXYView: FunctionComponent<Props> = ({
           canceler = undefined;
           if (completed) finished = true;
           if (canceled) return;
-          const data: PlotData = {
+          setLoaded({
             t: Array.from(tt),
             x: Array.from(concatenatedChunk[0] || []),
             y: Array.from(concatenatedChunk[1] || []),
-          };
-          // only use the times that are in the visible time range
-          const indices: number[] = [];
-          for (let i = 0; i < data.t.length; i++) {
-            if (
-              data.t[i] >= visibleStartTimeSec &&
-              data.t[i] <= visibleEndTimeSec
-            ) {
-              indices.push(i);
-            }
-          }
-          data.t = indices.map((i) => data.t[i]);
-          data.x = indices.map((i) => data.x[i]);
-          data.y = indices.map((i) => data.y[i]);
-          setPlotData(data);
+            startChunk: startChunkIndex,
+            endChunk: endChunkIndex,
+            complete: completed,
+          });
         } catch (err: unknown) {
           if (err instanceof Error && err.message !== "canceled") {
             throw err;
@@ -223,9 +217,35 @@ const SpatialSeriesXYView: FunctionComponent<Props> = ({
     dataset,
     chunkSize,
     zoomInRequired,
-    visibleStartTimeSec,
-    visibleEndTimeSec,
   ]);
+
+  // Only the times in the visible window.
+  const plotData = useMemo((): PlotData | undefined => {
+    if (!loaded) return undefined;
+    if (visibleStartTimeSec === undefined || visibleEndTimeSec === undefined)
+      return undefined;
+    const indices: number[] = [];
+    for (let i = 0; i < loaded.t.length; i++) {
+      if (
+        loaded.t[i] >= visibleStartTimeSec &&
+        loaded.t[i] <= visibleEndTimeSec
+      )
+        indices.push(i);
+    }
+    return {
+      t: indices.map((i) => loaded.t[i]),
+      x: indices.map((i) => loaded.x[i]),
+      y: indices.map((i) => loaded.y[i]),
+    };
+  }, [loaded, visibleStartTimeSec, visibleEndTimeSec]);
+  const holding =
+    !zoomInRequired &&
+    (!loaded ||
+      !loaded.complete ||
+      startChunkIndex === undefined ||
+      endChunkIndex === undefined ||
+      loaded.startChunk > startChunkIndex ||
+      loaded.endChunk < endChunkIndex);
 
   const plotHeight = Math.max(height - TIME_VIEW_CHROME, 200);
 
@@ -255,6 +275,7 @@ const SpatialSeriesXYView: FunctionComponent<Props> = ({
   }, [plotData]);
 
   const time = useTimeWindow();
+  const playback = useWindowPlayback();
   const samplingFrequency = dataClient?.estimatedSamplingFrequency;
   if (
     !dataset ||
@@ -310,6 +331,8 @@ const SpatialSeriesXYView: FunctionComponent<Props> = ({
         totalNumChannels: dataset.shape[1] ?? 1,
       })}
       busy={loading && !zoomInRequired}
+      playback={playback}
+      holding={holding}
     >
       {plot}
     </TimeView>
