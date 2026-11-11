@@ -34,7 +34,7 @@ const SPECS = [
   ["Padding", "12px · space/3", "8px 8px 8px 12px · space/2 and space/3", "—"],
   ["Icon", "20px · status/*/text", "16px · text/on-inverse; none for neutral", "16px · status/*/text"],
   ["Text", "type/label title · type/body-sm message · type/code-sm detail", "type/body-sm · text/on-inverse", "type/caption · status/*/text"],
-  ["Actions", "Up to two Small buttons: Secondary, then Ghost; Primary, then Secondary when one is primary", "One, as underlined type/label", "—"],
+  ["Actions", "Up to two Small buttons: Secondary, then Ghost; Primary, then Secondary when one is primary; a button action can be loading, with a spinner, while it runs", "One, as underlined type/label", "—"],
   ["Dismiss", "Optional 24px Ghost icon button", "Always, 24px Ghost icon button", "—"],
   ["Place", "In the view, where the problem is", "Bottom center, 24px up · space/6", "Under the field or plot"],
   ["Timing", "Stays", "4 seconds; errors and work in progress stay", "While it applies"],
@@ -47,6 +47,7 @@ const IN_APP = [
   ["A link to a file, object or Dandiset that can’t be found", "Error alert in place of “Loading…”: “This file couldn’t be shown”, with the cause, such as “DANDI has no Dandiset 999999 (404).”"],
   ["Share on a tab", "Success toast: “Link copied”; an error toast if the browser won’t copy"],
   ["Settings, after a key changes", "Info alert: “Reload to use the new key”, with Reload page"],
+  ["A Figpack figure being built", "Info alert: “Job pending” or “Job in progress”, with Refresh status, loading while it checks, and View job; an error alert when the job fails"],
   ["A 4D NIfTI image", "Info inline message: how many frames have loaded and how to load the rest"],
 ];
 

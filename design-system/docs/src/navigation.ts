@@ -344,6 +344,12 @@ export const navigation: NavSection[] = [
           "Tables, text, JSON, NIfTI volumes, audio and file information in a dataset.",
       },
       {
+        label: "EDF viewer",
+        href: "/ui-library/edf-viewer/",
+        summary:
+          "EDF recordings with channels, separation and the shared time controls.",
+      },
+      {
         label: "Archive search",
         href: "/ui-library/archive-search/",
         summary: "One search across DANDI, OpenNeuro and EMBER.",

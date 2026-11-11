@@ -1,12 +1,11 @@
 import React, {
-  CSSProperties,
   FunctionComponent,
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
+import { useCssVars } from "@components/useCssVars";
 import useYAxisTicks from "./YAxisTicks";
 import useActionToolbar from "./TimeScrollViewActionsToolbar";
 import useTimeScrollEventHandlers, {
@@ -17,7 +16,6 @@ import ViewToolbar from "./ViewToolbar";
 import { useTimeTicks } from "./timeTicks";
 import TSV2AxesLayer from "./TSV2AxesLayer";
 import TSV2CursorLayer from "./TSV2CursorLayer";
-import { ToolbarItem } from "./Toolbars";
 import {
   useTimeRange,
   useTimeseriesSelection,
@@ -26,6 +24,7 @@ import TimeseriesSelectionBar, {
   timeSelectionBarHeight,
 } from "@shared/TimeseriesSelectionBar/TimeseriesSelectionBar";
 import { Splitter } from "@fi-sci/splitter";
+import "./TimeScrollView2.css";
 
 const DefaultToolbarWidth = 18;
 
@@ -49,7 +48,6 @@ type Props = {
     yMax?: number;
     yLabel?: string;
   };
-  additionalToolbarItems?: ToolbarItem[];
   showTimeSelectionBar?: boolean;
   leftMargin?: number;
 };
@@ -105,7 +103,6 @@ const TimeScrollView2: FunctionComponent<Props> = ({
   yAxisInfo,
   shiftZoom,
   requireClickToZoom,
-  additionalToolbarItems,
   showTimeSelectionBar,
   leftMargin,
 }) => {
@@ -245,7 +242,13 @@ const TimeScrollView2: FunctionComponent<Props> = ({
 
   const [isViewClicked, setIsViewClicked] = useState(false);
 
-  const divRef = useRef<HTMLDivElement | null>(null);
+  const divRef = useCssVars<HTMLDivElement>({
+    "--tsv-width": width,
+    "--tsv-height": height,
+    "--tsv-canvas-width": canvasWidth,
+    "--tsv-canvas-height": canvasHeight,
+    "--tsv-bar-height": timeSelectionBarHeight,
+  });
   useEffect(() => {
     const allowWheelZoom = requireClickToZoom === false || isViewClicked;
     if (allowWheelZoom) {
@@ -351,12 +354,7 @@ const TimeScrollView2: FunctionComponent<Props> = ({
   const content = useMemo(() => {
     return (
       <div
-        style={{
-          position: "relative",
-          overflow: "hidden",
-          width: canvasWidth,
-          height: canvasHeight,
-        }}
+        className="tsv-content"
         onWheel={!requireClickToZoom || isViewClicked ? handleWheel : undefined}
         onMouseDown={handleMouseDown2}
         onMouseUp={handleMouseUp2}
@@ -367,11 +365,7 @@ const TimeScrollView2: FunctionComponent<Props> = ({
       >
         {axesLayer}
         <canvas
-          style={{
-            position: "absolute",
-            width: canvasWidth,
-            height: canvasHeight,
-          }}
+          className="tsv-canvas"
           ref={onCanvasElement}
           width={canvasWidth}
           height={canvasHeight}
@@ -395,44 +389,17 @@ const TimeScrollView2: FunctionComponent<Props> = ({
     isViewClicked,
   ]);
 
-  const timeControlActions = useActionToolbar({
-    belowDefault: additionalToolbarItems,
-  });
-
-  const content2Style: CSSProperties = useMemo(
-    () => ({
-      position: "absolute",
-      width: canvasWidth,
-      height: timeSelectionBarHeight,
-    }),
-    [canvasWidth],
-  );
-
-  const contentStyle: CSSProperties = useMemo(
-    () => ({
-      position: "absolute",
-      top: timeSelectionBarHeight,
-      width: canvasWidth,
-      height: canvasHeight - timeSelectionBarHeight,
-    }),
-    [canvasWidth, canvasHeight],
-  );
+  const timeControlActions = useActionToolbar();
 
   const content2 = showTimeSelectionBar ? (
-    <div style={content2Style}>
-      <div
-        style={{
-          position: "absolute",
-          width: canvasWidth,
-          height: timeSelectionBarHeight,
-        }}
-      >
+    <div className="tsv-bar">
+      <div className="tsv-bar">
         <TimeseriesSelectionBar
           width={canvasWidth}
           height={timeSelectionBarHeight - 5}
         />
       </div>
-      <div style={contentStyle}>{content}</div>
+      <div className="tsv-below-bar">{content}</div>
     </div>
   ) : (
     content
@@ -440,20 +407,14 @@ const TimeScrollView2: FunctionComponent<Props> = ({
 
   if (hideToolbar) {
     return (
-      <div
-        ref={divRef}
-        style={{ position: "absolute", width, height, background: "white" }}
-      >
+      <div ref={divRef} className="tsv tsv--bare">
         {content2}
       </div>
     );
   }
 
   return (
-    <div
-      ref={divRef}
-      style={{ position: "relative", width, height, background: "white" }}
-    >
+    <div ref={divRef} className="tsv">
       <Splitter
         // ref={divRef} // removed on 2.1.24, let's see if it causes problems
         width={width}
@@ -465,8 +426,8 @@ const TimeScrollView2: FunctionComponent<Props> = ({
           width={0}
           height={0}
           top={showTimeSelectionBar ? timeSelectionBarHeight : 0}
-          customActions={timeControlActions}
-          actuallyHideIt={showTimeseriesToolbar === false} // sorry :)
+          actions={timeControlActions}
+          hidden={showTimeseriesToolbar === false}
         />
         {content2}
       </Splitter>
