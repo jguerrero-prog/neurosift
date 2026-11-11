@@ -7,7 +7,15 @@ const seconds = (s: number) =>
   });
 
 /** One line on what the series holds: its time span, rate and channels. */
-export function timeseriesSummary(info: SimpleTimeseriesInfo): string {
+export function timeseriesSummary(
+  info: Pick<
+    SimpleTimeseriesInfo,
+    | "timeseriesStartTime"
+    | "timeseriesDuration"
+    | "samplingFrequency"
+    | "totalNumChannels"
+  >,
+): string {
   const start = info.timeseriesStartTime;
   const end = start + info.timeseriesDuration;
   const rate = info.samplingFrequency
