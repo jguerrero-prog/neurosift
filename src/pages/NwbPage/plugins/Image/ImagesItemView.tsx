@@ -8,7 +8,8 @@ import {
   useState,
 } from "react";
 import "./ImagesItemView.css";
-import IfHasBeenVisible from "../PSTH/PSTHItemView/IfHasBeenVisible";
+import { galleryImages } from "./imageGallery";
+import { useInView } from "react-intersection-observer";
 import {
   Hdf5Dataset,
   useHdf5Dataset,
@@ -30,36 +31,30 @@ type Props = {
 
 const ImagesItemView: FunctionComponent<Props> = ({ nwbUrl, path }) => {
   const group = useHdf5Group(nwbUrl, path);
-  const { imageWidth, imageHeight } = useMemo(() => {
-    if (!group) return { imageWidth: 0, imageHeight: 0 };
-    let imageWidth = 0;
-    let imageHeight = 0;
-    group.datasets.forEach((ds) => {
-      if (ds.shape.length !== 2) return;
-      if (ds.shape[0] > imageHeight) imageHeight = ds.shape[0];
-      if (ds.shape[1] > imageWidth) imageWidth = ds.shape[1];
-    });
-    return { imageWidth, imageHeight };
-  }, [group]);
+  const {
+    images,
+    width: imageWidth,
+    height: imageHeight,
+  } = useMemo(() => galleryImages(group?.datasets ?? []), [group]);
   if (!group)
     return <LoadingState label="Reading the images" phase="loading" />;
-  const n = group.datasets.length;
+  const n = images.length;
   return (
     <ViewPanel
       label={path.split("/").pop() || path}
       summary={`${n.toLocaleString("en-US")} image${n === 1 ? "" : "s"}, up to ${imageWidth.toLocaleString("en-US")} × ${imageHeight.toLocaleString("en-US")} px`}
       controls={null}
     >
-      <Gallery minWidth={imageWidth}>
-        {group.datasets.map((ds) => (
+      <Gallery width={imageWidth} height={imageHeight}>
+        {images.map((ds) => (
           <figure key={ds.path} className="images-item">
-            <IfHasBeenVisible width={imageWidth} height={imageHeight + 60}>
+            <LazyFrame>
               <ImageItem
                 nwbUrl={nwbUrl}
                 path={ds.path}
                 neurodataType={ds.attrs["neurodata_type"]}
               />
-            </IfHasBeenVisible>
+            </LazyFrame>
             <figcaption className="images-name">{ds.name}</figcaption>
           </figure>
         ))}
@@ -68,17 +63,31 @@ const ImagesItemView: FunctionComponent<Props> = ({ nwbUrl, path }) => {
   );
 };
 
-/** Images side by side, each at least as wide as the widest. */
-const Gallery: FunctionComponent<{ minWidth: number; children: ReactNode }> = ({
-  minWidth,
-  children,
-}) => {
+/** Images side by side as thumbnails, up to 240px wide each, in the images' shape. */
+const Gallery: FunctionComponent<{
+  width: number;
+  height: number;
+  children: ReactNode;
+}> = ({ width, height, children }) => {
   const ref = useCssVars<HTMLDivElement>({
-    "--image-min": Math.min(minWidth, 640),
+    "--image-min": Math.min(width, 240) || 240,
+    "--image-ratio": width && height ? `${width} / ${height}` : "1",
   });
   return (
     <div ref={ref} className="images-gallery">
       {children}
+    </div>
+  );
+};
+
+/** Reads and draws an image only once it scrolls into view. */
+const LazyFrame: FunctionComponent<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const { inView, ref } = useInView({ triggerOnce: true });
+  return (
+    <div ref={ref} className="images-frame">
+      {inView && children}
     </div>
   );
 };

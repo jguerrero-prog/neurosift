@@ -11,9 +11,19 @@
   min-inline-size: 0;
 }
 
-.images-item canvas {
-  max-inline-size: 100%;
-  block-size: auto;
+.images-frame {
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  aspect-ratio: var(--image-ratio);
+  overflow: hidden;
+  background: var(--surface-row-hover);
+}
+
+.images-frame canvas {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
 }
 
 .images-name {
