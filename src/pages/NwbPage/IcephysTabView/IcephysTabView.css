@@ -4,10 +4,6 @@
   overflow: auto;
 }
 
-.icephys > .ns-view {
-  box-sizing: border-box;
-}
-
 .icephys--state {
   padding: var(--space-4);
 }
@@ -194,10 +190,4 @@
 
 .icephys-axis > .ns-field {
   inline-size: 9rem;
-}
-
-@media (width > 1024px) {
-  .icephys .ns-view--settings {
-    grid-template-rows: minmax(0, 1fr);
-  }
 }
