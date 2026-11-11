@@ -12,7 +12,8 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx}\"",
     "test": "vitest run",
     "check:bundle": "node devel/check_bundle_size.mjs",
-    "tokens": "node design-system/tokens/build.mjs"
+    "tokens": "node design-system/tokens/build.mjs",
+    "icons": "node design-system/icons/build.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
