@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   advanceWindow,
   atEnd,
+  covers,
   framesDue,
   isPlaybackKey,
   sameWindow,
@@ -117,5 +118,25 @@ describe("isPlaybackKey", () => {
     expect(isPlaybackKey(" ", div)).toBe(true);
     expect(isPlaybackKey("Enter", div)).toBe(false);
     expect(isPlaybackKey(" ", button)).toBe(false);
+  });
+});
+
+describe("covers", () => {
+  it("is true when the loaded span holds the whole window", () => {
+    expect(covers({ start: 9, end: 20 }, 10, 15, 100)).toBe(true);
+  });
+
+  it("is false before anything has loaded, or when either edge is missing", () => {
+    expect(covers(undefined, 10, 15, 100)).toBe(false);
+    expect(covers({ start: 11, end: 20 }, 10, 15, 100)).toBe(false);
+    expect(covers({ start: 9, end: 14 }, 10, 15, 100)).toBe(false);
+  });
+
+  it("asks for nothing past the session's end", () => {
+    expect(covers({ start: 90, end: 100 }, 95, 105, 100)).toBe(true);
+  });
+
+  it("forgives rounding in sample times", () => {
+    expect(covers({ start: 1, end: 1.9999999999999998 }, 1, 2, 100)).toBe(true);
   });
 });

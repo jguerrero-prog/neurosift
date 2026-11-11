@@ -31,6 +31,17 @@ export const startWindow = (
   return { start: value.start + value.duration - duration, duration };
 };
 
+/** True when `loaded` holds the window from `start` to `end`, asking nothing past `sessionEnd`. */
+export const covers = (
+  loaded: { start: number; end: number } | undefined,
+  start: number,
+  end: number,
+  sessionEnd: number,
+) =>
+  !!loaded &&
+  loaded.start <= start + EPSILON &&
+  loaded.end >= Math.min(end, sessionEnd) - EPSILON;
+
 export const sameWindow = (a: TimeWindowValue, b: TimeWindowValue) =>
   Math.abs(a.start - b.start) < EPSILON &&
   Math.abs(a.duration - b.duration) < EPSILON;

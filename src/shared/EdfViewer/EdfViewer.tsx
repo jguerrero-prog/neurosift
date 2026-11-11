@@ -8,6 +8,9 @@ import TimeView, {
   TIME_VIEW_INSET,
   TIME_VIEW_SETTINGS,
 } from "../../pages/NwbPage/plugins/common/TimeView";
+import { covers } from "../../pages/NwbPage/plugins/common/playback";
+import { useWindowPlayback } from "../../pages/NwbPage/plugins/common/usePlayback";
+import { useTimeWindow } from "../../pages/NwbPage/plugins/common/useTimeWindow";
 import { timeseriesSummary } from "../../pages/NwbPage/plugins/simple-timeseries/timeseriesSummary";
 import EDFReader from "./EDFReader";
 import EdfChannels from "./EdfChannels";
@@ -71,6 +74,15 @@ const EdfViewer: FunctionComponent<EdfPageProps> = ({
     const nSamplesPerSec = edfReader?.getSignalFreqs()[0] || 1;
     return 5e6 / (nSamplesPerSec * nChannels);
   }, [edfReader]);
+  // Play shortens a window too long to draw, so it never plays the zoom-in message.
+  const playback = useWindowPlayback(maxVisibleDuration);
+  const lookahead = playback.playing
+    ? 2 * Math.max(1, Number(playback.speed))
+    : 0;
+  const [loadedRange, setLoadedRange] = useState<
+    { start: number; end: number } | undefined
+  >();
+  const time = useTimeWindow();
   useEffect(() => {
     // select all the channels to start
     setSelectedChannelIndices(
@@ -89,6 +101,15 @@ const EdfViewer: FunctionComponent<EdfPageProps> = ({
   const info = openNeuroInfo(edfUrl);
   const labels = edfReader?.getSignalTextLabels() ?? [];
   const rates = edfReader?.getSignalFreqs() ?? [];
+  const visibleEnd = time.value.start + time.value.duration;
+  const holding =
+    time.value.duration <= maxVisibleDuration &&
+    !covers(
+      loadedRange,
+      time.value.start,
+      visibleEnd,
+      timeseriesTimestampsClient?.endTime ?? visibleEnd,
+    );
   const section = (key: keyof typeof open) => ({
     open: open[key],
     onToggle: (next: boolean) => setOpen((o) => ({ ...o, [key]: next })),
@@ -109,6 +130,8 @@ const EdfViewer: FunctionComponent<EdfPageProps> = ({
             samplingFrequency: rates[0] ?? 0,
             totalNumChannels: labels.length,
           })}
+          playback={playback}
+          holding={holding}
           controls={
             <div className="edf-separation">
               <Select
@@ -182,6 +205,8 @@ const EdfViewer: FunctionComponent<EdfPageProps> = ({
             numVisibleChannels={undefined}
             yLabel=""
             maxVisibleDuration={maxVisibleDuration}
+            lookahead={lookahead}
+            onLoadedRange={setLoadedRange}
           />
         </TimeView>
       )}

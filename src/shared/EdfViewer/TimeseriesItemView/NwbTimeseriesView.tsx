@@ -19,6 +19,7 @@ import {
 } from "@shared/TimeseriesTimestampsClient/TimeseriesTimestampsClient";
 import { useCssVars } from "@components/useCssVars";
 import { LoadingState, useLoadingPhase } from "@ui";
+import { loadedSpan } from "./loadedSpan";
 import TimeseriesDatasetChunkingClient from "./TimeseriesDatasetChunkingClient";
 import { DataSeries, Opts } from "./WorkerTypes";
 
@@ -171,6 +172,10 @@ type NwbTimeseriesViewChildProps = {
   yLabel: string;
   maxVisibleDuration?: number;
   annotations?: TimeseriesAnnotation[];
+  /** Seconds past the window to load as well, as playback runs ahead. */
+  lookahead?: number;
+  /** The span of time drawn data covers, or undefined while there is none. */
+  onLoadedRange?: (range: { start: number; end: number } | undefined) => void;
 };
 
 export const NwbTimeseriesViewChild: FunctionComponent<
@@ -189,6 +194,8 @@ export const NwbTimeseriesViewChild: FunctionComponent<
   yLabel,
   maxVisibleDuration,
   annotations,
+  lookahead = 0,
+  onLoadedRange,
 }) => {
   const [worker, setWorker] = useState<Worker | null>(null);
   const [canvasElement, setCanvasElement] = useState<
@@ -278,8 +285,13 @@ export const NwbTimeseriesViewChild: FunctionComponent<
           visibleStartTimeSec,
         );
       if (canceled) return;
-      let iEnd =
-        await timeseriesTimestampsClient.getDataIndexForTime(visibleEndTimeSec);
+      const loadEnd = Math.min(
+        visibleEndTimeSec + lookahead,
+        timeseriesTimestampsClient.endTime ?? Infinity,
+      );
+      let iEnd = await timeseriesTimestampsClient.getDataIndexForTime(
+        Math.max(loadEnd, visibleEndTimeSec),
+      );
       if (canceled) return;
 
       // give a buffer of one point on each side
@@ -304,6 +316,7 @@ export const NwbTimeseriesViewChild: FunctionComponent<
     numVisibleChannels,
     maxVisibleDuration,
     overrideMaxVisibleDuration,
+    lookahead,
   ]);
 
   const [dataseriesMode, setDataseriesMode] = useState<"line" | "marker">(
@@ -413,6 +426,11 @@ export const NwbTimeseriesViewChild: FunctionComponent<
             });
           }
           setDataSeries(dataSeries);
+          onLoadedRange?.(
+            completed
+              ? loadedSpan(tt, concatenatedChunk[0]?.length ?? tt.length)
+              : undefined,
+          );
         } catch (err: any) {
           if (err.message !== "canceled") {
             throw err;
@@ -438,6 +456,7 @@ export const NwbTimeseriesViewChild: FunctionComponent<
     width,
     renderSubsampleFactor,
     channelIndicesForColor,
+    onLoadedRange,
   ]);
 
   // Set valueRange
@@ -468,11 +487,12 @@ export const NwbTimeseriesViewChild: FunctionComponent<
     // refresh the value range when applyConversion or datasetChunkingClient changes
     setValueRange(undefined);
     setDataSeries(undefined);
+    onLoadedRange?.(undefined);
     setTimeout(() => {
       // not ideal
       setRefreshValueRangeCode((old) => old + 1);
     }, 100);
-  }, [applyConversion, datasetChunkingClient]);
+  }, [applyConversion, datasetChunkingClient, onLoadedRange]);
 
   useEffect(() => {
     // reset the value range
