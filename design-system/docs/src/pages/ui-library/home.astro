@@ -12,7 +12,7 @@ const STATES = [
   ["Returning", "Recently opened shows up to five datasets from this browser, newest first, from any archive, with their titles."],
   ["Search submitted", "Enter opens the catalog with the query across all three archives. An empty search opens Browse all."],
   ["Link pasted into search", "A link opens like Open a file by link instead of searching."],
-  ["Open a file by link", "The two links give way to a Text input and Open file. Escape brings the links back."],
+  ["Open a file by link", "A Text input opens under the links, with focus in it, beside Open file and Cancel. The links stay. Cancel or Escape closes it and returns focus to Open a file by link."],
   ["Link isn’t a file Neurosift can open", "The field shows: “This link doesn’t point to an NWB file. Neurosift opens .nwb, .nwb.lindi.json and .zarr files.”"],
   ["Dataset page link", "A DANDI, EMBER or OpenNeuro dataset link opens that dataset."],
 ];
@@ -21,7 +21,7 @@ const BEHAVIOR = [
   ["Search", "Searches DANDI, EMBER and OpenNeuro at once and opens the catalog. The placeholder carries the live dataset count."],
   ["Browse all datasets", "Opens the catalog with no query, newest first, across all three archives."],
   ["Browse DANDI datasets", "Opens the same catalog with only DANDI checked in the Archive filter, since most visitors come for DANDI. EMBER and OpenNeuro are one click away."],
-  ["Open a file by link", "Enter or Open file submits. The link is checked first; nothing loads until it’s valid."],
+  ["Open a file by link", "Enter or Open file submits. The link is checked first; nothing loads until it’s valid. Cancel or Escape closes the field."],
   ["Recently opened", "Each row opens the dataset page. Kept in this browser only; there are no accounts."],
   ["Footer", "NWB viewer guide, Neurosift Chat in a new tab, the source on GitHub, Report a problem, and the version with its build date."],
 ];
