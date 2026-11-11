@@ -1,16 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getRedirectUrl, isDandiAssetUrl } from "@hdf5Interface";
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  LinearProgress,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
+import { useCssVars } from "@components/useCssVars";
+import { Button, Checkbox, LoadingState, Select } from "@ui";
 import FramesNote from "./FramesNote";
 import { Niivue, SHOW_RENDER } from "./niivue_dist";
 import React, {
@@ -23,6 +14,15 @@ import React, {
 import getAuthorizationHeaderForUrl from "../../../../../util/getAuthorizationHeaderForUrl";
 import { addRequestWatermark } from "../../../../../../util/requestWatermark";
 import ViewError from "@components/ViewError/ViewError";
+import "./NiftiViewer.css";
+
+const SLICE_TYPES = [
+  { value: "0", label: "Axial" },
+  { value: "1", label: "Coronal" },
+  { value: "2", label: "Sagittal" },
+  { value: "4", label: "Render" },
+  { value: "3", label: "A+C+S+R" },
+];
 
 interface NiftiViewerProps {
   fileUrl: string;
@@ -48,6 +48,10 @@ const NiftiViewer: React.FC<NiftiViewerProps> = ({
   );
   const niivueRef = useRef<Niivue | null>(null);
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
+  const root = useCssVars<HTMLDivElement>({
+    "--nifti-width": width,
+    "--nifti-height": height,
+  });
 
   const handleFrameChange = useCallback(
     (volume: any, index: any) => {
@@ -149,151 +153,101 @@ const NiftiViewer: React.FC<NiftiViewerProps> = ({
     return <ViewError what="the NIfTI image" error={error} />;
   }
 
-  // Helper function to safely get nFrame4D
-  const getNFrame4D = () => {
-    return niivueRef.current?.volumes[0]?.nFrame4D ?? 0;
+  const volume = niivueRef.current?.volumes[0];
+  const stepFrame = (step: number) => {
+    if (!volume) return;
+    const newVol = Math.min(
+      Math.max(0, currentVolume + step),
+      Math.max(0, (volume.nFrame4D ?? 0) - 1),
+    );
+    setCurrentVolume(newVol);
+    niivueRef.current?.setFrame4D(volume.id, newVol);
   };
 
   return (
-    <Box sx={{ width, p: 2 }}>
-      <Box sx={{ mb: 2 }}>
-        {loading ? (
-          <div>
-            <Typography>Loading NIfTI file...</Typography>
-            <LinearProgress />
-          </div>
-        ) : (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 2,
-              flexWrap: "wrap",
+    <div className="nifti-viewer" ref={root}>
+      {loading ? (
+        <LoadingState label="Loading the NIfTI image" phase="loading" />
+      ) : (
+        <div className="nifti-viewer-controls">
+          <Select
+            label="View"
+            size="sm"
+            value={String(sliceType)}
+            options={SLICE_TYPES}
+            onChange={(next) => {
+              const value = Number(next);
+              setSliceType(value);
+              niivueRef.current?.setSliceType(value);
             }}
-          >
-            <FormControl size="small">
-              <Select
-                value={sliceType}
-                onChange={(e) => {
-                  const value = Number(e.target.value);
-                  setSliceType(value);
-                  if (niivueRef.current) {
-                    niivueRef.current.setSliceType(value);
-                  }
-                }}
-                sx={{ minWidth: 120 }}
-              >
-                <MenuItem value={0}>Axial</MenuItem>
-                <MenuItem value={1}>Coronal</MenuItem>
-                <MenuItem value={2}>Sagittal</MenuItem>
-                <MenuItem value={4}>Render</MenuItem>
-                <MenuItem value={3}>A+C+S+R</MenuItem>
-              </Select>
-            </FormControl>
-
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={normalizeGraph}
-                  onChange={(e) => {
-                    setNormalizeGraph(e.target.checked);
-                    if (niivueRef.current) {
-                      niivueRef.current.graph.normalizeValues =
-                        e.target.checked;
-                      niivueRef.current.updateGLVolume();
-                    }
-                  }}
-                />
-              }
-              label="normalize graph"
-            />
-
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={perVolumeRange}
-                  onChange={(e) => {
-                    setPerVolumeRange(e.target.checked);
-                    if (niivueRef.current) {
-                      niivueRef.current.graph.isRangeCalMinMax =
-                        e.target.checked;
-                      niivueRef.current.updateGLVolume();
-                    }
-                  }}
-                />
-              }
-              label="per-volume graph range"
-            />
-
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={perVolumeContrast}
-                  onChange={(e) => {
-                    setPerVolumeContrast(e.target.checked);
-                    if (niivueRef.current?.volumes[0]) {
-                      handleFrameChange(
-                        niivueRef.current.volumes[0],
-                        currentVolume,
-                      );
-                    }
-                  }}
-                />
-              }
-              label="per-volume contrast"
-            />
-
-            <Button
-              onClick={() => {
-                const volume = niivueRef.current?.volumes[0];
-                if (!volume) return;
-                const newVol = Math.max(0, currentVolume - 1);
-                setCurrentVolume(newVol);
-                niivueRef.current?.setFrame4D(volume.id, newVol);
-              }}
-            >
-              back
-            </Button>
-
-            <Button
-              onClick={() => {
-                const volume = niivueRef.current?.volumes[0];
-                if (!volume) return;
-                const newVol = Math.min(currentVolume + 1, getNFrame4D() - 1);
-                setCurrentVolume(newVol);
-                niivueRef.current?.setFrame4D(volume.id, newVol);
-              }}
-            >
-              forward
-            </Button>
-          </Box>
-        )}
-        {!loading && (
-          <FramesNote
-            loaded={niivueRef.current?.volumes[0]?.nFrame4D ?? 0}
-            total={niivueRef.current?.volumes[0]?.nTotalFrame4D ?? 0}
           />
-        )}
-      </Box>
-      <Box sx={{ position: "relative", height }}>
-        <canvas
-          id={canvasId}
-          ref={(elmt) => setCanvas(elmt)}
-          style={{
-            width: "100%",
-            height: "100%",
-            border: "1px solid #ccc",
-          }}
-        />
-      </Box>
-      {!loading && (
-        <Box sx={{ mt: 1, p: 1, borderTop: "1px solid #ccc" }}>
-          <Typography variant="body2" color="textSecondary">
-            {locationString || "Click image to see voxel information"}
-          </Typography>
-        </Box>
+          <Checkbox
+            label="Normalize graph"
+            checked={normalizeGraph}
+            onChange={(checked) => {
+              setNormalizeGraph(checked);
+              if (niivueRef.current) {
+                niivueRef.current.graph.normalizeValues = checked;
+                niivueRef.current.updateGLVolume();
+              }
+            }}
+          />
+          <Checkbox
+            label="Per-volume graph range"
+            checked={perVolumeRange}
+            onChange={(checked) => {
+              setPerVolumeRange(checked);
+              if (niivueRef.current) {
+                niivueRef.current.graph.isRangeCalMinMax = checked;
+                niivueRef.current.updateGLVolume();
+              }
+            }}
+          />
+          <Checkbox
+            label="Per-volume contrast"
+            checked={perVolumeContrast}
+            onChange={(checked) => {
+              setPerVolumeContrast(checked);
+              if (volume) handleFrameChange(volume, currentVolume);
+            }}
+          />
+          <div
+            className="nifti-viewer-frames"
+            role="group"
+            aria-label="4D frames"
+          >
+            <Button
+              size="sm"
+              icon="chevron--left"
+              onClick={() => stepFrame(-1)}
+            >
+              Previous frame
+            </Button>
+            <Button
+              size="sm"
+              icon="chevron--right"
+              onClick={() => stepFrame(1)}
+            >
+              Next frame
+            </Button>
+          </div>
+        </div>
       )}
-    </Box>
+      {!loading && (
+        <FramesNote
+          loaded={volume?.nFrame4D ?? 0}
+          total={volume?.nTotalFrame4D ?? 0}
+        />
+      )}
+      <div className="nifti-viewer-canvas">
+        <canvas id={canvasId} ref={(elmt) => setCanvas(elmt)} />
+      </div>
+      {!loading && (
+        <p className="nifti-viewer-location">
+          {locationString || "Click image to see voxel information"}
+        </p>
+      )}
+    </div>
   );
 };
 
