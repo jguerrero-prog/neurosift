@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FunctionComponent, useMemo } from "react";
 import Plot from "@components/LazyPlot";
+import { useCssVars } from "@components/useCssVars";
 import { internId, shadesOf } from "./palette";
 import { LoadedSweep } from "./useSweepData";
 
@@ -379,19 +380,14 @@ const FamilyOverlayPlot: FunctionComponent<Props> = ({
     yRangeByUnit,
   ]);
 
+  const box = useCssVars<HTMLDivElement>({
+    "--icephys-w": width,
+    "--icephys-h": height,
+  });
   if (sweeps.length === 0) {
     return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width,
-          height,
-          color: "#888",
-        }}
-      >
-        Pick a protocol to render its sweep family.
+      <div ref={box} className="icephys-chart-box icephys-chart-empty">
+        No sweeps to draw yet.
       </div>
     );
   }
