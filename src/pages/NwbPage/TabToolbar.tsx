@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import ShareTabButton from "./ShareTabButton";
+import ShareTabButton from "@shared/ShareTabButton/ShareTabButton";
 
 const TOOLBAR_HEIGHT = 24;
 
@@ -33,7 +33,7 @@ const TabToolbar: FunctionComponent<TabToolbarProps> = ({
         gap: 12,
       }}
     >
-      <ShareTabButton tabId={tabId} nwbUrl={nwbUrl} />
+      <ShareTabButton params={{ url: nwbUrl, tab: tabId }} />
       {shouldShowPath && (
         <div
           style={{

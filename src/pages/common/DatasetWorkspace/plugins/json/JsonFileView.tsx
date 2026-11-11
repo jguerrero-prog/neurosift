@@ -5,6 +5,7 @@ import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/prism-light";
 import json from "react-syntax-highlighter/dist/esm/languages/prism/json";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { resolveDatasetFileUrl } from "@hdf5Interface";
+import ViewError from "@components/ViewError/ViewError";
 
 SyntaxHighlighter.registerLanguage("json", json);
 
@@ -52,11 +53,7 @@ const JsonFileView: FunctionComponent<DatasetPluginProps> = ({ file }) => {
   }
 
   if (error) {
-    return (
-      <Box sx={{ p: 3 }}>
-        <Typography color="error">Error: {error}</Typography>
-      </Box>
-    );
+    return <ViewError what="this file" error={error} />;
   }
 
   return (

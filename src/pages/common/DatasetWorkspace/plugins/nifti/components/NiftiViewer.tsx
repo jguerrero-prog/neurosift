@@ -11,6 +11,7 @@ import {
   Select,
   Typography,
 } from "@mui/material";
+import FramesNote from "./FramesNote";
 import { Niivue, SHOW_RENDER } from "./niivue_dist";
 import React, {
   useCallback,
@@ -21,6 +22,7 @@ import React, {
 } from "react";
 import getAuthorizationHeaderForUrl from "../../../../../util/getAuthorizationHeaderForUrl";
 import { addRequestWatermark } from "../../../../../../util/requestWatermark";
+import ViewError from "@components/ViewError/ViewError";
 
 interface NiftiViewerProps {
   fileUrl: string;
@@ -144,11 +146,7 @@ const NiftiViewer: React.FC<NiftiViewerProps> = ({
   }, [fileUrl, canvasId, canvas, handleFrameChange]);
 
   if (error) {
-    return (
-      <Box sx={{ p: 2 }}>
-        <Typography color="error">Error: {error}</Typography>
-      </Box>
-    );
+    return <ViewError what="the NIfTI image" error={error} />;
   }
 
   // Helper function to safely get nFrame4D
@@ -268,21 +266,13 @@ const NiftiViewer: React.FC<NiftiViewerProps> = ({
             >
               forward
             </Button>
-
-            <Button
-              onClick={() => {
-                const volume = niivueRef.current?.volumes[0];
-                if (!volume) return;
-                const total = volume.nTotalFrame4D;
-                const current = volume.nFrame4D;
-                alert(
-                  `4D images can be slow to load. Click the '...' icon below the graph to see the entire dataset. Currently displaying ${current} of ${total} frames.`,
-                );
-              }}
-            >
-              about
-            </Button>
           </Box>
+        )}
+        {!loading && (
+          <FramesNote
+            loaded={niivueRef.current?.volumes[0]?.nFrame4D ?? 0}
+            total={niivueRef.current?.volumes[0]?.nTotalFrame4D ?? 0}
+          />
         )}
       </Box>
       <Box sx={{ position: "relative", height }}>

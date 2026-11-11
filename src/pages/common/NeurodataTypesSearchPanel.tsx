@@ -6,6 +6,7 @@ import {
   TextField,
 } from "@mui/material";
 import { FunctionComponent } from "react";
+import ViewError from "@components/ViewError/ViewError";
 
 type NeurodataTypesSearchPanelProps = {
   neurodataTypes: string[];
@@ -34,11 +35,7 @@ export const NeurodataTypesSearchPanel: FunctionComponent<
   }
 
   if (error) {
-    return (
-      <Box sx={{ color: "error.main", pl: 2 }}>
-        Error loading neurodata types: {error}
-      </Box>
-    );
+    return <ViewError what="the neurodata types" error={error} />;
   }
 
   return (

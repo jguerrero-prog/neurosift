@@ -1,0 +1,3 @@
+.icephys-window-input[aria-invalid="true"] {
+  border-color: var(--border-error);
+}
