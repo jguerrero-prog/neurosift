@@ -235,10 +235,7 @@ const AppContent = () => {
                 element={<NwbPage width={width} height={mainHeight} />}
               />
               <Route path="/settings" element={<SettingsPage />} />
-              <Route
-                path="/guide"
-                element={<GuidePage width={width} height={mainHeight} />}
-              />
+              <Route path="/guide" element={<GuidePage />} />
               <Route
                 path="/edf"
                 element={<EdfPage width={width} height={mainHeight} />}
