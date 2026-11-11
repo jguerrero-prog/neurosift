@@ -359,6 +359,12 @@ export const navigation: NavSection[] = [
         summary: "Power by frequency over recording time, and its settings.",
       },
       {
+        label: "Intracellular recordings",
+        href: "/ui-library/icephys/",
+        summary:
+          "Patch-clamp sweeps by protocol, overlaid or in panels, and when each was recorded.",
+      },
+      {
         label: "Video and pose",
         href: "/ui-library/video-and-pose/",
         summary: "Behavioral video, pose markers over it, and linked videos.",
