@@ -75,18 +75,18 @@ export default function TimeDemo() {
           cursor={cursor}
           onChange={setView}
         />
-        <ChannelWindow
-          label="Channels"
-          total={70}
-          value={channels}
-          onChange={setChannels}
-        />
         <Playback
           playing={playing}
           onPlayingChange={setPlaying}
           speed={speed}
           onSpeedChange={setSpeed}
           time={cursor}
+        />
+        <ChannelWindow
+          label="Channels"
+          total={70}
+          value={channels}
+          onChange={setChannels}
         />
       </div>
       <TimeOverview

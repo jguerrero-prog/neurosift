@@ -10,6 +10,7 @@ import ViewError from "@components/ViewError/ViewError";
 import { useCssVars } from "@components/useCssVars";
 import { FunctionComponent, ReactNode, useMemo, useState } from "react";
 import TimeView, { TIME_VIEW_INSET } from "../common/TimeView";
+import { useWindowPlayback } from "../common/usePlayback";
 import { useTimeWindow } from "../common/useTimeWindow";
 import { useTimeseriesData } from "./hooks";
 import LabeledEventsPlot from "./LabeledEventsPlot";
@@ -41,6 +42,10 @@ export const SimpleTimeseriesView: FunctionComponent<
   const [renderer, setRenderer] = useState("canvas");
   const [channelSeparation, setChannelSeparation] = useState(0);
   const time = useTimeWindow();
+  const playback = useWindowPlayback();
+  const lookahead = playback.playing
+    ? 2 * Math.max(1, Number(playback.speed))
+    : 0;
 
   const {
     timeseriesClient,
@@ -49,13 +54,14 @@ export const SimpleTimeseriesView: FunctionComponent<
     info,
     loadedTimestamps,
     loadedData,
+    loadedRange,
     zoomInRequired,
     drawAnyway,
     visibleChannelsStart,
     setVisibleChannelsStart,
     numVisibleChannels,
     setNumVisibleChannels,
-  } = useTimeseriesData(nwbUrl, path);
+  } = useTimeseriesData(nwbUrl, path, lookahead);
 
   const group = useHdf5Group(nwbUrl, path);
   const channelNames = useMemo(() => {
@@ -80,6 +86,11 @@ export const SimpleTimeseriesView: FunctionComponent<
   const visibleStart = time.value.start;
   const visibleEnd = time.value.start + time.value.duration;
   const channels = info.totalNumChannels;
+  const holding =
+    !zoomInRequired &&
+    (!loadedRange ||
+      loadedRange.start > visibleStart ||
+      loadedRange.end < Math.min(visibleEnd, timeseriesClient.endTime));
   const plural = (n: number, word: string) =>
     `${n.toLocaleString("en-US")} ${word}${n === 1 ? "" : "s"}`;
 
@@ -134,6 +145,8 @@ export const SimpleTimeseriesView: FunctionComponent<
       label={name}
       summary={timeseriesSummary(info)}
       busy={isLoading}
+      playback={condensed ? undefined : playback}
+      holding={holding}
       controls={
         <>
           {channels > 1 && (
