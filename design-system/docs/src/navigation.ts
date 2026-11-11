@@ -373,7 +373,7 @@ export const navigation: NavSection[] = [
         label: "Default object view and Python",
         href: "/ui-library/nwb-object-views/",
         summary:
-          "Objects with no view of their own, Load in Python and Timeseries alignment.",
+          "Objects with no view of their own, tables, Load in Python and Timeseries alignment.",
       },
     ],
   },
