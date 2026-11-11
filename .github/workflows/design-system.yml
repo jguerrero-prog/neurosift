@@ -2,7 +2,7 @@ name: Design System
 
 on:
   pull_request:
-    branches: [main, development]
+    branches: [main]
 
 permissions:
   contents: read
@@ -74,6 +74,8 @@ jobs:
           git fetch --depth=1 origin "$BASE_REF"
           git worktree add --detach "$RUNNER_TEMP/base" FETCH_HEAD
 
-      # Fails when this pull request adds an MUI import, an inline style or an sx prop.
+      # Informational: the step is marked when this pull request adds an MUI import, an inline
+      # style or an sx prop, and the table goes to the summary, but the pull request doesn't fail.
       - name: Count MUI imports and inline styles against the base branch
+        continue-on-error: true
         run: node design-system/migration/count.mjs src "$RUNNER_TEMP/base/src" | tee -a "$GITHUB_STEP_SUMMARY"

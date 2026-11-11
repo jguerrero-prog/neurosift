@@ -1,4 +1,4 @@
-// Serves the built docs (dist/) for the accessibility suite, under DOCS_BASE as GitHub Pages does.
+// Serves the built docs (dist/) for the accessibility suite, under DOCS_BASE as neurosift.app does.
 import { createReadStream, existsSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, normalize } from "node:path";

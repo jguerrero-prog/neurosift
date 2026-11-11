@@ -155,7 +155,7 @@ const date = (iso: string) => new Date(`${iso}T12:00:00Z`).toLocaleDateString("e
 
 <DocsLayout title="Changelog" description="What changed in the design system, newest first.">
   <Intro
-    lead="What changed in the design system, newest first: the pull requests that built it in code, then the work in Figma that came before. Anything marked “to confirm” on a page stays a proposal until Jeremy Magland and Ben Dichter agree."
+    lead="What changed in the design system, newest first: the pull requests that built it in code, in jguerrero-prog/neurosift (the fork where the redesign was built, so the numbers are that repository’s, not this one’s), then the work in Figma that came before. Anything marked “to confirm” on a page stays a proposal until Jeremy Magland and Ben Dichter agree."
     status="Updated November 10, 2026 · Resources · Code dates are when a pull request merged, in UTC"
     rules={[
       { title: "Newest first", text: "Each day lists its changes with the latest at the top." },
@@ -170,7 +170,7 @@ const date = (iso: string) => new Date(`${iso}T12:00:00Z`).toLocaleDateString("e
         <ul class="rule-list">
           {prs.map(([number, title]) => (
             <li>
-              <a href={`${REPO}${number.slice(1)}`}>{number}</a> {title}
+              <a href={`${REPO}${number.slice(1)}`}>jguerrero-prog/neurosift{number}</a> {title}
             </li>
           ))}
         </ul>

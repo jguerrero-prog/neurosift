@@ -2,7 +2,7 @@ import react from "@astrojs/react";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "astro/config";
 
-// DOCS_BASE sets the path prefix when the site is published under a subpath, such as GitHub Pages.
+// DOCS_BASE sets the path prefix when the site is published under a subpath, such as /design-system/ on neurosift.app.
 export default defineConfig({
   base: process.env.DOCS_BASE ?? "/",
   server: { port: 4321 },
