@@ -185,6 +185,11 @@ export const navigation: NavSection[] = [
         summary: "Time window, Channel window, Time overview and Playback.",
       },
       {
+        label: "Image zoom",
+        href: "/components/image-zoom/",
+        summary: "Zoom and pan over one image: buttons, wheel, pinch, drag and keys.",
+      },
+      {
         label: "Tabs and segmented controls",
         href: "/components/tabs/",
         summary:

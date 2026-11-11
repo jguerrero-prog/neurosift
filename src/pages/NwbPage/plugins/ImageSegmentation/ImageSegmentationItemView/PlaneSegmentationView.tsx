@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { LoadingState, ViewPanel } from "@ui";
+import { ImageZoom, LoadingState, ViewPanel, type ImageZoomValue } from "@ui";
 import { FunctionComponent, ReactNode, useEffect, useState } from "react";
 import { TIME_VIEW_CHROME } from "../../common/TimeView";
 import "./PlaneSegmentationView.css";
@@ -289,7 +289,7 @@ const Test1: FunctionComponent<{
   const N2a = client.shape[2];
   const N1 = planeTransform.xyswap ? N2a : N1a;
   const N2 = planeTransform.xyswap ? N1a : N2a;
-  const scale = Math.min(area.w / N1, area.h / N2);
+  const [zoom, setZoom] = useState<ImageZoomValue>("fit");
 
   const [loadingMessage, setLoadingMessage] = useState("");
 
@@ -339,13 +339,7 @@ const Test1: FunctionComponent<{
           const c = offscreenCanvas.getContext("2d");
           if (!c) return;
           c.putImageData(imageData, 0, 0);
-          ctx.drawImage(
-            offscreenCanvas,
-            x0 * scale,
-            y0 * scale,
-            w0 * scale,
-            h0 * scale,
-          );
+          ctx.drawImage(offscreenCanvas, x0, y0);
         } else if (client.hasPixelMask) {
           const aa = await client.getPixelMask(j);
           if (canceled) return;
@@ -375,7 +369,7 @@ const Test1: FunctionComponent<{
           const c = offscreenCanvas.getContext("2d");
           if (!c) return;
           c.putImageData(imageData, 0, 0);
-          ctx.drawImage(offscreenCanvas, 0, 0, N1 * scale, N2 * scale);
+          ctx.drawImage(offscreenCanvas, 0, 0);
         }
       }
       setLoadingMessage(`Loaded ${N0} regions`);
@@ -384,7 +378,7 @@ const Test1: FunctionComponent<{
     return () => {
       canceled = true;
     };
-  }, [canvasElement, client, N0, N1, N2, scale, planeTransform]);
+  }, [canvasElement, client, N0, N1, N2, planeTransform]);
 
   return (
     <ViewPanel
@@ -397,11 +391,21 @@ const Test1: FunctionComponent<{
       controls={picker}
     >
       <div className="segmentation-view">
-        <canvas
-          ref={(elmt) => elmt && setCanvasElement(elmt)}
-          width={N1 * scale}
-          height={N2 * scale}
-        />
+        <ImageZoom
+          label={`${name} masks`}
+          width={N1}
+          height={N2}
+          value={zoom}
+          onChange={setZoom}
+          viewWidth={area.w}
+          viewHeight={area.h}
+        >
+          <canvas
+            ref={(elmt) => elmt && setCanvasElement(elmt)}
+            width={N1}
+            height={N2}
+          />
+        </ImageZoom>
         <div className="segmentation-side">
           <PlaneTransformSelector
             planeTransform={planeTransform}

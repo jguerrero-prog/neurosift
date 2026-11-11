@@ -7,11 +7,13 @@ import {
 import { FrameBlocks } from "./frameBlocks";
 import {
   IconButton,
+  ImageZoom,
   LoadingState,
   Playback,
   RangeSlider,
   Slider,
   ViewPanel,
+  type ImageZoomValue,
 } from "@ui";
 import { TIME_VIEW_CHROME, TIME_VIEW_INSET } from "../../common/TimeView";
 import { framesDue } from "../../common/playback";
@@ -105,6 +107,7 @@ export const TwoPhotonSeriesItemView: FunctionComponent<Props> = ({
   );
 
   const [planeTransform, setPlaneTransform] = useState(defaultPlaneTransform);
+  const [zoom, setZoom] = useState<ImageZoomValue>("fit");
 
   useEffect(() => {
     if (rgb) return;
@@ -391,21 +394,23 @@ export const TwoPhotonSeriesItemView: FunctionComponent<Props> = ({
     >
       <div className="imaging-frame">
         {currentImage ? (
-          <div
-            className="time-view-plot"
-            tabIndex={0}
-            aria-label={`${path.split("/").pop() || path}. Space plays and pauses.`}
+          <ImageZoom
+            label={`${path.split("/").pop() || path}. Space plays and pauses`}
+            width={currentImage.width}
+            height={currentImage.height}
+            value={zoom}
+            onChange={setZoom}
+            viewWidth={imageSize}
+            viewHeight={imageSize}
             onKeyDown={onSpace(() => play(!playing))}
           >
             <ImageDataView
-              width={imageSize}
-              height={imageSize}
               imageData={currentImage}
               currentPlane={currentPlane}
               minValue={currentMinValue || 0}
               maxValue={currentMaxValue || 1}
             />
-          </div>
+          </ImageZoom>
         ) : (
           <LoadingState
             label={`Loading frame ${n((frameIndex ?? 0) + 1)}`}
@@ -424,19 +429,14 @@ export const TwoPhotonSeriesItemView: FunctionComponent<Props> = ({
 };
 
 type ImageDataViewProps = {
-  width: number;
-  height: number;
   imageData: ImageData;
   currentPlane: number; // -1 means rgb
   minValue: number;
   maxValue: number;
 };
 
-const margins = { left: 10, right: 10, top: 10, bottom: 10 };
-
+/** The frame at its own size; ImageZoom scales it. */
 const ImageDataView: FunctionComponent<ImageDataViewProps> = ({
-  width,
-  height,
   imageData,
   currentPlane,
   minValue,
@@ -454,15 +454,6 @@ const ImageDataView: FunctionComponent<ImageDataViewProps> = ({
     const transformValue = (v: number) => {
       return Math.max(0, Math.min(1, (v - minValue) / (maxValue - minValue)));
     };
-
-    const scale = Math.min(
-      (width - margins.left - margins.right) / W,
-      (height - margins.top - margins.bottom) / H,
-    );
-    const offsetX =
-      margins.left + (width - margins.left - margins.right - W * scale) / 2;
-    const offsetY =
-      margins.top + (height - margins.top - margins.bottom - H * scale) / 2;
 
     if (!W || !H) {
       console.warn("Unexpected: W or H is zero");
@@ -498,32 +489,13 @@ const ImageDataView: FunctionComponent<ImageDataViewProps> = ({
         buf[4 * i + 3] = 255;
       }
     }
-    const offscreenCanvas = document.createElement("canvas");
-    offscreenCanvas.width = W;
-    offscreenCanvas.height = H;
-    const c = offscreenCanvas.getContext("2d");
-    if (!c) return;
-    c.putImageData(imgData, 0, 0);
-
-    ctx.clearRect(0, 0, width, height);
-    ctx.drawImage(offscreenCanvas, offsetX, offsetY, W * scale, H * scale);
-  }, [
-    W,
-    H,
-    data,
-    canvasElement,
-    width,
-    height,
-    minValue,
-    maxValue,
-    numPlanes,
-    currentPlane,
-  ]);
+    ctx.putImageData(imgData, 0, 0);
+  }, [W, H, data, canvasElement, minValue, maxValue, numPlanes, currentPlane]);
   return (
     <canvas
       ref={(elmt) => elmt && setCanvasElement(elmt)}
-      width={width}
-      height={height}
+      width={W}
+      height={H}
     />
   );
 };
