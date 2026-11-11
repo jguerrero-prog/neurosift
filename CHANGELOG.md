@@ -1,5 +1,9 @@
 # Changes
 
+## November 11, 2026
+
+- Saved Neurosift v1 links (`?p=…`) are rewritten once, when the app starts, by a tested module (`src/util/legacyUrl.ts`) that replaces the `LegacyUrlHandler` in `App.tsx`. Forms that broke before now open what they pointed to: `view:X/Y` tabs (which became an object path), `view:PSTH`, `view:RasterPlot` and `view:TrialAlignedSeries` tabs, other v1 views (opened as their object), `tab=timeseries-alignment`, `?p=/openneuro`, `?p=/openneuro-dataset`, `?p=/avi`, and `?p=/nwb&dandiAssetId=` without a url. NWB and EDF file URLs are now escaped, so a `&` or `#` inside one no longer breaks the link.
+
 ## October 21, 2026
 
 - Removed annotations: the Annotations page, the annotation panels on dandiset, NWB and OpenNeuro pages, the home page's highlighted views, and the notebook and chat links built from annotations. They had not been used since mid-2025, and depended on the `neurosift-annotation-manager` service.

@@ -6,9 +6,11 @@ import "@css/nwb-table-2.css";
 import "@css/nwb-table.css";
 import { installGlobalErrorReporting } from "./util/reportError";
 import { installStaleChunkReload } from "./util/reloadOnStaleChunk";
+import { redirectLegacyUrl } from "./util/legacyUrl";
 
 installGlobalErrorReporting();
 installStaleChunkReload();
+redirectLegacyUrl();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
