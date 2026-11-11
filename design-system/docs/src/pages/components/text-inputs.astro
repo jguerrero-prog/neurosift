@@ -169,6 +169,7 @@ const areaCode = `const sendOnEnter = (event: KeyboardEvent<HTMLTextAreaElement>
       <li><strong>Labels.</strong> Every field has a &lt;label&gt; tied to it. In a search field or a message box it is visually hidden, never missing.</li>
       <li><strong>Keys.</strong> A Text area keeps Enter for new lines unless the caller sends on Enter; then Shift+Enter still adds a line, and the helper says so.</li>
       <li><strong>Errors.</strong> The field gets aria-invalid, the message is tied to it with aria-describedby, and an icon goes with the color.</li>
+      <li><strong>Descriptions add up.</strong> A description the caller links with aria-describedby stays, and the field’s helper or error is read after it, in the Text input and the Text area alike.</li>
       <li><strong>Input hints.</strong> inputMode="decimal" for numbers, autocomplete="off" for keys, and type="search" in the search field.</li>
       <li><strong>Contrast.</strong> Text 17.4:1, placeholder 5.3:1 and the field edge 21:1 on white; the 2px focus border is 7.2:1.</li>
     </ul>

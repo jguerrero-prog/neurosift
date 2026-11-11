@@ -534,7 +534,7 @@ test("alerts: errors are announced at once, other messages politely, and none ta
   await page.goto("components/alerts/");
   const alerts = page.locator(".alert-demo");
   await expect(alerts.getByRole("alert")).toHaveCount(1);
-  await expect(alerts.getByRole("status")).toHaveCount(3);
+  await expect(alerts.getByRole("status")).toHaveCount(4);
   const inline = page.locator(".inline-message-demo");
   await expect(inline.getByRole("alert")).toHaveCount(1);
   await expect(inline.getByRole("status")).toHaveCount(2);

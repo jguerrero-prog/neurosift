@@ -34,7 +34,7 @@ const SPECS = [
   ["Padding", "12px · space/3", "8px 8px 8px 12px · space/2 and space/3", "—"],
   ["Icon", "20px · status/*/text", "16px · text/on-inverse; none for neutral", "16px · status/*/text"],
   ["Text", "type/label title · type/body-sm message · type/code-sm detail", "type/body-sm · text/on-inverse", "type/caption · status/*/text"],
-  ["Actions", "Up to two Small buttons: Secondary, then Ghost", "One, as underlined type/label", "—"],
+  ["Actions", "Up to two Small buttons: Secondary, then Ghost; Primary, then Secondary when one is primary", "One, as underlined type/label", "—"],
   ["Dismiss", "Optional 24px Ghost icon button", "Always, 24px Ghost icon button", "—"],
   ["Place", "In the view, where the problem is", "Bottom center, 24px up · space/6", "Under the field or plot"],
   ["Timing", "Stays", "4 seconds; errors and work in progress stay", "While it applies"],
@@ -61,6 +61,14 @@ const code = `import { Alert, InlineMessage, ToastProvider, useToast } from "@ui
   Try again, or report it if it keeps happening.
 </Alert>
 
+<Alert
+  status="warning"
+  title="Run this code?"
+  actions={[{ label: "Allow", onClick: allow, primary: true }, { label: "Deny", onClick: deny }]}
+>
+  The assistant wants to run a Python script that reads /units from this file.
+</Alert>
+
 <InlineMessage status="error">Window start must be before the end.</InlineMessage>
 
 // Once, at the app root:
@@ -74,7 +82,7 @@ toast.show({ status: "success", message: "Link copied" });`;
 <DocsLayout title="Alerts and toasts" description="Alert, Toast and Inline message: what happened and what to do next.">
   <Intro
     lead="Alerts, toasts and inline messages tell people what happened and what to do next: an embargoed Dandiset, a plot that failed to draw, a link copied. They replace Material UI alerts, a browser alert() box, red text in two shades with no icon, and “Copied!” in small gray text."
-    status="Updated November 9, 2026 · Components · Every example on this page is the component the app imports from @ui"
+    status="Updated November 10, 2026 · Components · Every example on this page is the component the app imports from @ui"
     rules={[
       { title: "Say what to do", text: "Every alert names the problem and the next step, with a button for it when there is one." },
       { title: "Stay or go by weight", text: "Alerts stay until the problem is fixed. Toasts confirm and leave after 4 seconds." },
@@ -95,11 +103,14 @@ toast.show({ status: "success", message: "Link copied" });`;
       <Alert status="warning" title="This Dandiset is embargoed" actions={[{ label: "Add API key", onClick: noop }, { label: "Get a key on DANDI", onClick: noop }]}>
         Add a DANDI API key from an account with access to open its files.
       </Alert>
+      <Alert status="warning" title="Run this code?" actions={[{ label: "Allow", onClick: noop, primary: true }, { label: "Deny", onClick: noop }]}>
+        The assistant wants to run a Python script that reads /units from this file.
+      </Alert>
       <Alert status="error" title="The PSTH couldn’t be drawn" detail="Reading /units/spike_times failed: the request timed out after 15 s." actions={[{ label: "Try again", onClick: noop }, { label: "Report this", onClick: noop }]}>
         Try again, or report it if it keeps happening.
       </Alert>
     </div>
-    <p class="doc-note">Info for something people should know; success rarely, since a toast is usually enough; warning when people can fix it themselves; error when something failed. Errors say which view failed, show the cause in code, and offer Try again and Report this.</p>
+    <p class="doc-note">Info for something people should know; success rarely, since a toast is usually enough; warning when people can fix it themselves; error when something failed. Errors say which view failed, show the cause in code, and offer Try again and Report this. When the alert asks for a decision, such as a permission prompt in Neurosift Chat, mark the expected answer primary: it becomes a Primary button and the other one Secondary.</p>
   </DocSection>
 
   <DocSection title="Toast" lead="A short confirmation after something people did, on navy at the bottom center of the window. Try them: each new toast replaces the one before.">

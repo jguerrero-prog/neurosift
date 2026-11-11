@@ -17,7 +17,7 @@ const GROUPS = [
   { value: "trial_type", label: "Trial type" },
   { value: "orientation", label: "Stimulus orientation" },
   { value: "contrast", label: "Contrast" },
-  { value: "response", label: "Response" },
+  { value: "response", label: "Response", disabled: true },
 ];
 
 const SPEEDS = ["0.1×", "0.25×", "0.5×", "1×", "2×", "4×", "8×"].map((s) => ({ value: s, label: s }));
@@ -103,7 +103,7 @@ const code = `import { Menu, Select } from "@ui";
 <DocsLayout title="Dropdowns and selects" description="Select and Menu: one value from a list, or one action from a list.">
   <Intro
     lead="Selects let people pick one value from a list: how to group trials, which Dandiset version to open, the playback speed. Menus list actions behind a button, such as the ways to share a file. Both work fully from the keyboard, and the Select is the browser’s own, so screen readers and phones handle it as they always do."
-    status="Updated November 6, 2026 · Components · Every select and menu on this page is the component the app imports from @ui"
+    status="Updated November 10, 2026 · Components · Every select and menu on this page is the component the app imports from @ui"
     rules={[
       { title: "Pick the control by count", text: "Four or fewer choices: radio buttons or a segmented control, so every option shows. Five or more: a select." },
       { title: "Options name the value", text: "“None”, not “(none)”. Units come with the value: “60 Hz”, “2×”." },
@@ -125,7 +125,7 @@ const code = `import { Menu, Select } from "@ui";
       <Select label="Group trials by" value="contrast" onChange={noop} options={GROUPS} error="“Contrast” isn’t in this file’s trials table. Pick another column." />
       <Select label="Group trials by" value="" onChange={noop} options={GROUPS} helper="This file has no trials table." disabled />
     </div>
-    <p class="doc-note">Default with a helper, an error for a saved choice that no longer applies to this file, and disabled with the reason beside it.</p>
+    <p class="doc-note">Default with a helper, an error for a saved choice that no longer applies to this file, and disabled with the reason beside it. Response is a disabled option: it’s grayed out in the list, and only a disabled select dims the field.</p>
   </DocSection>
 
   <DocSection title="Sizes" lead="Medium in pages and dialogs. Small in plot control panels, next to Small text inputs and buttons.">
@@ -189,6 +189,7 @@ const code = `import { Menu, Select } from "@ui";
   <DocSection title="Accessibility">
     <ul class="rule-list">
       <li><strong>A real label.</strong> The label is tied to the select, so screen readers say “Group trials by, Trial type, collapsed”.</li>
+      <li><strong>Descriptions add up.</strong> A description the caller links with aria-describedby stays, and the helper or error is read after it, in the Select and the Multi-select.</li>
       <li><strong>Native semantics.</strong> The browser announces the select, its options and the chosen one; nothing is rebuilt with ARIA.</li>
       <li><strong>Menus say what they are.</strong> The button has aria-haspopup and aria-expanded, the list is role="menu", and focus never gets lost when it closes.</li>
       <li><strong>Not by color alone.</strong> The chosen option has a check and SemiBold text as well as its position.</li>
