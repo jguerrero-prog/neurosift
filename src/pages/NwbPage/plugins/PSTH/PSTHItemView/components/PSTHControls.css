@@ -14,3 +14,8 @@
   position: relative;
   block-size: var(--chart-h);
 }
+
+.psth-chart-frame {
+  position: relative;
+  block-size: 100%;
+}

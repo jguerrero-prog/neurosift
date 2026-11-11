@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AccordionItem, EmptyState, ViewPanel } from "@ui";
 import { useCssVars } from "@components/useCssVars";
+import LazyFrame from "@components/LazyFrame";
 import { FunctionComponent, ReactNode, useState } from "react";
 import "./PSTHControls.css";
 import UnitSelectionComponent from "./UnitSelection";
@@ -20,7 +21,6 @@ import {
   PSTHTrialAlignedSeriesMode,
 } from "../types";
 import PSTHUnitWidget from "../PSTHUnitWidget";
-import IfHasBeenVisible from "../IfHasBeenVisible";
 
 type Props = {
   width: number;
@@ -250,7 +250,7 @@ const PSTHLayout: FunctionComponent<Props> = ({
         <div className="psth-charts">
           {unitIdsOrRoiIndicesToPlot.map((unitIdOrRoiIndex) => (
             <PSTHChart key={unitIdOrRoiIndex} height={unitWidgetHeight}>
-              <IfHasBeenVisible width={plotWidth} height={unitWidgetHeight}>
+              <LazyFrame className="psth-chart-frame">
                 <PSTHUnitWidget
                   width={plotWidth - 20}
                   height={unitWidgetHeight}
@@ -270,7 +270,7 @@ const PSTHLayout: FunctionComponent<Props> = ({
                   prefs={prefs}
                   mode={mode}
                 />
-              </IfHasBeenVisible>
+              </LazyFrame>
             </PSTHChart>
           ))}
         </div>
