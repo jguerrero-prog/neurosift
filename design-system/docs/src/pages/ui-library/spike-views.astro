@@ -23,6 +23,12 @@ const STATES = [
   ["Bins out of range", "Number of bins shows “Use between 1 and 1,000 bins.”"],
   ["Grouped", "Categories lists each value of the column with a checkbox."],
   ["Many units checked", "One chart per unit, in list order; Units reads “12 of 46 selected”."],
+  ["Figpack: no job yet", "Generate Figpack Raster Plot, a Primary button."],
+  ["Figpack: pending or in progress", "Info alert, “Job pending” or “Job in progress”, with Refresh status, which spins while it checks, and View job."],
+  ["Figpack: completed", "A Job completed success badge and View job, then the figure in a frame."],
+  ["Figpack: failed", "Error alert, “Job failed”, with the error, Retry job and View job."],
+  ["Figpack: expired", "Warning alert, “Job expired”, with Submit new job."],
+  ["Figpack: local file", "Info inline message: figures need a public NWB file served over HTTPS."],
 ];
 
 const BEHAVIOR = [
@@ -42,6 +48,7 @@ const DIFFERS = [
   ["No units chosen", "A sentence", "An empty state with Select first 5 units", "Built"],
   ["Number of bins", "Ignores values out of range", "Says “Use between 1 and 1,000 bins.”", "Built"],
   ["Unit header", "A stray “0”; ROIs called Unit", "Unit or ROI, without the 0", "Built"],
+  ["Figpack job status", "Tinted boxes with a bold “Job Status:” link, a bright blue Generate button and a green ✓ line", "Generate, a Primary button; Info, Error and Warning alerts with Refresh status and View job; a success badge when done", "Built"],
   ["Settings side", "Left of the charts", "Right, as in every View panel", "To confirm"],
 ];
 
@@ -51,13 +58,15 @@ const SPECS = [
   ["Settings", "Accordion items: Units, Align to, Controls, Categories, Sort units by, Display · summaries in type/code-sm"],
   ["Units list", "Checkbox with count · the first box is Mixed when some are checked · 18rem, then the list scrolls"],
   ["Empty", "Empty state with Select first 5 units"],
+  ["Figpack job", "16px (space/4) padding · Button, Primary · Alert with up to two Small actions · Badge, success, with its icon · 12px (space/3) gap"],
+  ["Figpack frame", "border/subtle · radius/sm · the figure fills it"],
 ];
 ---
 
 <DocsLayout title="Spike views" description="The raster of spike times, and the PSTH of spikes around each trial.">
   <Intro
     lead="Spike views show the units table: a raster of spike times on recording time, and a peri-stimulus time histogram of each unit’s spikes around every trial. Neurosift’s charts stay as they are. The raster gets the shared time frame and a Units window; the PSTH’s settings move into a panel beside the charts, where each section says what it’s set to."
-    status="Updated November 10, 2026 · UI library · Captured at 1440 × 900 with Dandiset 000673, sub-1 · Built from View panel, Time window, Channel window, Segmented control, Accordion, Checkbox, Select, Text input and Empty state"
+    status="Updated November 10, 2026 · UI library · Captured at 1440 × 900 with Dandiset 000673, sub-1 · Built from View panel, Time window, Channel window, Segmented control, Accordion, Checkbox, Select, Text input, Empty state, Alert, Badge and Button"
     rules={[
       { title: "Count what’s picked", text: "Units reads “5 of 46 selected”, and each unit shows its spikes." },
       { title: "A way to start", text: "With nothing picked, Select first 5 units is one click." },
@@ -84,6 +93,16 @@ const SPECS = [
       <Screen file="spikes-proposed-psth" alt="The rebuilt PSTH: the raster and histogram for unit 0 around start_time, with Units, Align to, Controls, Categories and Sort units by settings beside it." caption="PSTH: settings beside the charts, each saying what it’s set to." />
     </div>
     <p class="doc-note">Built from the <a href={withBase("/components/view-panel/")}>View panel</a>, <a href={withBase("/components/time-controls/")}>Time controls</a> and <a href={withBase("/components/accordions/")}>Accordion</a>.</p>
+  </DocSection>
+
+  <DocSection title="Figpack figures" lead="Figpack Raster on Units, Video preview on an ImageSeries and Pose estimation open from the object table. A job on the runpack service builds the figure, and the tab says where the job stands. No job exists for this file, so the pending and failed captures answer the job check with a stubbed status.">
+    <div class="captures">
+      <Screen file="figpack-job" alt="Today’s Figpack Raster tab on neurosift.app: a bright blue Generate Figpack Raster Plot button." caption="Today: a bright blue button, then colored boxes once a job runs." />
+      <Screen file="figpack-job-proposed" alt="The rebuilt Figpack Raster tab: Generate Figpack Raster Plot as a Primary button." caption="No job yet: Generate, a Primary button." />
+      <Screen file="figpack-job-proposed-pending" alt="The rebuilt pending job: an info alert, Job pending, Your job is queued and waiting for a worker to process it, with Refresh status and View job." caption="Pending: an info alert with Refresh status and View job." />
+      <Screen file="figpack-job-proposed-failed" alt="The rebuilt failed job: an error alert, Job failed, An unknown error occurred, with Retry job and View job." caption="Failed: an error alert with Retry job." />
+    </div>
+    <p class="doc-note">Built from <a href={withBase("/components/buttons/")}>Buttons</a>, <a href={withBase("/components/alerts/")}>Alerts</a> and <a href={withBase("/components/badges/")}>Badges</a>. The three Figpack views share one view, so they read alike.</p>
   </DocSection>
 
   <DocSection title="Try it" lead="Select the first 5 units, align to a column and group by a category.">
