@@ -187,8 +187,10 @@ test("links and controls are at least 24 by 24 pixels", async ({ page }) => {
           (el) =>
             el.checkVisibility() &&
             !el.matches(".skip-link") &&
+            // WCAG's inline exception: links, and link buttons (which browsers render inline-block), in running text.
             !(
-              getComputedStyle(el).display === "inline" &&
+              (getComputedStyle(el).display === "inline" ||
+                el.matches(".ns-button--link")) &&
               el.closest("p, li, figcaption")
             ),
         )
@@ -333,7 +335,7 @@ test("buttons keep a visible edge and focus ring in forced colors", async ({
   await page.emulateMedia({ forcedColors: "active" });
   await page.goto("components/buttons/");
   const edges = await page
-    .locator(".ns-button, .ns-icon-button")
+    .locator(".ns-button:not(.ns-button--link), .ns-icon-button")
     .evaluateAll((buttons) =>
       buttons.map((b) => {
         const style = getComputedStyle(b);
@@ -343,6 +345,16 @@ test("buttons keep a visible edge and focus ring in forced colors", async ({
       }),
     );
   expect(edges.every(Boolean)).toBe(true);
+  // Link buttons read as links, so they keep an underline instead of an edge.
+  const underlines = await page
+    .locator(".ns-button--link:not(:disabled)")
+    .evaluateAll((links) =>
+      links.map((l) =>
+        getComputedStyle(l).textDecorationLine.includes("underline"),
+      ),
+    );
+  expect(underlines.length).toBeGreaterThan(0);
+  expect(underlines.every(Boolean)).toBe(true);
   const button = page.locator(".ns-button--primary").first();
   await button.focus();
   await page.keyboard.press(`Shift+${tab(browserName)}`);
