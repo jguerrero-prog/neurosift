@@ -1,5 +1,6 @@
 ---
 import DocRows from "../../components/DocRows.astro";
+import FeedbackDemo from "../../components/FeedbackDemo";
 import Existing from "../../components/Existing.astro";
 import { Button, IconButton, type ButtonVariant } from "@ui";
 import CodeSample from "../../components/CodeSample.astro";
@@ -45,12 +46,15 @@ const SPECS = [
   ["Ghost", "No fill; hover action/secondary-hover", "Same"],
   ["Destructive", "action/destructive, hover and pressed darker", "Same"],
   ["Disabled", "action/disabled with text/disabled; Secondary keeps white with border/disabled", "Same"],
+  ["Pressed toggle", "The style’s pressed fill, action/*-pressed; Ghost adds a 1px border/strong edge", "Same"],
 ];
 
 const code = `import { Button, IconButton } from "@ui";
 
 <Button variant="primary" icon="download">Download</Button>
 <Button size="sm" loading={saving}>Save</Button>
+<Button size="sm" variant="ghost" pressed={helpful}
+  onClick={() => setHelpful(!helpful)}>Helpful</Button>
 <Button href="https://dandiarchive.org" icon="launch">View on DANDI</Button>
 <IconButton icon="settings" label="Settings" variant="ghost" />`;
 const ANATOMY = [
@@ -145,6 +149,22 @@ const ANATOMY = [
     <p class="doc-note">A loading button never changes width. With an icon, the spinner takes the icon’s place. Without one, the spinner sits in the middle and the label stays in place, unseen, so the width holds and screen readers still hear the label. Loading keeps focus on the button, sets aria-busy and ignores clicks. Disabled buttons can’t be focused, so always say nearby why an action isn’t available, such as “Add an API key first”.</p>
   </DocSection>
 
+  <DocSection title="Toggle buttons" lead="A button that stays on until pressed again, such as Helpful and Not helpful under an answer in Neurosift Chat. pressed keeps the style’s pressed fill, and a pressed Ghost gains the Secondary edge, so on and off differ by more than color. Press them here.">
+    <FeedbackDemo client:visible />
+    <DocTable caption="Pressed toggles" columns={["Style", "Off", "On"]}>
+      {
+        STYLES.map(({ variant, name, label }) => (
+          <tr>
+            <th scope="row">{name}</th>
+            <td><Button variant={variant} pressed={false}>{label}</Button></td>
+            <td><Button variant={variant} pressed>{label}</Button></td>
+          </tr>
+        ))
+      }
+    </DocTable>
+    <p class="doc-note">Use a toggle only for a state that stays, never for an action. The label stays the same when pressed; the button says “pressed” to screen readers through aria-pressed.</p>
+  </DocSection>
+
   <DocSection title="Anatomy" lead="A Medium Primary button with an icon. Every value comes from the spacing, radius and color tokens.">
     <div class="demo-row"><Button variant="primary" icon="folder--open">Open file</Button></div>
     <DocTable caption="Button anatomy" columns={["Part","Value"]}>
@@ -186,6 +206,7 @@ const ANATOMY = [
       <li><strong>Real buttons.</strong> A &lt;button&gt; for actions, a link for navigation. Button renders an &lt;a&gt; when given href. Enter works on both, Space on buttons.</li>
       <li><strong>Visible focus.</strong> The ring appears for keyboard focus on every style and is never removed. On navy surfaces it turns white.</li>
       <li><strong>Contrast.</strong> White on navy 10.98:1, ink on white 17.40:1, white on red 6.57:1. Secondary edges are black, 21:1.</li>
+      <li><strong>Toggles.</strong> pressed sets aria-pressed, so screen readers say “Helpful, toggle button, pressed”. In forced colors a pressed button takes the system’s selected colors.</li>
       <li><strong>Loading and disabled.</strong> Loading sets aria-busy and keeps focus. Disabled is the native attribute, so it leaves the tab order.</li>
     </ul>
   </DocSection>

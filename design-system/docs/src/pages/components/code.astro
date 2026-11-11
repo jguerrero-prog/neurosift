@@ -24,6 +24,16 @@ starting_time = X['starting_time'][()]
 rate = X['starting_time'].attrs['rate']
 data = X['data']`;
 
+const JSON_SAMPLE = `{
+  "dandiset": "000728",
+  "version": "0.240827.1809",
+  "assets": 12
+}`;
+
+const OUTPUT = `Units: 412
+Sampling rate: 30000.0 Hz
+Duration: 1375.28 s`;
+
 const COLORS = [
   ["code/text", "neutral/900", "Names, operators, punctuation", "16.50:1"],
   ["code/keyword", "blue/600", "import, from, def, for, in, as", "6.84:1"],
@@ -53,6 +63,8 @@ const code = `import { CodeBlock, InlineCode } from "@ui";
 
 <CodeBlock language="shell" code="$ pip install --upgrade lindi" />
 <CodeBlock language="python" title={fileName} code={script} />
+<CodeBlock title="JSON" code={response} />
+<CodeBlock title="Output" code={result} />
 
 <p>Open <InlineCode>/acquisition/LFPs</InlineCode> in Python.</p>`;
 ---
@@ -60,7 +72,7 @@ const code = `import { CodeBlock, InlineCode } from "@ui";
 <DocsLayout title="Code block" description="Code block and Inline code: Python people can copy, read and run.">
   <Intro
     lead="Code blocks hand people the Python they need to load what they’re looking at: the Python usage tab writes a script for the whole file, and Load in Python gives the lines for one object. It’s how people move from looking at data in Neurosift to analyzing it, so the code has to be easy to read, copy and run."
-    status="Updated November 9, 2026 · Components · Every example on this page is the component the app imports from @ui"
+    status="Updated November 10, 2026 · Components · Every example on this page is the component the app imports from @ui"
     rules={[
       { title: "Ready to paste", text: "Every block has a Copy button. Install steps get their own Shell block so they don’t end up in Python." },
       { title: "Readable colors", text: "Four syntax colors from tokens, each 4.9:1 or more on the code surface. Red stays for errors." },
@@ -76,6 +88,14 @@ const code = `import { CodeBlock, InlineCode } from "@ui";
       <CodeBlock client:visible language="python" code={SCRIPT} />
     </div>
     <p class="doc-note">The Load in Python lines for /acquisition/LFPs, as Neurosift writes them today: a Shell block for the install, then a Script block for the object. Each copies on its own. The Python usage tab uses one Script block for the whole file, with the file name in the header.</p>
+  </DocSection>
+
+  <DocSection title="Any language, and output" lead="Without a language, a block shows its code as plain text, named by its title: another language such as JSON or JavaScript, or what a script printed. It keeps the header, Copy and wrapping, without line numbers or syntax colors.">
+    <div class="code-demo">
+      <CodeBlock client:visible title="JSON" code={JSON_SAMPLE} />
+      <CodeBlock client:visible title="Output" code={OUTPUT} />
+    </div>
+    <p class="doc-note">Neurosift Chat shows the code it ran and what it printed this way. Its Copy button is named by the title, such as “Copy Output”, and copies every line as written, $ included.</p>
   </DocSection>
 
   <DocSection title="In Neurosift">
@@ -105,7 +125,7 @@ const code = `import { CodeBlock, InlineCode } from "@ui";
   <DocSection title="Accessibility">
     <ul class="rule-list">
       <li><strong>Real text.</strong> Code is selectable text in pre and code, so screen readers and search can read it. Line numbers are hidden from both and can’t be selected.</li>
-      <li><strong>A named copy button.</strong> “Copy Python code” is the accessible name; “Copied” is announced in a status region.</li>
+      <li><strong>A named copy button.</strong> “Copy Python code” is the accessible name, or “Copy Output” for a plain block; “Copied” is announced in a status region.</li>
       <li><strong>Not color alone.</strong> Syntax colors help scanning, but meaning never depends on them.</li>
       <li><strong>Nothing to scroll.</strong> Lines wrap, so a block never scrolls sideways.</li>
     </ul>
@@ -124,7 +144,7 @@ const code = `import { CodeBlock, InlineCode } from "@ui";
     </DocTable>
   </DocSection>
 
-  <DocSection title="In code" lead="Import from @ui. The block highlights Python and shell itself, from the code tokens.">
+  <DocSection title="In code" lead="Import from @ui. The block highlights Python and shell itself, from the code tokens. Leave out language for anything else, and give it a title.">
     <CodeSample label="React" code={code} />
   </DocSection>
 </DocsLayout>
