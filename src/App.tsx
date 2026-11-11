@@ -20,12 +20,10 @@ import { logPageLoad } from "./util/sendLog";
 import { v1Url } from "./util/v1Url";
 
 // Each page is its own chunk, so a visit downloads only the page it lands on.
-const DandiPage = lazy(() => import("./pages/DandiPage/DandiPage"));
 const DandisetPageContainer = lazy(
   () => import("./pages/DandisetPage/DandisetPageContainer"),
 );
 const EdfPage = lazy(() => import("./pages/EdfPage/EdfPage"));
-const EmberDandiPage = lazy(() => import("./pages/EmberPage/EmberDandiPage"));
 const EmberDandisetPageContainer = lazy(
   () => import("./pages/EmberDandisetPage/EmberDandisetPageContainer"),
 );
@@ -35,7 +33,7 @@ const NwbPage = lazy(() => import("./pages/NwbPage/NwbPage"));
 const OpenNeuroDatasetPage = lazy(
   () => import("./pages/OpenNeuroDatasetPage/OpenNeuroDatasetPage"),
 );
-const OpenNeuroPage = lazy(() => import("./pages/OpenNeuroPage/OpenNeuroPage"));
+const SearchPage = lazy(() => import("./pages/SearchPage/SearchPage"));
 const SettingsPage = lazy(() => import("./pages/SettingsPage/SettingsPage"));
 const SlpPage = lazy(() => import("./pages/SlpPage/SlpPage"));
 const VideoPage = lazy(() => import("./pages/VideoPage/VideoPage"));
@@ -178,8 +176,18 @@ const AppContent = () => {
                 element={<HomePage width={width} height={mainHeight} />}
               />
               <Route
+                path="/search"
+                element={<SearchPage width={width} height={mainHeight} />}
+              />
+              <Route
                 path="/dandi"
-                element={<DandiPage width={width} height={mainHeight} />}
+                element={
+                  <SearchPage
+                    width={width}
+                    height={mainHeight}
+                    archive="DANDI"
+                  />
+                }
               />
               <Route
                 path="/dandiset/:dandisetId"
@@ -189,7 +197,13 @@ const AppContent = () => {
               />
               <Route
                 path="/ember"
-                element={<EmberDandiPage width={width} height={mainHeight} />}
+                element={
+                  <SearchPage
+                    width={width}
+                    height={mainHeight}
+                    archive="EMBER"
+                  />
+                }
               />
               <Route
                 path="/ember-dandiset/:dandisetId"
@@ -202,7 +216,13 @@ const AppContent = () => {
               />
               <Route
                 path="/openneuro"
-                element={<OpenNeuroPage width={width} height={mainHeight} />}
+                element={
+                  <SearchPage
+                    width={width}
+                    height={mainHeight}
+                    archive="OpenNeuro"
+                  />
+                }
               />
               <Route
                 path="/openneuro-dataset/:datasetId"
