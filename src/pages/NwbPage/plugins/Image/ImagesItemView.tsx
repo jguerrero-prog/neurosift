@@ -1,4 +1,12 @@
-import { LoadingState, Slider, ViewPanel } from "@ui";
+import {
+  Alert,
+  IconButton,
+  ImageZoom,
+  LoadingState,
+  Slider,
+  ViewPanel,
+  type ImageZoomValue,
+} from "@ui";
 import { useCssVars } from "@components/useCssVars";
 import {
   FunctionComponent,
@@ -20,6 +28,14 @@ import { DatasetDataType } from "@remote-h5-file";
 import { getNeurodataTypeAncestry } from "../../neurodataTypeInheritance";
 import { useNwbFileSpecifications } from "../../SpecificationsView/SetupNwbFileSpecificationsProvider";
 import ViewError from "@components/ViewError/ViewError";
+import {
+  MAX_IMAGE_BYTES,
+  datasetBytes,
+  tooLargeMessage,
+} from "../../datasetSize";
+
+const imageBytes = (ds: { shape: number[]; dtype: string }) =>
+  datasetBytes(ds.shape, ds.dtype);
 
 type Props = {
   width: number;
@@ -27,9 +43,14 @@ type Props = {
   nwbUrl: string;
   path: string;
   condensed?: boolean;
+  onOpenObjectInNewTab?: (path: string) => void;
 };
 
-const ImagesItemView: FunctionComponent<Props> = ({ nwbUrl, path }) => {
+const ImagesItemView: FunctionComponent<Props> = ({
+  nwbUrl,
+  path,
+  onOpenObjectInNewTab,
+}) => {
   const group = useHdf5Group(nwbUrl, path);
   const {
     images,
@@ -46,18 +67,39 @@ const ImagesItemView: FunctionComponent<Props> = ({ nwbUrl, path }) => {
       controls={null}
     >
       <Gallery width={imageWidth} height={imageHeight}>
-        {images.map((ds) => (
-          <figure key={ds.path} className="images-item">
-            <LazyFrame className="images-frame">
-              <ImageItem
-                nwbUrl={nwbUrl}
-                path={ds.path}
-                neurodataType={ds.attrs["neurodata_type"]}
-              />
-            </LazyFrame>
-            <figcaption className="images-name">{ds.name}</figcaption>
-          </figure>
-        ))}
+        {images.map((ds) => {
+          const tooLarge = imageBytes(ds) > MAX_IMAGE_BYTES;
+          return (
+            <figure
+              key={ds.path}
+              className={
+                tooLarge ? "images-item images-item--wide" : "images-item"
+              }
+            >
+              <LazyFrame
+                className={tooLarge ? "images-message" : "images-frame"}
+              >
+                <ImageItem
+                  nwbUrl={nwbUrl}
+                  path={ds.path}
+                  neurodataType={ds.attrs["neurodata_type"]}
+                />
+              </LazyFrame>
+              <figcaption className="images-caption">
+                <span className="images-name">{ds.name}</span>
+                {onOpenObjectInNewTab && !tooLarge && (
+                  <IconButton
+                    icon="launch"
+                    label={`Open ${ds.name} to zoom`}
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onOpenObjectInNewTab(ds.path)}
+                  />
+                )}
+              </figcaption>
+            </figure>
+          );
+        })}
       </Gallery>
     </ViewPanel>
   );
@@ -80,10 +122,14 @@ const Gallery: FunctionComponent<{
   );
 };
 
+/** The viewport size, when the image is shown alone and zooms. */
+type ZoomArea = { width: number; height: number };
+
 type ImageItemProps = {
   nwbUrl: string;
   path: string;
   neurodataType: string;
+  zoomArea?: ZoomArea;
 };
 
 const coreImageTypes = ["GrayscaleImage", "RGBImage", "RGBAImage", "Image"];
@@ -92,9 +138,35 @@ export const ImageItem: FunctionComponent<ImageItemProps> = ({
   nwbUrl,
   path,
   neurodataType,
+  zoomArea,
 }) => {
   const dataset = useHdf5Dataset(nwbUrl, path);
-  const { data, errorMessage } = useHdf5DatasetData(nwbUrl, path);
+  if (!dataset)
+    return <LoadingState label="Reading the image" phase="loading" />;
+  const bytes = imageBytes(dataset);
+  if (bytes > MAX_IMAGE_BYTES)
+    return (
+      <Alert status="warning" title="Too large to show here">
+        {tooLargeMessage(path, bytes, MAX_IMAGE_BYTES)}
+      </Alert>
+    );
+  return (
+    <ImageData
+      nwbUrl={nwbUrl}
+      dataset={dataset}
+      neurodataType={neurodataType}
+      zoomArea={zoomArea}
+    />
+  );
+};
+
+const ImageData: FunctionComponent<{
+  nwbUrl: string;
+  dataset: Hdf5Dataset;
+  neurodataType: string;
+  zoomArea?: ZoomArea;
+}> = ({ nwbUrl, dataset, neurodataType, zoomArea }) => {
+  const { data, errorMessage } = useHdf5DatasetData(nwbUrl, dataset.path);
   const specifications = useNwbFileSpecifications();
   // Resolve to the nearest core image type in the inheritance chain, so that
   // extension subtypes (e.g. a type extending RGBImage) get the visualization
@@ -106,29 +178,60 @@ export const ImageItem: FunctionComponent<ImageItemProps> = ({
   if (errorMessage) {
     return <ViewError what="the images" error={errorMessage} />;
   }
-  if (!dataset || !data)
-    return <LoadingState label="Reading the image" phase="loading" />;
+  if (!data) return <LoadingState label="Reading the image" phase="loading" />;
 
+  const props = { dataset, data, zoomArea };
   if (resolvedType === "GrayscaleImage") {
-    return <GrayscaleImageItem dataset={dataset} data={data} />;
+    return <GrayscaleImageItem {...props} />;
   } else if (resolvedType === "RGBImage") {
-    return <RGBImageItem dataset={dataset} data={data} />;
+    return <RGBImageItem {...props} />;
   } else if (resolvedType === "RGBAImage") {
-    return <RGBAImageItem dataset={dataset} data={data} />;
+    return <RGBAImageItem {...props} />;
   } else {
     // "Image" or unknown: infer from the dataset shape
-    return <RegularImageItem dataset={dataset} data={data} />;
+    return <RegularImageItem {...props} />;
   }
+};
+
+type PictureProps = {
+  dataset: Hdf5Dataset;
+  zoomArea?: ZoomArea;
+  children: ReactNode;
+};
+
+/** The drawn image, zoomable when it is shown alone. */
+const Picture: FunctionComponent<PictureProps> = ({
+  dataset,
+  zoomArea,
+  children,
+}) => {
+  const [zoom, setZoom] = useState<ImageZoomValue>("fit");
+  if (!zoomArea) return children;
+  return (
+    <ImageZoom
+      label={dataset.name}
+      width={dataset.shape[1]}
+      height={dataset.shape[0]}
+      value={zoom}
+      onChange={setZoom}
+      viewWidth={zoomArea.width}
+      viewHeight={zoomArea.height}
+    >
+      {children}
+    </ImageZoom>
+  );
 };
 
 type GrayscaleImageItemProps = {
   dataset: Hdf5Dataset;
   data: DatasetDataType;
+  zoomArea?: ZoomArea;
 };
 
 const GrayscaleImageItem: FunctionComponent<GrayscaleImageItemProps> = ({
   dataset,
   data,
+  zoomArea,
 }) => {
   const H = dataset.shape[0];
   const W = dataset.shape[1];
@@ -183,8 +286,10 @@ const GrayscaleImageItem: FunctionComponent<GrayscaleImageItemProps> = ({
   }, [canvasElement, W, H, data, maxVal, windowMin, windowMax]);
 
   return (
-    <div>
-      <canvas ref={(elmt) => setCanvasElement(elmt)} width={W} height={H} />
+    <div className="images-grayscale">
+      <Picture dataset={dataset} zoomArea={zoomArea}>
+        <canvas ref={(elmt) => setCanvasElement(elmt)} width={W} height={H} />
+      </Picture>
       <div className="images-controls">
         <Slider
           label="Brightness"
@@ -214,21 +319,20 @@ const GrayscaleImageItem: FunctionComponent<GrayscaleImageItemProps> = ({
 type RegularImageItemProps = {
   dataset: Hdf5Dataset;
   data: DatasetDataType;
+  zoomArea?: ZoomArea;
 };
 
-const RegularImageItem: FunctionComponent<RegularImageItemProps> = ({
-  dataset,
-  data,
-}) => {
+const RegularImageItem: FunctionComponent<RegularImageItemProps> = (props) => {
+  const { dataset } = props;
   if (dataset.shape.length === 2) {
     // I guess this is just a grayscale image
-    return <GrayscaleImageItem dataset={dataset} data={data} />;
+    return <GrayscaleImageItem {...props} />;
   } else if (dataset.shape.length === 3 && dataset.shape[2] === 3) {
     // I guess this is an RGB image
-    return <RGBImageItem dataset={dataset} data={data} />;
+    return <RGBImageItem {...props} />;
   } else if (dataset.shape.length === 3 && dataset.shape[2] === 4) {
     // I guess this is an RGBA image
-    return <RGBAImageItem dataset={dataset} data={data} />;
+    return <RGBAImageItem {...props} />;
   } else {
     return (
       <div>Image not supported with shape: {dataset.shape.join(", ")}</div>
@@ -239,11 +343,13 @@ const RegularImageItem: FunctionComponent<RegularImageItemProps> = ({
 type RGBImageItemProps = {
   dataset: Hdf5Dataset;
   data: DatasetDataType;
+  zoomArea?: ZoomArea;
 };
 
 const RGBImageItem: FunctionComponent<RGBImageItemProps> = ({
   dataset,
   data,
+  zoomArea,
 }) => {
   const H = dataset.shape[0];
   const W = dataset.shape[1];
@@ -284,17 +390,23 @@ const RGBImageItem: FunctionComponent<RGBImageItemProps> = ({
     ctx.putImageData(imageData, 0, 0);
   }, [canvasElement, W, H, dataset, data]);
 
-  return <canvas ref={(elmt) => setCanvasElement(elmt)} width={W} height={H} />;
+  return (
+    <Picture dataset={dataset} zoomArea={zoomArea}>
+      <canvas ref={(elmt) => setCanvasElement(elmt)} width={W} height={H} />
+    </Picture>
+  );
 };
 
 type RGBAImageItemProps = {
   dataset: Hdf5Dataset;
   data: DatasetDataType;
+  zoomArea?: ZoomArea;
 };
 
 const RGBAImageItem: FunctionComponent<RGBAImageItemProps> = ({
   dataset,
   data,
+  zoomArea,
 }) => {
   const H = dataset.shape[0];
   const W = dataset.shape[1];
@@ -336,7 +448,11 @@ const RGBAImageItem: FunctionComponent<RGBAImageItemProps> = ({
     ctx.putImageData(imageData, 0, 0);
   }, [canvasElement, W, H, dataset, data]);
 
-  return <canvas ref={(elmt) => setCanvasElement(elmt)} width={W} height={H} />;
+  return (
+    <Picture dataset={dataset} zoomArea={zoomArea}>
+      <canvas ref={(elmt) => setCanvasElement(elmt)} width={W} height={H} />
+    </Picture>
+  );
 };
 
 export default ImagesItemView;
