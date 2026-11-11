@@ -103,7 +103,7 @@ const code = `import { DataTable, Tree } from "@ui";
   <DocSection title="Object tree" lead="The Main tab of a file: every object with its type, description and views. The name opens the object; the checkboxes add an object or one of its views to a combined view. Check two or more to see the selection bar.">
     <ObjectTreeDemo client:visible />
     <ul class="rule-list">
-      <li><strong>Object row.</strong> Chevron, checkbox, the type icon, a name that opens the object, its views as chips, the neurodata type in link blue when it has a view, and a two-line description. Each level indents 16px.</li>
+      <li><strong>Object row.</strong> Chevron, checkbox, the type icon, a name that opens the object, the neurodata type in link blue when it has a view, and a one-line description cut with an ellipsis, the full text on hover; its views follow as chips. Each level indents 16px.</li>
       <li><strong>Selection bar.</strong> Up to two names; past two, two names and a count that opens the full list. At 768px and below, only the count. Clear unchecks everything; View together opens the selection in one tab.</li>
       <li><strong>Selection list.</strong> Everything checked, in the order checked; each × unchecks one.</li>
     </ul>
