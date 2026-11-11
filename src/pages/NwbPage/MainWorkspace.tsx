@@ -12,7 +12,7 @@ import { neurodataTypeInheritsFrom } from "./neurodataTypeInheritance";
 import ErrorBoundary from "@components/ErrorBoundary";
 import ScrollY from "@components/ScrollY";
 import NwbHierarchyView from "./NwbHierarchyView";
-import Hdf5View from "./Hdf5View";
+import Hdf5View from "./Hdf5View/Hdf5View";
 import TimeseriesAlignmentView from "./TimeseriesAlignmentView";
 import NwbUsageScript from "./components/NwbUsageScript";
 import MultiVideoTabView from "./MultiVideoTabView";
@@ -213,6 +213,13 @@ const MainWorkspace: React.FC<MainWorkspaceProps> = ({
     handleSwitchTab(id);
   };
 
+  // A path picked in the schema opens in the HDF5 tab.
+  const [hdf5Focus, setHdf5Focus] = useState<{ path: string; at: number }>();
+  const openInHdf5 = (path: string) => {
+    setHdf5Focus({ path, at: Date.now() });
+    handleFixedTabSwitch("hdf5");
+  };
+
   const handleDynamicTabSwitch = (id: string) => {
     if (id === "main") {
       // Switch back to showing the active fixed section
@@ -298,15 +305,14 @@ const MainWorkspace: React.FC<MainWorkspaceProps> = ({
               tabId="hdf5"
               selected={activeFixedTab === "hdf5"}
             >
-              <ScrollY width={contentWidth} height={contentHeight}>
-                <ErrorBoundary what="the HDF5 view">
-                  <Hdf5View
-                    nwbUrl={nwbUrl}
-                    width={contentWidth}
-                    isExpanded={showFixedContent && activeFixedTab === "hdf5"}
-                  />
-                </ErrorBoundary>
-              </ScrollY>
+              <ErrorBoundary what="the HDF5 view">
+                <Hdf5View
+                  nwbUrl={nwbUrl}
+                  width={contentWidth}
+                  isExpanded={showFixedContent && activeFixedTab === "hdf5"}
+                  focus={hdf5Focus}
+                />
+              </ErrorBoundary>
             </TabPanel>
             <TabPanel
               tabsId="file-sections"
@@ -367,20 +373,21 @@ const MainWorkspace: React.FC<MainWorkspaceProps> = ({
               selected={activeFixedTab === "specifications"}
             >
               {showFixedContent && activeFixedTab === "specifications" && (
-                <ScrollY width={contentWidth} height={contentHeight}>
-                  <ErrorBoundary what="the schema">
-                    <Suspense
-                      fallback={
-                        <LoadingState
-                          label="Loading the schema"
-                          phase="loading"
-                        />
-                      }
-                    >
-                      <SpecificationsView />
-                    </Suspense>
-                  </ErrorBoundary>
-                </ScrollY>
+                <ErrorBoundary what="the schema">
+                  <Suspense
+                    fallback={
+                      <LoadingState
+                        label="Loading the schema"
+                        phase="loading"
+                      />
+                    }
+                  >
+                    <SpecificationsView
+                      nwbUrl={nwbUrl}
+                      onOpenPath={openInHdf5}
+                    />
+                  </Suspense>
+                </ErrorBoundary>
               )}
             </TabPanel>
             <TabPanel
