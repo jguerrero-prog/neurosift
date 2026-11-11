@@ -354,6 +354,11 @@ export const navigation: NavSection[] = [
         summary: "One search, open a file by link, and what was opened last.",
       },
       {
+        label: "Guide",
+        href: "/ui-library/guide/",
+        summary: "The NWB viewer guide, word for word, on Page and Section.",
+      },
+      {
         label: "Spectrogram",
         href: "/ui-library/spectrogram/",
         summary: "Power by frequency over recording time, and its settings.",
