@@ -486,6 +486,8 @@ const MultiVideoTabView: FunctionComponent<Props> = ({
         ? sessionWindow.start
         : clamp(prev, sessionWindow.start, sessionWindow.end),
     );
+    // Keyed to the window's bounds, not the object, so toggling a camera that leaves them alone doesn't re-run it.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionWindow?.start, sessionWindow?.end]);
 
   useEffect(() => {
@@ -715,6 +717,8 @@ const MultiVideoTabView: FunctionComponent<Props> = ({
         syncAnimationRef.current = null;
       }
     };
+    // runDriftCorrection reads everything through refs; depending on it would restart the loop every render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [driftActive]);
 
   // React to selection changes on the mounted-but-hidden videos: pause anything
