@@ -3,9 +3,8 @@ import { LoadingState, ViewPanel } from "@ui";
 import { FunctionComponent, ReactNode, useEffect, useState } from "react";
 import { TIME_VIEW_CHROME } from "../../common/TimeView";
 import "./PlaneSegmentationView.css";
-import PlaneTransformSelector, {
-  PlaneTransform,
-} from "./PlaneTransformSelector";
+import PlaneTransformSelector from "./PlaneTransformSelector";
+import type { PlaneTransform } from "./planeTransform";
 import {
   getHdf5Dataset,
   getHdf5DatasetData,

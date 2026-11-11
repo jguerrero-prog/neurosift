@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getHdf5DatasetData, useHdf5Group } from "@hdf5Interface";
-import TimeScrollView2, {
-  useTimeScrollView2,
-} from "@shared/component-time-scroll-view-2/TimeScrollView2";
+import TimeScrollView2 from "@shared/component-time-scroll-view-2/TimeScrollView2";
+import { useTimeScrollView2 } from "@shared/component-time-scroll-view-2/useTimeScrollView2";
 import { useTimeseriesSelection } from "@shared/context-timeseries-selection-2";
 import { timeSelectionBarHeight } from "@shared/TimeseriesSelectionBar/TimeseriesSelectionBar";
 import {

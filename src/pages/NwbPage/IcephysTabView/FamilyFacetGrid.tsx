@@ -1,7 +1,7 @@
 import { EmptyState } from "@ui";
 import { useCssVars } from "@components/useCssVars";
 import { FunctionComponent, useMemo } from "react";
-import { facetColors } from "./FacetLegend";
+import { facetColors } from "./sweepGroups";
 import FamilyOverlayPlot from "./FamilyOverlayPlot";
 import { categorical } from "./palette";
 import { LoadedSweep } from "./useSweepData";

@@ -1,4 +1,5 @@
 import { InlineMessage } from "@ui";
+import { dandisetIdFromUrl } from "./dandisetIdFromUrl";
 import { FunctionComponent, useMemo } from "react";
 import FigpackIframeDisplay from "./FigpackIframeDisplay";
 import FigpackJobStatusDisplay from "./FigpackJobStatusDisplay";
@@ -22,11 +23,6 @@ type Props = FigpackViewProps & {
 };
 
 type FigpackOutput = { figpack_url: string };
-
-export const dandisetIdFromUrl = (url: string): string => {
-  const urlObj = new URL(url);
-  return urlObj.searchParams.get("dandisetId") || "";
-};
 
 /** A figure built by a Figpack job on the runpack service, then shown in a frame. */
 const FigpackJobView: FunctionComponent<Props> = ({
