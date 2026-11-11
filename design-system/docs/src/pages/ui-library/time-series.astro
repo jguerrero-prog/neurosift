@@ -36,7 +36,7 @@ const BEHAVIOR = [
   ["Draw anyway", "Draws the whole window once; a wider window asks again."],
   ["Aligned views", "Changes apply at once; Window and Max intervals apply when typing pauses. Update goes away."],
   ["Playback", "On traces and Spatial X/Y. Play moves the window forward in real time at the chosen speed; the readout is the window’s right edge. Speed changes mid-play. Dragging the overview, editing the window, zooming or stepping pauses it, and so does the end. Space plays and pauses when the plot has focus."],
-  ["Spatial X/Y while playing", "The path draws up to the window’s right edge, with a dot at the current position; earlier samples in the window stay as the trail."],
+  ["Spatial X/Y while playing", "The path draws up to the window’s right edge, with a dot at the current position; earlier samples in the window stay as the trail. Play shortens a window longer than 30 s to 30 s, keeping its right edge, so the path redraws smoothly; shorter windows stay as they are."],
   ["Loading ahead", "While playing, traces load the next seconds before the window reaches them."],
 ];
 

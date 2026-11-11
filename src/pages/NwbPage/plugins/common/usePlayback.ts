@@ -1,7 +1,12 @@
 import type { TimeWindowValue } from "@ui";
 import { useTimeseriesSelection } from "@shared/context-timeseries-selection-2";
 import { KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
-import { advanceWindow, atEnd, isPlaybackKey, settleWindow } from "./playback";
+import {
+  advanceWindow,
+  isPlaybackKey,
+  settleWindow,
+  startWindow,
+} from "./playback";
 import { useTimeWindow } from "./useTimeWindow";
 
 /** A hold shorter than this, such as one chunk loading, isn't worth announcing. */
@@ -84,8 +89,11 @@ export type WindowPlayback = PlaybackClock & {
   time: number;
 };
 
-/** Plays the shared time window forward; an outside edit to the window pauses it. */
-export function useWindowPlayback(): WindowPlayback {
+/**
+ * Plays the shared time window forward; an outside edit to the window pauses it.
+ * `maxDuration` shortens a longer window when Play is pressed.
+ */
+export function useWindowPlayback(maxDuration?: number): WindowPlayback {
   const { session, value } = useTimeWindow();
   const { setVisibleTimeRange, setCurrentTime } = useTimeseriesSelection();
   const pending = useRef<TimeWindowValue[]>([]);
@@ -114,8 +122,8 @@ export function useWindowPlayback(): WindowPlayback {
   }, [playing, value, setPlaying]);
 
   const play = (next: boolean) => {
-    if (next && atEnd(value, session))
-      show({ start: session.start, duration: value.duration });
+    const start = next ? startWindow(value, session, maxDuration) : null;
+    if (start) show(start);
     setPlaying(next);
   };
   return {
