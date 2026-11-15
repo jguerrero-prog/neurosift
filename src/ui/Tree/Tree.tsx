@@ -10,6 +10,10 @@ export interface TreeNode {
   size?: string;
   /** Leave out for a folder whose contents aren't loaded yet. */
   children?: TreeNode[];
+  /** A color dot in place of the icon, such as a brain region's atlas color. */
+  swatch?: string;
+  /** Shown on hover, such as the full name with what a count means. */
+  hint?: string;
 }
 
 interface TreeProps {
@@ -23,6 +27,8 @@ interface TreeProps {
   onOpen?: (node: TreeNode) => void;
   /** Moves into a folder instead of expanding it, for a list of one folder at a time. */
   onOpenFolder?: (node: TreeNode) => void;
+  /** False where choosing a row is the action, such as brain regions: the row selects, the chevron opens and closes. */
+  expandOnSelect?: boolean;
 }
 
 type Row = {
@@ -53,6 +59,7 @@ export function Tree({
   onSelect,
   onOpen,
   onOpenFolder,
+  expandOnSelect = true,
 }: TreeProps) {
   const expands = (node: TreeNode) => !onOpenFolder && opens(node);
   const rows: Row[] = [];
@@ -108,7 +115,7 @@ export function Tree({
         if (isOpen) setOpen(node.id, false);
         else if (parent) focus(parent);
       },
-      Enter: () => activate(node),
+      Enter: () => (expandOnSelect ? activate(node) : onSelect(node.id)),
       " ": () => onSelect(node.id),
     };
     if (!(event.key in moves)) return;
@@ -134,22 +141,41 @@ export function Tree({
             aria-selected={node.id === selected}
             tabIndex={node.id === current?.node.id ? 0 : -1}
             className="ns-tree-row"
+            title={node.hint}
             onClick={() => {
               setActive(node.id);
               onSelect(node.id);
-              activate(node);
+              if (expandOnSelect || !folder) activate(node);
             }}
             onKeyDown={(event) => onKeyDown(event, index)}
           >
             {Array.from({ length: row.level - 1 }, (_, i) => (
               <span key={i} className="ns-tree-indent" />
             ))}
-            <span className="ns-tree-chevron">
+            <span
+              className="ns-tree-chevron"
+              onClick={(event) => {
+                if (expandOnSelect || !folder) return;
+                event.stopPropagation();
+                setActive(node.id);
+                setOpen(node.id, !isOpen);
+              }}
+            >
               {folder && (
                 <Icon name={isOpen ? "chevron--down" : "chevron--right"} />
               )}
             </span>
-            <Icon name={isOpen ? "folder--open" : KIND_ICONS[node.kind]} />
+            {node.swatch ? (
+              <span
+                className="ns-tree-swatch"
+                aria-hidden="true"
+                ref={(dot) =>
+                  dot?.style.setProperty("--ns-tree-swatch", node.swatch ?? "")
+                }
+              />
+            ) : (
+              <Icon name={isOpen ? "folder--open" : KIND_ICONS[node.kind]} />
+            )}
             <span className="ns-tree-name">{node.name}</span>
             {node.size && <span className="ns-tree-size">{node.size}</span>}
           </li>

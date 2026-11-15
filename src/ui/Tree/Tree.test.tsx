@@ -178,3 +178,71 @@ describe("Tree", () => {
     expect(onOpen).toHaveBeenCalledWith(NODES[2]);
   });
 });
+
+describe("Tree for choosing, such as brain regions", () => {
+  const REGIONS: TreeNode[] = [
+    {
+      id: "8",
+      name: "Basic cell groups and regions",
+      kind: "folder",
+      size: "68",
+      swatch: "#bfdae3",
+      hint: "Basic cell groups and regions: 68 dandisets",
+      children: [
+        {
+          id: "672",
+          name: "Caudoputamen",
+          kind: "file",
+          size: "12",
+          swatch: "#98d6f9",
+        },
+      ],
+    },
+  ];
+
+  const Regions = ({ onSelect }: { onSelect: (id: string) => void }) => {
+    const [expanded, setExpanded] = useState<string[]>(["8"]);
+    return (
+      <Tree
+        label="Brain regions"
+        nodes={REGIONS}
+        expanded={expanded}
+        onExpandedChange={setExpanded}
+        onSelect={onSelect}
+        expandOnSelect={false}
+      />
+    );
+  };
+
+  it("selects a parent row without folding its children away", () => {
+    const onSelect = vi.fn();
+    render(<Regions onSelect={onSelect} />);
+    fireEvent.click(screen.getByText("Basic cell groups and regions"));
+    expect(onSelect).toHaveBeenCalledWith("8");
+    expect(screen.getByText("Caudoputamen")).toBeTruthy();
+  });
+
+  it("opens and closes from the chevron, and Enter selects", () => {
+    const onSelect = vi.fn();
+    render(<Regions onSelect={onSelect} />);
+    const parent = screen.getAllByRole("treeitem")[0];
+    fireEvent.click(parent.querySelector(".ns-tree-chevron")!);
+    expect(screen.queryByText("Caudoputamen")).toBeNull();
+    expect(onSelect).not.toHaveBeenCalled();
+    fireEvent.keyDown(parent, { key: "Enter" });
+    expect(onSelect).toHaveBeenCalledWith("8");
+    expect(screen.queryByText("Caudoputamen")).toBeNull();
+  });
+
+  it("draws the color dot instead of an icon and gives the row its hint", () => {
+    render(<Regions onSelect={() => {}} />);
+    const parent = screen.getAllByRole("treeitem")[0];
+    const dot = parent.querySelector<HTMLElement>(".ns-tree-swatch");
+    expect(dot?.style.getPropertyValue("--ns-tree-swatch")).toBe("#bfdae3");
+    // The chevron is the only icon left on the row.
+    expect(parent.querySelectorAll(".ns-icon")).toHaveLength(1);
+    expect(parent.getAttribute("title")).toBe(
+      "Basic cell groups and regions: 68 dandisets",
+    );
+  });
+});

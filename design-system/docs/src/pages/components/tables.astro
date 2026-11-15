@@ -24,7 +24,7 @@ const KEYS = [
   ["Left arrow", "—", "Closes a folder, or moves to its parent"],
   ["Home, End", "—", "First or last row"],
   ["Enter or Space on a list cell", "Opens or closes its detail row", "—"],
-  ["Enter", "Sorts from a header", "Opens the file, or opens and closes a folder"],
+  ["Enter", "Sorts from a header", "Opens the file, or opens and closes a folder; selects the row in a tree for choosing"],
   ["Space", "Toggles the row’s checkbox", "Selects the row"],
 ];
 
@@ -46,6 +46,7 @@ const SPECS = [
   ["Detail row", "Full width under its row · surface/page · 12px 16px padding · stays in view when the table scrolls sideways"],
   ["Tree indent", "16px per level"],
   ["Tree icons", "16px · chevron, folder, folder--open, data--structured, document"],
+  ["Tree color dot", "12px circle in the node's data color, in place of the icon · border/subtle edge"],
 ];
 
 const code = `import { DataTable, Tree } from "@ui";
@@ -78,6 +79,17 @@ const code = `import { DataTable, Tree } from "@ui";
   selected={file}
   onSelect={setFile}
   onOpen={openFile}
+/>
+
+// A tree for choosing: each region carries swatch and hint.
+<Tree
+  label="Brain regions"
+  nodes={regions}
+  expanded={open}
+  onExpandedChange={setOpen}
+  selected={region}
+  onSelect={setRegion}
+  expandOnSelect={false}
 />`;
 ---
 
@@ -102,6 +114,14 @@ const code = `import { DataTable, Tree } from "@ui";
   <DocSection title="File tree" lead="Folders and files of a Dandiset, and the groups and datasets of an HDF5 file. File names and sizes are illustrative.">
     <FileTreeDemo client:visible />
     <p class="doc-note">Anywhere on a folder row opens or closes it; today only the ► arrow does, which the walkthrough found people missed. Clicking an NWB file opens it, and folders say how many files they hold.</p>
+  </DocSection>
+
+  <DocSection title="Tree for choosing" lead="Where choosing a row is the action, such as brain regions in the DANDI Atlas, set expandOnSelect to false.">
+    <ul>
+      <li><strong>The row selects, the chevron opens and closes.</strong> Choosing a parent never folds its children away. Enter selects; the arrow keys still open and close.</li>
+      <li><strong>A color dot instead of the icon.</strong> Set <code>swatch</code> to the node's data color, such as the atlas's color for a region. It is data, not decoration, so it never comes from the palette.</li>
+      <li><strong>Say what a count means.</strong> Set <code>hint</code> to the full name and the count in words, such as “Caudoputamen: 12 dandisets, 395 files”, so a cut-off name and a bare number can still be read.</li>
+    </ul>
   </DocSection>
 
   <DocSection title="Object tree" lead="The Main tab of a file: every object with its type, description and views. The name opens the object; the checkboxes add an object or one of its views to a combined view. Check two or more to see the selection bar.">
