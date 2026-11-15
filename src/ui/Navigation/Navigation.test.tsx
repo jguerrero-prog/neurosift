@@ -63,6 +63,24 @@ describe("AppBar", () => {
     error.mockRestore();
   });
 
+  it("puts a byline under the name, inside the home link", () => {
+    render(
+      <AppBar
+        homeHref="/"
+        logo={<img src="/logo.png" alt="" />}
+        name="Neurosift Brain"
+        byline={<>by DANDI Atlas</>}
+        actions={[]}
+      />,
+    );
+    const home = screen.getByRole("link", {
+      name: "Neurosift Brain by DANDI Atlas",
+    });
+    expect(home.querySelector(".ns-app-bar-byline")?.textContent).toBe(
+      "by DANDI Atlas",
+    );
+  });
+
   it("gives every action a name, visible or not, and opens external links in a new tab", () => {
     setup();
     expect(

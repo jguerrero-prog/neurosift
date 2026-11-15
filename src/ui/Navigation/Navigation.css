@@ -41,6 +41,25 @@
   letter-spacing: var(--type-h4-letter-spacing);
 }
 
+/* The byline sits under the name, ending where it ends; both lines fit the 48px bar. */
+.ns-app-bar-title {
+  display: inline-grid;
+}
+
+.ns-app-bar-title:has(.ns-app-bar-byline) .ns-app-bar-name {
+  line-height: 1.15;
+}
+
+.ns-app-bar-byline {
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
+  justify-self: end;
+  font: var(--type-caption);
+  line-height: 1.2;
+  color: var(--text-secondary);
+}
+
 .ns-app-bar-actions {
   display: flex;
   flex-wrap: wrap;

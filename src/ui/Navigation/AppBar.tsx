@@ -32,6 +32,8 @@ interface AppBarProps {
   /** The mark beside the name; decorative, since the link is named. */
   logo: ReactNode;
   name?: string;
+  /** A short line under the name, set to its end, such as who a tool in the suite comes from. */
+  byline?: ReactNode;
   actions: AppBarAction[];
 }
 
@@ -54,6 +56,7 @@ export function AppBar({
   homeHref,
   logo,
   name = "Neurosift",
+  byline,
   actions,
 }: AppBarProps) {
   const narrow = useNarrow();
@@ -63,7 +66,12 @@ export function AppBar({
         <span className="ns-app-bar-logo" aria-hidden="true">
           {logo}
         </span>
-        <span className="ns-app-bar-name">{name}</span>
+        <span className="ns-app-bar-title">
+          <span className="ns-app-bar-name">{name}</span>
+          {/* The space keeps "Brain by" apart in the link's name; the grid doesn't lay it out. */}
+          {byline && " "}
+          {byline && <span className="ns-app-bar-byline">{byline}</span>}
+        </span>
       </a>
       <div className="ns-app-bar-actions">
         {actions.map((action) => {
