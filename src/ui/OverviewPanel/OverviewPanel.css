@@ -45,34 +45,6 @@
   color: var(--text-default);
 }
 
-.ns-overview-panel-handle {
-  position: absolute;
-  inset-block: 0;
-  inset-inline-end: calc(var(--layout-target-min) / -2);
-  z-index: 1;
-  inline-size: var(--layout-target-min);
-  cursor: col-resize;
-  touch-action: none;
-}
-
-.ns-overview-panel-handle::after {
-  position: absolute;
-  inset-block: 0;
-  inset-inline-start: calc(50% - var(--space-0-5));
-  inline-size: var(--space-1);
-  content: "";
-}
-
-.ns-overview-panel-handle:hover::after,
-.ns-overview-panel-handle:focus-visible::after {
-  background: var(--border-selected);
-}
-
-.ns-overview-panel-handle:focus-visible {
-  outline: var(--border-width-2) solid var(--border-focus);
-  outline-offset: calc(var(--space-0-5) * -1);
-}
-
 .ns-overview-panel-rail {
   display: flex;
   flex: none;

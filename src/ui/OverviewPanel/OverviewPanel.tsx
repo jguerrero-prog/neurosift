@@ -1,21 +1,15 @@
-import {
-  useLayoutEffect,
-  useRef,
-  type KeyboardEvent,
-  type PointerEvent,
-  type ReactNode,
-} from "react";
+import { useLayoutEffect, useRef, type ReactNode } from "react";
 import {
   DescriptionList,
   type Description,
 } from "../DescriptionList/DescriptionList";
 import { IconButton } from "../IconButton/IconButton";
+import { PanelResizer } from "../PanelResizer/PanelResizer";
 import "../base.css";
 import "./OverviewPanel.css";
 
 const PANEL_MIN = 240;
 const PANEL_MAX = 480;
-const STEP = 16;
 
 interface OverviewPanelProps {
   title: string;
@@ -64,32 +58,6 @@ export function OverviewPanel({
       </div>
     );
 
-  const onKey = (event: KeyboardEvent) => {
-    const next = {
-      ArrowLeft: width - STEP,
-      ArrowRight: width + STEP,
-      Home: PANEL_MIN,
-      End: PANEL_MAX,
-    }[event.key];
-    if (next === undefined) return;
-    event.preventDefault();
-    onWidthChange(clamp(next));
-  };
-
-  const onDrag = (event: PointerEvent<HTMLDivElement>) => {
-    const left = panel.current?.getBoundingClientRect().left ?? 0;
-    const handle = event.currentTarget;
-    handle.setPointerCapture(event.pointerId);
-    const move = (moved: globalThis.PointerEvent) =>
-      onWidthChange(clamp(moved.clientX - left));
-    const stop = () => {
-      handle.removeEventListener("pointermove", move);
-      handle.removeEventListener("pointerup", stop);
-    };
-    handle.addEventListener("pointermove", move);
-    handle.addEventListener("pointerup", stop);
-  };
-
   return (
     <section ref={panel} className="ns-overview-panel" aria-label={title}>
       <div className="ns-overview-panel-scroll">
@@ -111,17 +79,12 @@ export function OverviewPanel({
         ))}
         {children}
       </div>
-      <div
-        className="ns-overview-panel-handle"
-        role="separator"
-        aria-label={`Resize ${lower(title)}`}
-        aria-orientation="vertical"
-        aria-valuenow={clamp(width)}
-        aria-valuemin={PANEL_MIN}
-        aria-valuemax={PANEL_MAX}
-        tabIndex={0}
-        onKeyDown={onKey}
-        onPointerDown={onDrag}
+      <PanelResizer
+        label={`Resize ${lower(title)}`}
+        width={width}
+        min={PANEL_MIN}
+        max={PANEL_MAX}
+        onWidthChange={onWidthChange}
       />
     </section>
   );

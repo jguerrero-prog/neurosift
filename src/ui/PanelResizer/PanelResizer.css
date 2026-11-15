@@ -1,0 +1,28 @@
+/* A side panel's draggable edge: a 24px target over the panel's border, a line on hover and focus. */
+.ns-panel-resizer {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: calc(var(--layout-target-min) / -2);
+  z-index: 1;
+  inline-size: var(--layout-target-min);
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.ns-panel-resizer::after {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(50% - var(--space-0-5));
+  inline-size: var(--space-1);
+  content: "";
+}
+
+.ns-panel-resizer:hover::after,
+.ns-panel-resizer:focus-visible::after {
+  background: var(--border-selected);
+}
+
+.ns-panel-resizer:focus-visible {
+  outline: var(--border-width-2) solid var(--border-focus);
+  outline-offset: calc(var(--space-0-5) * -1);
+}

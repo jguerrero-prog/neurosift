@@ -81,6 +81,7 @@ export { SettingPair, TooMuchData, ViewPanel } from "./ViewPanel/ViewPanel";
 export { PlotThemeSwitch } from "./PlotThemeSwitch/PlotThemeSwitch";
 
 export { OverviewPanel } from "./OverviewPanel/OverviewPanel";
+export { PanelResizer } from "./PanelResizer/PanelResizer";
 export { StatusBar } from "./StatusBar/StatusBar";
 export { ColorBar, Legend } from "./Legend/Legend";
 export type { LegendItem } from "./Legend/Legend";
