@@ -1,6 +1,12 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { applyTheme, readTheme, THEME_KEY, watchSystemTheme } from "./theme";
+import {
+  applyTheme,
+  readTheme,
+  setDefaultTheme,
+  THEME_KEY,
+  watchSystemTheme,
+} from "./theme";
 
 const system = (matches: Record<string, boolean>) => {
   const listeners: (() => void)[] = [];
@@ -36,6 +42,21 @@ describe("theme", () => {
     applyTheme("light");
     expect(document.documentElement.dataset.theme).toBeUndefined();
     expect(localStorage.getItem(THEME_KEY)).toBeNull();
+  });
+
+  it("lets a tool in the suite start in another theme, and stores Light once it isn't the default", () => {
+    setDefaultTheme("dark");
+    try {
+      expect(readTheme()).toBe("dark");
+      applyTheme("light");
+      expect(localStorage.getItem(THEME_KEY)).toBe("light");
+      expect(readTheme()).toBe("light");
+      applyTheme("dark");
+      expect(localStorage.getItem(THEME_KEY)).toBeNull();
+      expect(document.documentElement.dataset.theme).toBe("dark");
+    } finally {
+      setDefaultTheme("light");
+    }
   });
 
   it("follows the computer's dark mode and contrast settings for System", () => {

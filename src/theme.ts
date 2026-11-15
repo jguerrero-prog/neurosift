@@ -21,9 +21,17 @@ const MORE_CONTRAST = "(prefers-contrast: more)";
 const DARK = "(prefers-color-scheme: dark)";
 const listeners = new Set<() => void>();
 
+/** What shows until someone picks a theme: Light for Neurosift; a tool in the suite may start elsewhere. */
+let defaultChoice: ThemeChoice = "light";
+
+/** Sets the theme shown until someone picks one. Call before the first render; index.html must match it. */
+export const setDefaultTheme = (choice: ThemeChoice) => {
+  defaultChoice = choice;
+};
+
 export const readTheme = (): ThemeChoice => {
   const saved = localStorage.getItem(THEME_KEY) as ThemeChoice | null;
-  return saved && CHOICES.includes(saved) ? saved : "light";
+  return saved && CHOICES.includes(saved) ? saved : defaultChoice;
 };
 
 export const resolveTheme = (choice: ThemeChoice): Theme => {
@@ -39,7 +47,8 @@ const draw = (theme: Theme) => {
 };
 
 export const applyTheme = (choice: ThemeChoice) => {
-  if (choice === "light") localStorage.removeItem(THEME_KEY);
+  // The default is stored as nothing, so changing the default later reaches people who never chose.
+  if (choice === defaultChoice) localStorage.removeItem(THEME_KEY);
   else localStorage.setItem(THEME_KEY, choice);
   draw(resolveTheme(choice));
   listeners.forEach((notify) => notify());
